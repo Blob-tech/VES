@@ -1,0 +1,4 @@
+<div class="alert alert-info alert-dismissible fade-in" [hidden] = " noSubs ? false : true">
+    <strong>Alert!</strong> {{noSubs}}
+  </div>
+  <p *ngFor = "let sub of subscriberList">{{sub.name}}</p>

@@ -1,0 +1,10 @@
+
+    <div class="row">
+        <div class="col-lg-3 col-xl-3 col-sm-3 col-md-3" *ngFor="let sub of subscriptions;let i = index">
+        
+            <button routerLink="/e-library/subscriber/subscriber-management/list/{{sub.subscription_category}}" matTooltip="{{sub.subscription_category}}" *ngIf="i % 2 == 0" mat-raised-button color = "primary"><h1><strong>{{sub.subscription_category.length > 10 ? sub.subscription_category.substring(0,10)+"..." : sub.subscription_category}}</strong></h1></button>
+            <button routerLink="/e-library/subscriber/subscriber-management/list/{{sub.subscription_category}}" matTooltip="{{sub.subscription_category}}" *ngIf = "i % 2 != 0 " mat-raised-button color = "accent"><h1><strong>{{sub.subscription_category.length > 10 ? sub.subscription_category.substring(0,10)+"..." : sub.subscription_category}}</strong></h1></button>
+
+        </div>
+    </div>
+

@@ -1,0 +1,119 @@
+.navbar
+{
+    position: fixed;
+    z-index: 3;
+    top:0;
+}
+
+h1{
+    font-size:  30px;
+}
+
+h4{
+    font-size: 15px;
+}
+
+.btn
+{
+    color : white;
+    padding: 0 14px;
+    
+}
+
+.btn .login-button
+{
+    background-color: coral;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.fas 
+{
+    font-size : 25px;
+}
+.hamburger-menu
+{
+    visibility: hidden;
+}
+.mat-button
+{
+    width : 200px;
+    text-align: center;
+    padding: 2px;
+    margin : 1rem;
+}
+.container
+{
+    margin:5%;
+    width : 90%;
+    height: fit-content;
+    border-radius: 5px;
+}
+
+.icon
+{
+    border-radius: 50%;
+    height : 250px;
+    width : 250px;
+}
+@media screen and (max-width: 760px)
+{
+.top-menu
+{
+    visibility: hidden;
+}
+
+.hamburger-menu
+{
+    visibility: visible;
+    justify-content: flex-end;
+    margin-left : 200px;
+}
+
+h1
+{
+    font-size: 15px;
+}
+}
+
+@media screen and (max-width: 710px)
+{
+    .hamburger-menu
+{
+    visibility: visible;
+    justify-content: flex-end;
+    margin-left : 100px;
+}
+}
+
+@media screen and (max-width: 360px)
+{
+    .hamburger-menu
+{
+   
+    margin-left : 70px;
+}
+}
+
+
+@media screen and (max-width: 400px)
+{
+.hamburger-menu
+{
+    visibility: visible;
+    justify-content: flex-end;
+    margin-left : 80px;
+}
+}
+
+@media screen and (max-width: 330px)
+{
+.hamburger-menu
+{
+    visibility: visible;
+    justify-content: flex-end;
+    margin-left : 50px;
+}
+}

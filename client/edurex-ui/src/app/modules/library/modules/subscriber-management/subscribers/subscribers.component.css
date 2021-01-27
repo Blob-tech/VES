@@ -1,0 +1,15 @@
+
+button
+{
+    width: 90%;
+    height: fit-content;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+button.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  

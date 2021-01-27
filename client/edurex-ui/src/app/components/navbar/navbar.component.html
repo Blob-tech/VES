@@ -1,0 +1,188 @@
+<mat-toolbar color="primary" class="navbar">
+    <mat-toolbar-row>
+      <span style="margin-right: 1rem;"><img src="{{imgUrl}}" height="50" width="{{icon_width.value}}">
+      </span>
+      <span><h1><strong>{{name.value}}</strong> </h1>
+      <h4><i>{{tagline.value}}</i></h4></span>
+      <span class="example-spacer"></span>
+                <span class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
+      <div class = "top-menu">
+      <span>
+        
+        <mat-slide-toggle (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
+        Dark Mode</mat-slide-toggle></span>
+      <span><button matTooltip ="settings" mat-mini-fab color="basic" [matMenuTriggerFor]="settings"><mat-icon class="auto-flip">settings</mat-icon> </button></span>
+
+
+      <mat-menu #settings="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="theme"
+        matTooltip="Select a theme!" > <mat-icon class="auto-flip">format_color_fill</mat-icon> Theme</button>
+        <button (click)="open(counter)" mat-menu-item matTooltip="Configure Counter"><mat-icon class="auto-flip">scatter_plot</mat-icon>Counter</button>
+        <button mat-menu-item 
+        matTooltip="System Configuration!" (click)="open(system)"> <mat-icon class="auto-flip">build</mat-icon> System Configuration</button>
+      </mat-menu>
+
+      <mat-menu #settings2="matMenu">
+          <mat-slide-toggle (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
+              Dark Mode</mat-slide-toggle>
+          <button mat-menu-item [matMenuTriggerFor]="theme"
+          matTooltip="Select a theme!" > <mat-icon class="auto-flip">format_color_fill</mat-icon> Theme</button>
+          <button (click)="open(counter)" mat-menu-item matTooltip="Configure Counter"><mat-icon class="auto-flip">scatter_plot</mat-icon>Counter</button>
+          <button mat-menu-item 
+          matTooltip="System Configuration!" (click)="open(system)"> <mat-icon class="auto-flip">build</mat-icon> System Configuration</button>
+          <button mat-menu-item class="login-button" routerLink="/login">
+            <mat-icon class="auto-flip">account_circle</mat-icon> Login</button>
+        </mat-menu>
+      
+      <mat-menu #theme="matMenu">
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[0])"><mat-icon class="auto-flip" style="color:indigo">invert_colors</mat-icon>Candy</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[1])"><mat-icon class="auto-flip" style="color:deeppink">invert_colors</mat-icon>Romance</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[2])"><mat-icon class="auto-flip" style="color:teal">invert_colors</mat-icon>Wave</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[3])"><mat-icon class="auto-flip" style="color:brown">invert_colors</mat-icon>Sand</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[4])"><mat-icon class="auto-flip" style="color:yellow">invert_colors</mat-icon>Bubble</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[5])"><mat-icon class="auto-flip" style="color:lightskyblue">invert_colors</mat-icon>Sonic</button>
+      </mat-menu>
+      
+      
+
+      <span class="btn"><button mat-raised-button class="login-button" routerLink="/login">
+        <mat-icon class="auto-flip">account_circle</mat-icon> Login</button></span>
+      </div>
+      
+    </mat-toolbar-row>
+</mat-toolbar>
+
+
+
+    <!-- Edit Content Modal-->
+    <ng-template #counter let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h2 class="modal-title">Counter Configuration System</h2>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <form [formGroup]="counterForm">
+            <button mat-button>Books/Article/Video Counter</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Book id  Counter</mat-label>
+                <input matInput type="number" [formControl]="library" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(library.value,'library')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'library')">Reset</button>
+            <button mat-button>Subscriber Counter</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Subscriber Counter</mat-label>
+                <input matInput type="number" [formControl]="user" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(user.value,'user')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'user')">Reset</button>
+            <button mat-button>Institute/Organisation Counter</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Institute/Organisation Counter</mat-label>
+                <input matInput type="number" [formControl]="organisation" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(organisation.value,'organisation')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'organisation')">Reset</button>
+            <button mat-button>Course Counter</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Course Counter</mat-label>
+                <input matInput type="number" [formControl]="course" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(course.value,'course')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'course')">Reset</button>
+          
+          </form>
+          </div>
+        </div>
+      </ng-template>
+
+
+          <!-- Edit system configuration Modal-->
+    <ng-template #system let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h2 class="modal-title">System Configuration </h2>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+            <span style="display: flex; margin:1rem">
+                <img class="icon" src="{{imgUrl}}"></span>
+                <span class="example-spacer"></span>
+                <span style="display: flex; margin:1rem">
+              <button (click)="open(edit_image)" mat-raised-button><mat-icon>camera_alt</mat-icon> Edit Image</button>
+              </span>
+            
+          <form [formGroup]="systemForm">
+
+              <button mat-button>Company Logo width</button> 
+              <mat-form-field class="form-group" appearance="outline">
+                  <mat-label>Icon Width</mat-label>
+                  <input type="number" min="20" max="200" matInput  formControlName="icon_width" required placeholder="Enter your brand icon width" >
+                  <mat-error *ngIf="name.hasError('required')">
+                    Value is required
+                  </mat-error>
+              </mat-form-field>
+
+          <button mat-button>Company or Organization</button> 
+          <mat-form-field class="form-group" appearance="outline">
+              <mat-label>Brand Name</mat-label>
+              <input matInput  formControlName="name" required placeholder="Enter your Institution Name" >
+              <mat-error *ngIf="name.hasError('required')">
+                Value is required
+              </mat-error>
+          </mat-form-field>
+
+          <button mat-button>Company Tagline</button> 
+          <mat-form-field class="form-group" appearance="outline">
+            <mat-label>Tagline</mat-label>
+            <input matInput  formControlName="tagline" required placeholder="Enter your Institution tagline or moto" >
+            <mat-error *ngIf="tagline.hasError('required')">
+              Value is required
+            </mat-error>
+        </mat-form-field>
+        </form>
+        <br>
+        <button class="btn btn-xl btn-success" (click)="updateBrand()" [disabled]="systemForm.status != 'VALID'">Save</button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #edit_image let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Thumbnail</h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                <mat-form-field class="form-group" style=" width: 30%; display: inline-block; margin-right: 100px;"  appearance="outline">
+                        <mat-label>Thumbnail Image</mat-label>
+                        <ngx-mat-file-input #removableInput [(formControl)]="cover" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                        (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
+                        <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+                        <mat-hint>Images in .jpg, .jpeg or .png only allowed </mat-hint>
+                        <mat-error *ngIf="cover.hasError('required')">
+                          Please select a file
+                        </mat-error>
+                        <mat-error *ngIf="cover.hasError('maxContentSize')">
+                          The total size must not exceed 5 MB).
+                        </mat-error>
+                      </mat-form-field>
+                
+                <img style="height: 200px; width: 150px;"  mat-card-image src="{{url}}" alt="Chapter Photo"><br>
+                                <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-lg btn-success"  (click)="save_icon()" [disabled]="cover.status === 'INVALID'" >Save</button>
+        </div>
+      </ng-template>
+
+

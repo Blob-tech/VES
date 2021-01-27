@@ -1,0 +1,70 @@
+<img src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
+
+<div class="container content">
+      
+    <mat-grid-list cols="2" rowHeight="100px">
+        <!--mat-grid-tile
+            [colspan]="1"
+            [rowspan]="6">
+            <img src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
+        </mat-grid-tile-->
+        <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="6">
+            <div class="container">
+                    
+                <span><h1><strong>{{book.book_name}}</strong></h1></span>
+                <h4><p><strong>Author : </strong>{{book.author}}</p></h4>
+                <h5>
+                    <p><strong>Book Id : </strong> {{book.book_id}}</p>
+                    <p><strong>Published : </strong>{{book.date_of_published.substring(0,10)}} | {{book.publisher}}</p>
+                    <p><strong>Genre : </strong>{{book.category}} | {{ book.subcategory ? book.subcategory : ''}}</p>
+                    <p *ngIf="language != null"><strong>Language :</strong>{{book.language}})</p>
+                    <p><strong>Description : </strong>{{book.description}}</p>
+                    <p *ngIf="book.type === 'doc' || book.type === 'docx'"><i class="fas fa-file-word" style="color : blue"></i></p>
+                    <p *ngIf="book.type === 'ppt' || book.type === 'pptx'"><i class="fas fa-file-powerpoint" style="color : orange"></i></p>
+                    <p *ngIf="book.type === 'pdf'"><i class="fas fa-file-pdf" style="color : red"></i></p>
+                    <p *ngIf="book.type === 'mp4' || book.type ==='mp3' || book.type === 'avi'"><i class="avatar fas fa-file-video" style="color : lightseagreen"></i></p>
+                    <p><strong>Subscription :</strong> {{book.subscription}}</p>
+                </h5>
+                <button *ngIf="book.type != 'mp4' && book.type != 'mp3' && book.type != 'avi'"
+                mat-raised-button color="primary" style="margin-right: 1rem;" style="color : black"><mat-icon class="auto-flip">save_alt</mat-icon><a target="_blank"  href="{{docSrc + book.book_source}}" style="color: black">Download</a></button>
+                <button mat-raised-button color = "accent"  style="margin: 1rem;">{{book.subscription}}</button>
+                <br><br>
+                <mat-icon class="auto-flip like">thumb_up</mat-icon>{{book.total_like}}
+                <mat-icon class="auto-flip like">thumb_down</mat-icon> {{book.total_dislike}}
+                <mat-icon class="auto-flip">visibility</mat-icon> {{book.total_view}}
+            </div>
+                
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <div class="container pdf-container" *ngIf="book.type == 'pdf'"
+      >
+            <ng2-pdfjs-viewer [fullScreen]="true"
+            pdfSrc="{{docSrc + book.book_source}}"></ng2-pdfjs-viewer>
+    </div>
+
+    <div plyr 
+    plyrTitle="SVM" plyrPlaysInline="true" plyrSources="{{docSrc + book.book_source}}"
+    plyrPoster ="{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}"
+    *ngIf="book.type == 'mp4' || book.type == 'mp3' || book.type == 'avi'"
+      style="width:80%; height: 50%; margin:1% 10% 1% 10%">
+      <!--mat-video
+        ngClass="mat-video-responsive"
+        src="{{docSrc + book.book_source}}"
+        title="{{book.book_name}}"
+        preload=true
+        fullscreen=true
+        poster="{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}"
+        showFrameByFrame= true
+        quality=true
+        color="accent"
+        download=true
+      >
+      </mat-video-->
+      
+    </div>
+
+    
+</div>

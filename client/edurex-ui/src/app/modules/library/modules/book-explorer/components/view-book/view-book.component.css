@@ -1,0 +1,101 @@
+.container
+{
+    margin: 5%;
+    border-radius: 5px;
+    padding : 2%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    width : 90%;
+    max-height: fit-content;
+    overflow: visible;
+    
+}
+
+.content
+{
+    margin-top : -200px;
+}
+
+@media screen and (max-width : 760px)
+{
+    .content
+    {
+        margin-top: -150px;
+    }
+}
+
+.auto-flip 
+{
+    margin-right : 1rem;
+    margin-left: 1rem;
+}
+
+.like  
+{
+    color : lightslategrey;
+}
+
+.star
+{
+    color : orange;
+}
+
+.like :hover
+{
+    color : rgb(48, 48, 196);
+}
+
+img
+{
+    border-radius : 50%;
+    height: 150px;
+    width : 150px;
+    margin-left : 65%;
+    z-index:5%;
+    border-color : orangered;
+    border-style: solid;
+}
+
+h5{
+    color : lightslategray
+}
+
+.fas 
+{
+    font-size : 50px;
+}
+
+.pdf-container
+{
+    width: 800px; 
+    height: 500px;
+}
+
+@media screen and (max-width : 760px)
+{
+.pdf-container
+{
+    width: 85%; 
+}
+}
+
+@media screen and (max-width : 780px)
+{
+.pdf-container
+{
+    width: 85%; 
+}
+}
+
+@media screen and (max-width : 760px)
+{
+    img 
+    {
+        width : 50px;
+        height : 50px;
+    }
+
+    h1 
+    {
+        font-size : 15px;
+    }
+}

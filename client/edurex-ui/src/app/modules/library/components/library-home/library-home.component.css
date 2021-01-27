@@ -1,0 +1,45 @@
+
+
+.library-menu
+{
+    background-image: url("../../../../../assets/images/library.jpg");
+    background-size: cover;
+    height: 100%;
+    padding-top : 150px; 
+}
+
+.library-menu div
+{
+    display: inline;
+
+}
+
+.library-menu .row
+{
+    margin-left : 10%;
+}
+
+.action-button
+{
+    width:350px;
+    height: 100px;
+    text-align: center;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media screen and (max-width : 380px)
+{
+    .action-button
+    {
+        width : 340px;
+    }
+
+    .library-menu
+    {
+        margin-left: 1px;
+    }
+}
+
+
+

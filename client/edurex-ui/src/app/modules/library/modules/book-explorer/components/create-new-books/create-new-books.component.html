@@ -1,0 +1,157 @@
+
+<mat-card class="bookForm" >
+    <div class="alert alert-danger alert-dismissible fade-in" [hidden] = " error ? false : true">
+        <button type="button" class="close" data-dismiss="alert" (click) = "dismissErrorAlert()">&times;</button>
+        <strong>Error!</strong> {{error}}
+      </div>
+      <mat-divider></mat-divider>
+      <div class="alert alert-success alert-dismissible fade-in" [hidden] = " message ? false : true">
+            <button type="button" class="close" data-dismiss="alert" (click) = "dismissMessageAlert()">&times;</button>
+            <strong>Success!</strong> {{message}}
+          </div>
+          <br>
+    <mat-card-header class="header">
+        <mat-card-title><h2>Add an Article/Book to  your e-Library</h2></mat-card-title>
+        <mat-card-subtitle>All fields marked * are required</mat-card-subtitle>
+    </mat-card-header>
+<form [formGroup]="createBookForm" (ngSubmit)="addArticle()" >
+    <mat-form-field class="form-group" appearance="outline" style="width: 90%;">
+        <mat-label>Book/Article Id</mat-label>
+        <input matInput formControlName="book_id"  required placeholder="Enter a book or article Id" readonly>
+        <mat-error *ngIf="book_id.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="book_id.hasError('pattern')">Book Id should start with an alphabet and it should not contain any space or special characters.</mat-error>
+    </mat-form-field>
+    <mat-form-field class="form-group" appearance="outline">
+        <mat-label>Book/Article Name</mat-label>
+        <input matInput formControlName="name" required placeholder="Enter a book or article name" >
+        <mat-hint>Book name should not exceed more than 200 characters</mat-hint>
+        <mat-hint align="end">{{name.value?.length || 0}}/200</mat-hint>
+        <mat-error *ngIf="name.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-group" appearance="outline">
+            <mat-label>Author</mat-label>
+            <input matInput formControlName="author" required placeholder="Enter an Author name" >
+            <mat-hint>Author name should not exceed more than 100 characters</mat-hint>
+            <mat-hint align="end">{{author.value?.length || 0}}/100</mat-hint>
+            <mat-error *ngIf="author.hasError('required')">Value is required</mat-error>
+            <mat-error *ngIf="author.hasError('pattern')">No Special character other than ' and . is allowed.No numbers allowed</mat-error>
+            <mat-error *ngIf="author.hasError('maxlength')">Character Limit Exceeded</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-group" appearance="outline">
+            <mat-label>Publisher</mat-label>
+            <input matInput formControlName="publisher" required placeholder="Enter an Publisher name" >
+            <mat-hint>Publisher name should not exceed more than 100 characters</mat-hint>
+            <mat-hint align="end">{{publisher.value?.length || 0}}/100</mat-hint>
+            <mat-error *ngIf="publisher.hasError('required')">Value is required</mat-error>
+            <mat-error *ngIf="publisher.hasError('pattern')">No Special character other than ' and . is allowed.No numbers allowed</mat-error>
+            <mat-error *ngIf="publisher.hasError('maxlength')">Character Limit Exceeded</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-group" appearance="outline">
+            <mat-label>Subscription Category</mat-label>
+                <mat-select multiple formControlName = "subscription" required>
+                        <mat-option *ngFor="let sub of subscriptions" [value]="sub.subscription_category">{{sub.subscription_category}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="subscription.hasError('required')">Value is required</mat-error>
+        </mat-form-field>
+        
+
+        <mat-form-field class="form-group" appearance="outline" style="width: 90%;">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" required placeholder="Enter Abstract/Description/Introduction of the content" ></textarea>
+                <mat-hint>Description should not exceed more than 500 characters</mat-hint>
+                <mat-hint align="end">{{description.value?.length || 0}}/500</mat-hint>
+                <mat-error *ngIf="description.hasError('required')">Value is required</mat-error>
+                <mat-error *ngIf="description.hasError('maxlength')">Character Limit Exceeded</mat-error>
+            </mat-form-field>
+        
+            <mat-form-field  class="form-group" appearance="outline" >
+                    <mat-label>Category</mat-label>
+                    <input type="text" matInput [formControl]="category" [matAutocomplete]="autoCategory"
+                    placeholder="Select a category" (keyup)="apply_filter($event)"  (change)="resetSubCategory($event)" required>
+                    <mat-autocomplete #autoCategory="matAutocomplete" >
+                      <mat-option *ngFor="let category of filteredcategories" [value]="category.book_category">
+                        {{category.book_category}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+
+                  <mat-form-field class="form-group" appearance="outline" [hidden]="isSubCategoryDisabled()">
+                        <mat-label>Sub-category</mat-label>
+                        <input  type="text"  matInput [formControl]="subcategory" [matAutocomplete]="autoSubCategory"
+                        placeholder="Select a subcategory" (keyup)="filter_subcategories($event)">
+                        <mat-autocomplete #autoSubCategory="matAutocomplete" >
+                          <mat-option *ngFor="let subcategory of subcategories" [value]="subcategory">
+                            {{subcategory}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+
+                      <mat-form-field class="form-group" appearance="outline">
+                          <mat-label>Language</mat-label>
+                          <input  type="text"  matInput formControlName="language"  [matAutocomplete]="autoLanguage"
+                          placeholder="Select a language" (keyup)="filter_languages($event)" required>
+                          <mat-autocomplete #autoLanguage="matAutocomplete" >
+                            <mat-option *ngFor="let lang of filtered_languages" [value]="lang.name+'('+lang.nativeName+')'">
+                              {{lang.name}}({{lang.nativeName}})
+                            </mat-option>
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      
+                      
+                      <br>
+                      <mat-form-field class="form-group" style=" width: 90%;"  appearance="outline">
+                        <mat-label>Article/Book </mat-label>
+                        <ngx-mat-file-input #removable [formControl]="book" accept=".doc,.pdf,.docx,.ppt,.pptx,.mp4,.mp3"  placeholder="Browse Documents" 
+                        (change)="onSelectBook($event)" required ></ngx-mat-file-input>
+                        <button mat-icon-button matSuffix *ngIf="!removable.empty" (click)="removable.clear($event)">
+                          <mat-icon>clear</mat-icon>
+                        </button>
+                        <mat-hint>Documnent can only be in .pdf, .ppt,.docx,.mp4,.mp3 format </mat-hint>
+                        <mat-error *ngIf="book.hasError('required')">
+                          Please select a file
+                        </mat-error>
+                        <mat-error *ngIf="book.hasError('maxContentSize')">
+                          The total size must not exceed {{configParams.doc_size}} MB).
+                        </mat-error>
+                      </mat-form-field><br><br>
+                      <mat-progress-bar mode="determinate" value="{{docprogress}}"></mat-progress-bar><br><br>
+                    <mat-form-field class="form-group"   appearance="outline">
+                            <mat-label>Thumbnail Image</mat-label>
+                            <ngx-mat-file-input #removableInput formControlName="cover" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                            (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
+                            <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                              <mat-icon>clear</mat-icon>
+                            </button>
+                            <mat-hint>Images in .jpg, .jpeg,.png  only allowed </mat-hint>
+                            <mat-error *ngIf="cover.hasError('required')">
+                              Please select a file
+                            </mat-error>
+                            <mat-error *ngIf="cover.hasError('maxContentSize')">
+                              The total size must not exceed {{configParams.img_size}} MB).
+                            </mat-error>
+                          </mat-form-field>
+                    
+                    <img style="height: 200px; width: 150px;"  mat-card-image src="{{url}}" alt="Chapter Photo"><br>
+                                    <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                    <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+                    <br>
+
+                    <button type="submit" mat-raised-button style="margin-right: 1rem;" color="accent"
+                    [disabled]="submitDisabled()">Save</button>
+                    <button type="reset" mat-raised-button>Reset</button>
+
+</form>
+<br>
+<div class="alert alert-danger alert-dismissible fade-in" [hidden] = " error ? false : true">
+    <button type="button" class="close" data-dismiss="alert" (click) = "dismissErrorAlert()">&times;</button>
+    <strong>Error!</strong> {{error}}
+  </div>
+  <mat-divider></mat-divider>
+  <div class="alert alert-success alert-dismissible fade-in" [hidden] = " message ? false : true">
+        <button type="button" class="close" data-dismiss="alert" (click) = "dismissMessageAlert()">&times;</button>
+        <strong>Success!</strong> {{message}}
+      </div>
+</mat-card>
+

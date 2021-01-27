@@ -1,0 +1,38 @@
+<div class="content">
+</div>
+<div id="overlay">
+</div>
+
+<mat-card class="login">
+    <mat-card-header  class="login-hdr">
+        <mat-card-title>
+            <h2>{{brand[0].name}} Login</h2>
+        </mat-card-title>
+        <mat-card-subtitle>
+            Field marked * are required.
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="login-form">
+        <form>
+        <mat-form-field class="form-group" appearance="outline">
+            <mat-label>User Id</mat-label>
+            <input  matInput placeholder="your email or phone number" [formControl]="userid" required>
+            <mat-hint>User Id should be a valid 10-digit registered mobile number OR a valid email id</mat-hint>
+            <mat-error>{{getUserIdErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field   appearance="outline">
+            <mat-label>Password </mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" required [formControl]="passwd">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-hint id="capsLock" style="color:saddlebrown;" [hidden]="!capslockOn"><mat-icon>warning</mat-icon>CAPSLOCK is on </mat-hint>
+                    <mat-error>{{getPasswordErrorMessage()}}</mat-error>
+        </mat-form-field>
+        </form>
+        <br>
+        <button mat-raised-button color="accent">Login</button>
+    </mat-card-content>
+</mat-card>
+
+<img id="logo" src="{{iconUrl}}" style="background-color: linen;">

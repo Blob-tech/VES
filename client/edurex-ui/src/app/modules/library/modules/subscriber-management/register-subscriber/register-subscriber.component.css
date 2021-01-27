@@ -1,0 +1,23 @@
+.bookForm
+{
+    padding:2%;
+    margin : 7%;
+    border-radius:5px;
+}
+
+.form-group 
+{
+    margin:1%;
+    width: 45%;
+    
+}
+
+.header
+{
+    background-color: coral;
+    padding: 1%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}

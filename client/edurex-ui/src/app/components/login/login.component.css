@@ -1,0 +1,106 @@
+.content
+{
+    top:0%;
+    height: 100%;
+    width:100%;
+    background-image: url("../../../assets/images/login.png");
+    z-index: 0;
+    
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: BLOCK; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #360033;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #0b8793, #360033);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #0b8793, #360033); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+    opacity: 0.8;
+    z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+  }
+#logo
+{
+    height: 200px;
+    width: 200px;
+    position: fixed;
+    border-radius: 50%;
+    border : 5px solid coral;
+    top : 80px;
+    left : 45%;
+    z-index : 3;
+}
+
+.login
+{
+    position: fixed;
+    z-index: 2;
+    width: 50%;
+    left: 25%;
+    top:150px;
+    margin-bottom: 10%;
+    padding: 8% 2% 2% 2%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.login-hdr
+{
+    background: coral;
+    border-radius: 5px;
+    padding:5px;
+    padding-left:32%;
+    text-align: center ;
+}
+
+.login-form
+{
+    max-width: 90%;
+    padding: 5%;
+}
+
+mat-form-field
+{
+    width: 100%;
+    font-size :20px;
+}
+
+mat-card-footer
+{
+    padding-left: 30%;
+}
+
+@media screen and (max-width : 1500px)
+{
+    .login
+    {
+        width : 90%;
+        left:5%;
+        padding: 0;
+    }
+
+    #logo
+{
+    height: 100px;
+    width: 100px;
+    position: fixed;
+    border-radius: 50%;
+    border : 5px solid coral;
+    top : 100px;
+    left :7%;
+    z-index : 3;
+}
+
+.login-hdr
+{
+    
+    padding:5px;
+    padding-top : 50px;
+    text-align: center ;
+}
+}

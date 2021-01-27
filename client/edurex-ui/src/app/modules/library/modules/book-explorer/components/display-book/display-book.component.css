@@ -1,0 +1,88 @@
+mat-card-footer
+{
+    padding-left: 5%;
+    padding-bottom: 1rem;;
+}
+
+.action-button
+{
+    margin-left: 1rem;
+}
+
+.mat-card img
+{
+    border-radius:5px;
+    height: 350px;
+    width:280px;
+    padding:1%;
+    margin-bottom: 1rem;
+}
+
+@media screen and (max-width : 1100px)
+{
+    .mat-card img 
+    {
+        width:250px;
+    }
+}
+
+@media screen and (max-width : 800px)
+{
+    .mat-card img 
+    {
+        width:180px;
+    }
+}
+
+@media screen and (max-width : 760px)
+{
+    .mat-card img 
+    {
+        width:280px;
+    }
+}
+
+.book
+{
+    margin-bottom: 1rem;
+}
+.mat-card
+{
+    height: fit-content;
+}
+
+.mat-card-title span
+{
+    margin-bottom: 1%;
+}
+
+h5
+{
+    color : lightslategray;
+}
+
+.badge-info
+{
+    margin-left : 2px;
+}
+.avatar
+{
+    font-size: 30px;
+}
+
+
+
+
+mat-form-field
+{
+    width : 20%; 
+    margin:1%;
+}
+
+@media screen and (max-width:760px)
+{
+    mat-form-field
+{
+    width : 45%;
+}
+}

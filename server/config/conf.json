@@ -1,0 +1,12 @@
+{
+    "development" : {
+        "PORT" : 3000,
+        "HOST" : "http://localhost:3000/",
+        "MONGODB_URI" : "mongodb://localhost:27017/edurexdb"
+    },
+    "production" : {
+        "PORT" : 8080,
+        "HOST" : "http://xxx.yyy.com/",
+        "MONGODB_URI" : "mongodb://xxxxx/DB_Name"
+    }
+}

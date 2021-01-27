@@ -1,0 +1,221 @@
+<button mat-fab color="primary"  matTooltip="home"
+routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></button>
+
+<mat-tab-group>
+  <mat-tab label="Article Category">
+    <ng-template matTabContent>
+      <form class ="catFrm" [formGroup]="articleCategoryForm">
+        <mat-form-field class="form-group" appearance="outline">
+          <mat-label>Category Name</mat-label>
+          <input matInput formControlName ="category_name" placeholder="Enter a category Name" required>
+          <mat-hint>Category name should not contain more than 100 characters</mat-hint>
+          <mat-error *ngIf="category_name.hasError('required')">[value] is required</mat-error>
+          <mat-error *ngIf="category_name.hasError('maxLength')">Character limit exceeded</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" class="action-button" (click)="addCategory()" [disabled]="submitCatDisabled()">Add Category</button>
+        <button mat-raised-button color="accent" type="reset" class="action-button">Reset</button>
+      </form><br><br>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor = "let articleCategory of articleCategories; let i = index">
+          <mat-expansion-panel-header style="background-color:{{header_color[i%8]}}">
+              <mat-panel-title style="color:black;display: flex;" >
+                  {{articleCategory.book_category}}<span class="example-spacer"></span>
+                  <button mat-mini-fab color="warn" (click)="removeCategory(articleCategory._id)"><mat-icon>delete</mat-icon></button>
+                  </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form class ="catFrm" [formGroup]="articleSubCategoryForm">
+              <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Subcategory Name</mat-label>
+                <input matInput formControlName ="subcategory_name" placeholder="Enter a subcategory Name" required>
+                <mat-hint>Subcategory name should not contain more than 100 characters.</mat-hint>
+                <mat-error *ngIf = "subcategory_name.hasError('required')">[value] is required</mat-error>
+                <mat-error *ngIf = "subcategory_name.hasError('maxLength')">Character limit exceeded</mat-error>
+              </mat-form-field>
+              <button mat-raised-button color="primary" type="submit" class="action-button" 
+              (click)="addSubCategory(articleCategory._id)" [disabled]="submitSubCatDisabled()">Add Subcategory</button>
+              <button mat-raised-button color="accent" type="reset" class="action-button">Reset</button>
+            </form><br><br>
+          <p *ngFor = "let subcategory of articleCategory.book_subCategory" style="display: flex;">
+            {{subcategory}}<span class="example-spacer"></span>
+            <button mat-mini-fab color="warn" style="margin-left: 1rem;" (click)="removeSubCategory(subcategory,articleCategory._id)"><mat-icon>remove</mat-icon></button>
+          </p>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Subcription Category">
+    <ng-template matTabContent>
+        <form class ="catFrm" [formGroup]="subscriptionCategoryForm">
+            <mat-form-field class="form-group" appearance="outline" >
+              <mat-label>Subscription Category Name</mat-label>
+              <input matInput formControlName ="subscription_category_name" placeholder="Enter a subscription category Name" required>
+              
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" class="action-button" (click)="addSubscriptionCategory()" [disabled]="submitSubscriptionDisabled()">Add Category</button>
+            <button mat-raised-button color="accent" type="reset" class="action-button">Reset</button>
+          </form><br><br>
+          <mat-card *ngFor = "let subscat of subscriptionCategories; let i = index">
+            <mat-card-header style="display: flex;">
+           <h2><strong>{{subscat.subscription_category}}</strong></h2>
+           <span class="example-spacer"></span>
+           <button mat-mini-fab color="warn" (click)="removeSubscriptionCategory(subscat._id)"><mat-icon>delete</mat-icon></button>
+            </mat-card-header>
+            </mat-card>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Configuration Parameter">
+      <ng-template matTabContent>
+        <form class ="catFrm" [formGroup]="configForm">
+          <button mat-button >New Release Parameter</button>
+          <mat-form-field class="form-group" appearance="outline" >
+              <mat-label>New Release </mat-label>
+              <mat-select formControlName ="release" placeholder="Enter a new release period" required>
+                <mat-option [value]=86400000>Today</mat-option>
+                <mat-option [value]=604800000>Last Week</mat-option>
+                <mat-option [value]=1209600000>Last 2 Week</mat-option>
+                <mat-option [value]=2592000000>Last 1 Month</mat-option>
+                <mat-option [value]=7776000000>Last 3 Month</mat-option>
+                <mat-option [value]=15552000000>Last 6 Month</mat-option>
+                <mat-option [value]=31536000000>This Year</mat-option>
+              </mat-select>
+            </mat-form-field>
+          <br>
+          <button mat-button >Thumbnail Image Size Limit</button>
+          <mat-form-field class="form-group" appearance="outline" >
+              <mat-label>Image Size Limit </mat-label>
+              <mat-select formControlName ="img_size" placeholder="Enter maximum size limit for Book Cover" required>
+                <mat-option [value]=1>1 MB</mat-option>
+                <mat-option [value]=2>2 MB</mat-option>
+                <mat-option [value]=5>5 MB</mat-option>
+                <mat-option [value]=10>10 MB</mat-option>
+                <mat-option [value]=25>25 MB</mat-option>
+                <mat-option [value]=50>50 MB</mat-option>
+                <mat-option [value]=100>100 MB</mat-option>
+              </mat-select>
+            </mat-form-field><br>
+            <button mat-button >Profile  Image Size Limit</button>
+            <mat-form-field class="form-group" appearance="outline" >
+                <mat-label>Profile Image Size Limit </mat-label>
+                <mat-select formControlName ="avatar_size" placeholder="Enter maximum size limit for subscriber profile image" required>
+                  <mat-option [value]=1>1 MB</mat-option>
+                  <mat-option [value]=2>2 MB</mat-option>
+                  <mat-option [value]=5>5 MB</mat-option>
+                  <mat-option [value]=10>10 MB</mat-option>
+                  <mat-option [value]=25>25 MB</mat-option>
+                  <mat-option [value]=50>50 MB</mat-option>
+                  <mat-option [value]=100>100 MB</mat-option>
+                </mat-select>
+              </mat-form-field><br>
+          <button mat-button >Document  Size Limit</button>
+          <mat-form-field class="form-group" appearance="outline" >
+              <mat-label>Document Size Limit </mat-label>
+              <mat-select formControlName ="doc_size" placeholder="Enter maximum size limit for Book/Article" required>
+                <mat-option [value]=10>10 MB</mat-option>
+                <mat-option [value]=20>20 MB</mat-option>
+                <mat-option [value]=100>100 MB</mat-option>
+                <mat-option [value]=200>200 MB</mat-option>
+                <mat-option [value]=250>250 MB</mat-option>
+                <mat-option [value]=500>500 MB</mat-option>
+                <mat-option [value]=1024>1 GB</mat-option>
+                <mat-option [value]=10240>10 GB</mat-option>
+              </mat-select>
+            </mat-form-field>
+          <br>
+          
+          <button mat-raised-button color="accent" (click)="setConfigValues()">Save</button>
+            </form>
+      </ng-template>
+    </mat-tab>
+    
+    <mat-tab label="Course Tag">
+        <ng-template matTabContent>
+            <form class ="catFrm" [formGroup]="courseTagForm">
+                <mat-form-field class="form-group" appearance="outline" >
+                  <mat-label>Course Tag Name</mat-label>
+                  <input matInput formControlName ="course_tag" placeholder="Enter a course tag name" required>
+                  
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="submit" class="action-button" (click)="addCourseTag()" [disabled]="submitCourseTagDisabled()">Add Course Tag</button>
+                <button mat-raised-button color="accent" type="reset" class="action-button">Reset</button>
+              </form>
+      <mat-tab-group>
+        <mat-tab label="All">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span>{{tags.course_tag}}</span><button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span>
+        </mat-tab>
+        <mat-tab label="A">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('A') || tags.course_tag.startsWith('a')">{{tags.course_tag}} <button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="B">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('B') || tags.course_tag.startsWith('b')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="C">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('C') || tags.course_tag.startsWith('c')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="D">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('D') || tags.course_tag.startsWith('d')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="E">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('E') || tags.course_tag.startsWith('e')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="F">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('F') || tags.course_tag.startsWith('f')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="G">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('G') || tags.course_tag.startsWith('g')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="H">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('H') || tags.course_tag.startsWith('h')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="I">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('I') || tags.course_tag.startsWith('i')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="J">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('J') || tags.course_tag.startsWith('j')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="K">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('K') || tags.course_tag.startsWith('k')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="L">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('L') || tags.course_tag.startsWith('l')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('M') || tags.course_tag.startsWith('m')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="N">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('N') || tags.course_tag.startsWith('n')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="O">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('O') || tags.course_tag.startsWith('o')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="P">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('P') || tags.course_tag.startsWith('p')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+        </mat-tab>
+        <mat-tab label="Q">
+        </mat-tab>
+        <mat-tab label="R">
+        </mat-tab>
+        <mat-tab label="S">
+        </mat-tab>
+        <mat-tab label="T">
+        </mat-tab>
+        <mat-tab label="U">
+        </mat-tab>
+        <mat-tab label="V">
+        </mat-tab>
+        <mat-tab label="W">
+        </mat-tab>
+        <mat-tab label="X">
+        </mat-tab>
+        <mat-tab label="Y">
+        </mat-tab>
+        <mat-tab label="Z">
+        </mat-tab>
+        
+        
+
+      </mat-tab-group>
+    </ng-template>
+    </mat-tab>
+</mat-tab-group>
