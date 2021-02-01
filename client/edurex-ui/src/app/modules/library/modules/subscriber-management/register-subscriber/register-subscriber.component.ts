@@ -7,6 +7,7 @@ import { BookService } from '../../../service/book.service';
 import { NavbarService } from 'src/app/components/navbar/navbar.service';
 import { Router } from '@angular/router';
 import { SubscriberService } from '../../../service/subscriber.service';
+import { InstituteManagementService } from '../../../service/institute-management.service';
 
 
 
@@ -49,7 +50,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
   url = "assets/images/user.png";
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private subscriberService : SubscriberService,
-    private navbar : NavbarService) { }
+    private instituteService : InstituteManagementService, private navbar : NavbarService) { }
 
     
   ngOnInit(): void {
@@ -57,6 +58,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     this.getSubscriptionCategories();
     this.getConfigParams();
     this.getCounter();
+    this.getInstituteList();
     
   }
 
@@ -79,6 +81,8 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     this.error = null;
   }
 
+
+  institutes = [];
   categories = [];
   hide = true;
   hide2=true;
@@ -97,7 +101,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
       address : ['',[Validators.maxLength(500)]],
       password : ['',[Validators.required,Validators.minLength(8),Validators.maxLength(15),Validators.pattern("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]*$")]],
       resetPassword : ['',[Validators.required]],
-      institute_id :[''],
+      institute :['',Validators.required],
       role : ['',Validators.required],
       avatar : ['']//1 MB
     },
@@ -152,6 +156,10 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
   {
     return this.subscriberForm.get('subscription');
   }
+  get institute()
+  {
+    return this.subscriberForm.get('institute');
+  }
 
   get address()
   {
@@ -186,6 +194,28 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     )
   }
 
+  getInstituteList()
+  {
+    this.instituteService.get_institutes().subscribe(
+      data=>{
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          this.institutes = data as Array<any>;
+          this.institutes.sort((a,b) => a.organisation_name.localeCompare(b.organisation_name));
+        }
+        else
+        {
+          this._snackbar.open("Error in loading institutes ! "+ data,null, {duration : 5000});
+          
+        }
+      },
+      err => {
+        this._snackbar.open("Error in loading institutes from edurex database! "+ err,null, {duration : 5000});
+          
+      })
+  }
+  
+
   getCounter()
   {
     this.navbar.getCounterList().subscribe(
@@ -205,6 +235,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     this.libCategoryServices.getSubscriptionCategories().subscribe(
       data => {
         this.subscriptions = data as Array<any>;
+        this.subscriptions.sort((a,b) => a.subscription_category.localeCompare(b.subscription_category));
       },
       err=>
       {

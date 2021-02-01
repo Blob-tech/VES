@@ -17,10 +17,10 @@ export class SubscriberService {
     return this.httpClient.post(this.URL+"add",formData,{headers : headers});
   }
 
-  get_subscribers(category : String)
+  get_subscribers(institute : String)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL + "list/" + category,{headers : headers});
+    return this.httpClient.get(this.URL + "list/" + institute,{headers : headers});
   }
 }

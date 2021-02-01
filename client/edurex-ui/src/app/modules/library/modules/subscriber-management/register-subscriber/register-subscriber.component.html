@@ -55,6 +55,14 @@
                           <mat-error *ngIf="subscription.hasError('required')">Value is required</mat-error>
             </mat-form-field>
             <mat-form-field class="form-group" appearance="outline" style="width:90%">
+                <mat-label>Institute/Organisation</mat-label>
+                    <mat-select multiple  formControlName = "institute" required>
+                            <mat-option *ngFor="let ins of institutes" [value]="ins.organisation_id">{{ins.organisation_name}}</mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="institute.hasError('required')">Value is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="form-group" appearance="outline" style="width:90%">
                 <mat-label>Subscriber Address</mat-label>
                 <textarea matInput formControlName="address"  placeholder="Enter subscriber address" ></textarea>
                 <mat-hint>Subscriber address should not exceed more than 500 characters</mat-hint>
@@ -104,8 +112,6 @@
                             <mat-label>role</mat-label>
                             <mat-select formControlName="role" required placeholder="Select a role">
                                 <mat-option value = "LADMIN">Library Admin</mat-option>
-                                <mat-option value="IADMIN">Institute Admin</mat-option>
-                                <mat-option value = "CADMIN">Content Admin</mat-option>
                                 <mat-option value="STUDENT">Student</mat-option>
 
                             </mat-select>

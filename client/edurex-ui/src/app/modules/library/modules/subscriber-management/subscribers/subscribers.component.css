@@ -13,3 +13,8 @@ button.truncate {
     white-space: nowrap;
   }
   
+.mat-tooltip.tooltip 
+{
+background-color: darkblue;
+font-size: 50px;
+}

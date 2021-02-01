@@ -36,9 +36,10 @@ const userSchema = new schema(
            type : String,
            required : true
        },
-       institute_id :
+       institute :
        {
-           type : String,
+           type : [String],
+           required : true
        },
         subscription_category :
        {

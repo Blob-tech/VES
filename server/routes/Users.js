@@ -9,9 +9,9 @@ const User = require('../models/User');
 users.use(cors());
 
 //get Users depend upon subscription category
-users.get('/list/:category',(req,res,next)=>{
+users.get('/list/:institute',(req,res,next)=>{
 
-    User.find({ $and : [{active:true},{subscription_category : {$elemMatch : {$eq : req.params.category}}}]})
+    User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
     .then(
         data=>{
         res.json(data);
@@ -40,7 +40,7 @@ users.post('/add',async (req,res,next)=>{
                name : req.body.name,
                address : req.body.address,
                password : bcrypt.hashSync(req.body.password,10),
-               institute_id :req.body.institute_id,
+               institute :req.body.institute.split(","),
                subscription_category :req.body.subscription.split(","),
                date_of_registration : dateFormat(new Date(),"yyyy-mm-dd'T'HH:MM:ss"),
                role : req.body.role,

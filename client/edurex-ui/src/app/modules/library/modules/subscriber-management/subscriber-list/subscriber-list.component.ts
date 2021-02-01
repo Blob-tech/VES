@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SubscriberService } from '../../../service/subscriber.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import {config} from 'src/conf';
 
 @Component({
   selector: 'app-subscriber-list',
@@ -12,6 +13,8 @@ export class SubscriberListComponent implements OnInit {
 
   subscriberList = [];
   noSubs = null;
+  
+
   constructor(private subscriberService : SubscriberService,private _snacbar : MatSnackBar,
     private route : ActivatedRoute) { }
 
@@ -23,9 +26,9 @@ export class SubscriberListComponent implements OnInit {
     });
   }
 
-  getSubscribers(category : String)
+  getSubscribers(institute : String)
   {
-    this.subscriberService.get_subscribers(category).subscribe(
+    this.subscriberService.get_subscribers(institute).subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {

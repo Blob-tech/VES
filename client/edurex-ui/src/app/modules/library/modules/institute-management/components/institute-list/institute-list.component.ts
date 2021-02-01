@@ -22,6 +22,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
     institutes = [];
     noInstitute = null;
+    imgUrl = config.host + "organisation/";
 
     displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'address'];
    

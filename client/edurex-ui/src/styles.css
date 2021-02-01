@@ -4,7 +4,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-mat-tooltip
-{
-    font-size:20px;
-}
+.mat-tooltip.tooltip {
+    background-color: darkblue;
+    font-size: 50px;
+  }

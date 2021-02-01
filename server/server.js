@@ -47,6 +47,7 @@ var Organisation = require('./routes/Organisations');
 app.use('/thumbnail',express.static(path.join(__dirname, 'uploads/library/cover-photos/')));
 app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')));
 app.use('/system',express.static(path.join(__dirname,'uploads/system/')));
+app.use('/organisation',express.static(path.join(__dirname,'uploads/organisation/logo/')));
 app.use('/counters',Counters)
 app.use('/library/category',LibraryCategory);
 app.use('/library/books',Book);
