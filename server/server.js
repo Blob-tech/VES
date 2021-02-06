@@ -82,7 +82,7 @@ app.get('/library/books/languages/get/:id',(req,res,next)=>{
         {
             res.json({"err":"Error in Loading Language"})
         }
-        collection.findOne({code : req.params.id}).then(
+        collection.findOne({name : req.params.id}).then(
             data=>{
                 res.json(data)
             }

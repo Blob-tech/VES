@@ -66,7 +66,7 @@
             </mat-card>
         </mat-sidenav>
         <div style="margin-top:180px">
-            <breadcrumb style="color:black"></breadcrumb>
+            <!--breadcrumb style="color:black"></breadcrumb-->
             <router-outlet></router-outlet>
             <mat-card class="mobile-right-sidebar">
                 <mat-card-header>
@@ -74,7 +74,6 @@
                         New Releases
                     </mat-card-title>
                 </mat-card-header>
-
                 <div style="margin:1%;padding: 1%;">
                 <p *ngFor="let book of books">
                         <img class="avatar"  src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
