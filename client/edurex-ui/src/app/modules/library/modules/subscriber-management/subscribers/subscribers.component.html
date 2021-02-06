@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-lg-3 col-xl-3 col-sm-3 col-md-3" *ngFor="let ins of institutes;let i = index">
             
-            <button routerLink="/e-library/subscriber/subscriber-management/list/{{ins.organisation_id}}" matTooltip="{{ins.organisation_name}}" *ngIf="i % 2 == 0" mat-raised-button color = "primary"><img height=40 width=40 src="{{ins.avatar ? imgUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 50 ? ins.organisation_name.substring(0,50)+"..." : ins.organisation_name}}</strong></button>
-            <button routerLink="/e-library/subscriber/subscriber-management/list/{{ins.organisation_id}}" matTooltip="{{ins.organisation_name}}" *ngIf = "i % 2 != 0 " mat-raised-button color = "accent"><img height=40 width=40 src="{{ins.avatar ? imgUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 50 ? ins.organisation_name.substring(0,50)+"..." : ins.organisation_name}}</strong></button>
+            <button routerLink="/e-library/subscriber/subscriber-management/list/{{ins.organisation_id}}" matTooltip="{{ins.organisation_name}}" matTooltipClass="tooltip" matTooltipPosition="above" *ngIf="i % 2 == 0" mat-raised-button color = "primary"><img height=40 width=40 src="{{ins.avatar ? imgUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 100 ? ins.organisation_name.substring(0,100)+"..." : ins.organisation_name}}</strong></button>
+            <button routerLink="/e-library/subscriber/subscriber-management/list/{{ins.organisation_id}}" matTooltip="{{ins.organisation_name}}" matTooltipClass="tooltip" matTooltipPosition="above" *ngIf = "i % 2 != 0 " mat-raised-button color = "accent"><img height=40 width=40 src="{{ins.avatar ? imgUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 100 ? ins.organisation_name.substring(0,100)+"..." : ins.organisation_name}}</strong></button>
 
         </div>
     </div>

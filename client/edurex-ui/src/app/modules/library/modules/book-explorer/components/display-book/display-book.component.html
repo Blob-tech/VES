@@ -58,7 +58,7 @@
            <mat-card-subtitle>{{book.author}} | {{book.language}}</mat-card-subtitle>
            
         </mat-card-header>
-        <img  src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
+        <img  mat-card-image src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
           <mat-card-footer>
               <button matTooltip="view" routerLink= "/e-library/book-explorer/view/{{book.book_id}}  " mat-mini-fab class="action-button" color="primary" ><i class="fas fa-eye"></i></button>
               <button matTooltip="edit" routerLink= "/e-library/book-explorer/edit/{{book.book_id}}  " mat-mini-fab class="action-button" color="accent" ><i class="fas fa-edit"></i></button>

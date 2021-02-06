@@ -5,6 +5,8 @@ button
     height: fit-content;
     padding: 1rem;
     margin: 1rem;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 button.truncate {
