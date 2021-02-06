@@ -18,7 +18,7 @@ import { config } from "src/conf";
 })
 export class NavbarComponent implements OnInit {
   
-  themeList :String[] = ["indigo-pink","pink-bluegrey","teal-cyan","yellow-brown","deeppurple-amber","lime-blue"]
+  themeList :String[] = ["indigo-pink","pink-bluegrey","teal-cyan","yellow-brown","deeppurple-amber","lime-blue","light-green-grey"]
   constructor(config: NgbModalConfig, private modalService: NgbModal,private formBuilder : FormBuilder,
     private navbarService : NavbarService, private _snackbar : MatSnackBar,private route : Router) {
     config.backdrop = 'static';

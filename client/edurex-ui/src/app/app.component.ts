@@ -18,7 +18,7 @@ export class AppComponent {
   
   constructor(private overlayContainer: OverlayContainer) {
     // Set default theme here:
-    this.setActiveTheme('deeppurple-amber', /* darkness: */ false)
+    this.setActiveTheme('light-green-grey', /* darkness: */ false)
   }
   
   setActiveTheme(theme: string, darkness: boolean = null) {

@@ -32,6 +32,11 @@ $themes-map: (
   lime-blue : (
     primary-base : $mat-lime,
     accent-base : $mat-light-blue,
+  ),
+   
+  light-green-grey : (
+    primary-base : $mat-light-green,
+    accent-base : $mat-grey
   )
 );
 

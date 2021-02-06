@@ -8,6 +8,11 @@ mat-form-field mat-error
     font-size: 15px;
 }
 
+.mobile-module-button
+{
+    display:none;
+}
+
 .breadcrumb
 {
     position:fixed;
@@ -26,9 +31,26 @@ mat-form-field mat-error
 .auto-flip
 {
     font-size: 30px;
-    display: inline;
 }
 
 h1{
     font-size: 40px;
+}
+
+span
+{
+    margin-right: 10px;
+    margin-top: 25px;
+}
+
+@media screen and (max-width : 800px)
+{
+    .module-button
+    {
+        display:none;
+    }
+    .mobile-module-button
+    {
+        display : block;
+    }
 }

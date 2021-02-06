@@ -24,7 +24,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     noInstitute = null;
     imgUrl = config.host + "organisation/";
 
-    displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'address'];
+    displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions'];
    
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

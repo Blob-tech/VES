@@ -1,9 +1,9 @@
 <mat-toolbar color="primary" class="navbar">
     <mat-toolbar-row>
-      <span style="margin-right: 1rem;"><img src="{{imgUrl}}" height="50" width="{{icon_width.value}}">
+      <span style="margin-right: 1px;"><img src="{{imgUrl}}" height="50" width="{{icon_width.value}}">
       </span>
       <span><h1><strong>{{name.value}}</strong> </h1>
-      <h4><i>{{tagline.value}}</i></h4></span>
+      <h4><i id="tagline">{{tagline.value}}</i></h4></span>
       <span class="example-spacer"></span>
                 <span class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
       <div class = "top-menu">
@@ -41,6 +41,7 @@
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[3])"><mat-icon class="auto-flip" style="color:brown">invert_colors</mat-icon>Sand</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[4])"><mat-icon class="auto-flip" style="color:yellow">invert_colors</mat-icon>Bubble</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[5])"><mat-icon class="auto-flip" style="color:lightskyblue">invert_colors</mat-icon>Sonic</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[6])"><mat-icon class="auto-flip" style="color:green">invert_colors</mat-icon>Lex</button>
       </mat-menu>
       
       
