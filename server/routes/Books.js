@@ -9,6 +9,59 @@ const multer = require('multer');
 const Books = require('../models/Books');
 const mongoose = require('mongoose');
 
+//Get total books count
+books.get('/count/:category/:subcategory',(req,res,next)=>
+{
+    if(req.params.category == "all")
+    {
+        Books.find({active  : {$eq : true}},).count((err,count)=>{
+            if(err)
+            {
+                res.json({"err": "Error in loading the list of Books from Edurex Database."})
+            }
+            else
+            {
+                res.json(count)
+            }
+        }
+        )
+           
+    }
+    else{
+        if(req.params.subcategory == "all")
+        {
+            Books.find({$and : [{active  : {$eq : true}},
+            {category : req.params.category}] })
+            .count((err,count)=>{
+                if(err)
+                {
+                    res.json({"err": "Error in loading the list of Books from Edurex Database."})
+                }
+                else
+                {
+                    res.json(count)
+                }
+            })
+        }
+        else
+        {
+            Books.find({$and : [{active  : {$eq : true}},
+            {category : req.params.category},
+            {subcategory : req.params.subcategory}]})
+            .count((err,count)=>{
+                if(err)
+                {
+                    res.json({"err": "Error in loading the list of Books from Edurex Database."})
+                }
+                else
+                {
+                    res.json(count)
+                }
+            })
+        }
+    }
+
+})
 
 //Get Book by Id
 books.get('/view/:id',(req,res,next)=>
@@ -41,12 +94,12 @@ books.get('/list/latest',(req,res,next)=>
 })
 
 // Get List of All Books;
-books.get('/list/:category/:subcategory',(req,res,next)=>
+books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
 {
     if(req.params.category == "all")
     {
         Books.find({active  : {$eq : true}},)
-        .sort({book_name : 1})
+        .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
             .then(
                 data => 
                 {
@@ -63,7 +116,7 @@ books.get('/list/:category/:subcategory',(req,res,next)=>
         {
             Books.find({$and : [{active  : {$eq : true}},
             {category : req.params.category}] })
-            .sort({book_name : 1})
+            .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
                 .then(
                     data => 
                     {
@@ -80,7 +133,7 @@ books.get('/list/:category/:subcategory',(req,res,next)=>
             Books.find({$and : [{active  : {$eq : true}},
             {category : req.params.category},
             {subcategory : req.params.subcategory}]})
-            .sort({book_name : 1})
+            .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
                 .then(
                     data => 
                     {

@@ -38,8 +38,13 @@
   <div style="margin:1rem" sclass="alert alert-info alert-dismissible fade-in" [hidden] = " noBook ? false : true">
       <strong>Alert!</strong> {{noBook}} 
     </div>
-
-
+    <mat-paginator 
+    (page)="handlePageEvent($event)"
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions">
+</mat-paginator>
+<br>
 <div class="container normal-display">
     <div class="row">
    <div class="col-sm-4 col-md-4 col-lg-4 book" *ngFor="let book of books;let i = index;">
@@ -69,5 +74,12 @@
     </div>
     </div>
     </div>
-
+<br>
+    <mat-paginator 
+    (page)="handlePageEvent($event)"
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions">
+</mat-paginator>
+<br>
     

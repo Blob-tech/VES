@@ -205,6 +205,7 @@ app.put('/library/config/set',(req,res,next)=>{
         }
         collection.findOneAndUpdate({_id : {$ne :null}},
             {$set : {
+                books_per_page : req.body.books_per_page,
                 release : req.body.release,
                 img_size : req.body.img_size,
                 doc_size : req.body.doc_size,

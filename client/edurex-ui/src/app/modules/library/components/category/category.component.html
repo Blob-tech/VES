@@ -68,6 +68,18 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
   <mat-tab label="Configuration Parameter">
       <ng-template matTabContent>
         <form class ="catFrm" [formGroup]="configForm">
+            <button mat-button >Books in New Release</button>
+            <mat-form-field class="form-group" appearance="outline" >
+                <mat-label>Books in New Release</mat-label>
+                <mat-select formControlName ="books_per_page" placeholder="Enter number of books for new release" required>
+                  <mat-option [value]=5>5</mat-option>
+                  <mat-option [value]=10>10</mat-option>
+                  <mat-option [value]=25>25</mat-option>
+                  <mat-option [value]=50>50</mat-option>
+                  <mat-option [value]=100>100</mat-option>
+                </mat-select>
+              </mat-form-field>
+            <br>
           <button mat-button >New Release Parameter</button>
           <mat-form-field class="form-group" appearance="outline" >
               <mat-label>New Release </mat-label>

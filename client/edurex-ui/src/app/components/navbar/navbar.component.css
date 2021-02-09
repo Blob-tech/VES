@@ -66,14 +66,18 @@ h4{
 }
 #tagline
 {
-    font-size : 10px;
+    display: none;
+}
+#brand-name
+{
+    display: none;
 }
 
 .hamburger-menu
 {
     visibility: visible;
     justify-content: flex-end;
-    margin-left : 200px;
+    margin-left : 300px;
 }
 
 h1
