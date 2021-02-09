@@ -2,12 +2,15 @@
     <mat-toolbar-row>
       <span style="margin-right: 1px;"><img src="{{imgUrl}}" height="50" width="{{icon_width.value}}">
       </span>
-      <span><h1><strong>{{name.value}}</strong> </h1>
+      <span id="brand-name"><h1><strong>{{name.value}}</strong> </h1>
       <h4><i id="tagline">{{tagline.value}}</i></h4></span>
       <span class="example-spacer"></span>
-                <span class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
-      <div class = "top-menu">
-      <span>
+                <span  class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
+                <span class="example-spacer"></span>
+    
+     
+     <div class = "top-menu">
+      <span>         
         
         <mat-slide-toggle (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
         Dark Mode</mat-slide-toggle></span>

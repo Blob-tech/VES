@@ -23,6 +23,14 @@ export class InstituteManagementService {
     headers.append("Content-Type","application/json");
     return this.httpClient.get(this.URL + "list/all" ,{headers : headers});
   }
+
+  delete_institutes(id : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL + "delete/" + id , {headers : headers});
+
+  }
 }
 
 

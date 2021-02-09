@@ -3,6 +3,7 @@ const organisations = express.Router();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dateFormat = require('dateformat');
+const fs = require('fs');
 
 const Organisation = require('../models/Organisation');
 organisations.use(cors());
@@ -138,5 +139,36 @@ organisations.post('/add',async (req,res,next)=>{
 
 })
 
+
+// Delete an organisation
+//Delete a Book
+organisations.put('/delete/:id', (req,res,next)=>
+{
+          Organisation.findOne({organisation_id : req.params.id}).
+          then(data=>{  
+            if(data)
+            {
+
+               fs.unlinkSync('./uploads/organisation/logo/'+data.avatar)
+               
+
+                Organisation.findOneAndUpdate({organisation_id : req.params.id},
+                    {
+                        $set : {
+                            active : false
+                        }
+            
+                    }).then(data => {
+                        res.json({"msg" : "Organisation has been Deleted Successfully" })
+                    }).catch(err => {
+                        res.json({"err" : "Error in deleting Organisation" })
+                    })
+
+            }
+          }).catch(err=>{
+            res.json({"err" : "Error in deleting Organisation from Edurex Database" + err});
+          })        
+      
+})
 
 module.exports = organisations;

@@ -27,10 +27,11 @@ export class CategoryComponent implements OnInit {
 
   configForm = this.formBuilder.group(
     {
-      release : [0,Validators.required],
-      img_size : [0,Validators.required],
-      doc_size : [0,Validators.required],
-      avatar_size :[0,Validators.required],
+      release : [86400000,Validators.required],
+      img_size : [1,Validators.required],
+      doc_size : [1,Validators.required],
+      avatar_size :[10,Validators.required],
+      books_per_page : [5,Validators.required] 
     }
   )
   
@@ -130,6 +131,12 @@ export class CategoryComponent implements OnInit {
     return this.configForm.get('doc_size');
   }
 
+  get books_per_page()
+  {
+    return this.configForm.get('books_per_page');
+  }
+
+
   
 
   getConfigValues()
@@ -140,6 +147,7 @@ export class CategoryComponent implements OnInit {
         {
           this.config_params = data[0];
           this.configForm.patchValue({
+            books_per_page : this.config_params.books_per_page,
             release : this.config_params.release,
             img_size : this.config_params.img_size,
             doc_size : this.config_params.doc_size,

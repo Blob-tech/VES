@@ -110,6 +110,7 @@
 
   mat-card mat-card-header
   {
+      background-color: lightblue;
       border-radius: 5px;
       padding: 1rem;
 

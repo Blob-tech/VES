@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, Validators } from '@angular/forms';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
+import {PageEvent} from '@angular/material/paginator';
 import {config} from 'src/conf';
 
 @Component({
@@ -25,6 +26,11 @@ export class DisplayBookComponent implements OnInit {
   search_book = new FormControl('');
   search_id = new FormControl('');
   language = new FormControl('');
+   // MatPaginator Inputs
+   length = 10;
+   pageSize = 5;
+   pageSizeOptions: number[] = [5, 10, 25, 100];
+   pageIndex = 0;
 
   imgUrl = config.host + "thumbnail/";
   constructor(private bookService : BookService, private route : ActivatedRoute,
@@ -34,14 +40,52 @@ export class DisplayBookComponent implements OnInit {
     this.getConfigParams();
     this.getLanguages();
     this.route.params.subscribe(routeParams => {
-      this.getBooks(routeParams.category,routeParams.subcategory);
+      this.getBookCount(routeParams.category,routeParams.subcategory);
+      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1);
      
     });
   }
 
-  getBooks(category,subcategory)
+  
+
+
+ 
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  handlePageEvent(event: PageEvent) {
+    this.length = event.length;
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.route.params.subscribe(routeParams => {
+      this.getBookCount(routeParams.category,routeParams.subcategory);
+      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1);
+     
+    });
+  }
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+  }
+
+  getBookCount(category,subcategory)
   {
-    this.bookService.getBook(category,subcategory).subscribe(
+      this.bookService.getBookCount(category,subcategory).subscribe(
+        data=>{
+          this.length = Number(data);
+        },
+        err=>{
+          this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+      }
+      )
+  }
+
+  getBooks(category,subcategory,books_per_page,page)
+  {
+    this.bookService.getBook(category,subcategory,books_per_page,page).subscribe(
       data=>
       {
         this.books = data as Array<any>;
@@ -74,7 +118,7 @@ export class DisplayBookComponent implements OnInit {
           {
             this._snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
             this.route.params.subscribe(routeParams => {
-            this.getBooks(routeParams.category,routeParams.subcategory);
+            this.getBooks(routeParams.category,routeParams.subcategory,4,1);
             });
           }
           else

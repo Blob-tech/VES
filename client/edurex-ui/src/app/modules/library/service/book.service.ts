@@ -45,12 +45,19 @@ export class BookService {
     headers.append("Content-Type","application/json");
     return this.httpClient.put(this.URL+"delete/" + id,{headers:headers})
   }
-
-  getBook(category : String, subcategory : String)
+  getBookCount(category : String , subcategory : String)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"list/"+category+"/" + subcategory,{headers:headers})
+    return this.httpClient.get(this.URL+"count/"+category + "/" + subcategory,{headers : headers})
+  }
+
+  getBook(category : String, subcategory : String, books_per_page : Number, page : Number)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"list/"+category+"/" + subcategory + "/" + books_per_page + 
+    "/" + page,{headers:headers})
   }
 
   addBook(book : FormData)
