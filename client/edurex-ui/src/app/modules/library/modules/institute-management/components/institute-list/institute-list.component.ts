@@ -22,7 +22,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
     institutes = [];
     noInstitute = null;
-    imgUrl = config.host + "organisation/";
+    imgUrl = config.host + "organisation_logo/";
 
     displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions'];
    
@@ -117,4 +117,23 @@ import { SelectionModel } from '@angular/cdk/collections';
             
         })
       }
+
+      delete_institute(id : String)
+      {
+        var res = confirm("Are you sure want to delete this institution ?");
+        if( res == true) {
+        this.instituteService.delete_institutes(id).subscribe(
+          data=>
+          { 
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+            this.getInstituteList();
+          },
+          err=>
+          {
+            this._snackbar.open("Error in deleting institute from the organisation. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
+          }
+
+        )
+      }
+    }
     }

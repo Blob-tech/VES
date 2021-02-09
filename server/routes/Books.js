@@ -14,7 +14,7 @@ books.get('/count/:category/:subcategory',(req,res,next)=>
 {
     if(req.params.category == "all")
     {
-        Books.find({active  : {$eq : true}},).count((err,count)=>{
+        Books.find({active  : {$eq : true}},).countDocuments((err,count)=>{
             if(err)
             {
                 res.json({"err": "Error in loading the list of Books from Edurex Database."})

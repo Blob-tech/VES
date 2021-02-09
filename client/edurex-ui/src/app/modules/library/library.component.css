@@ -8,6 +8,15 @@ mat-form-field mat-error
     font-size: 15px;
 }
 
+.module-button  button
+{
+    padding: 2px;
+}
+
+.mobile-module-button button
+{
+    padding : 1px;
+}
 .mobile-module-button
 {
     display:none;
