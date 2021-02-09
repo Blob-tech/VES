@@ -82,9 +82,9 @@ books.get('/view/:id',(req,res,next)=>
 })
 
 //get list of latest release
-books.get('/list/latest',(req,res,next)=>
+books.get('/list/latest/:latest_number',(req,res,next)=>
 {
-    Books.find({active : true}).sort({date_of_published : -1}).limit(5).then(
+    Books.find({active : true}).sort({date_of_published : -1}).limit(Number(req.params.latest_number)).then(
         data=>{
             res.json(data);
         }

@@ -10,6 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource} from '@angular/material/table';
 import { Institute } from '../../models/institute';
 import { SelectionModel } from '@angular/cdk/collections';
+import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -17,6 +18,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     selector: 'app-institute-list',
     templateUrl: './institute-list.component.html',
     styleUrls: ['./institute-list.component.css'],
+    providers :[NgbModalConfig,NgbModal],
   })
   export class InstituteListComponent implements OnInit {
 
@@ -33,10 +35,11 @@ import { SelectionModel } from '@angular/cdk/collections';
     
 
 
-   constructor(private formBuilder : FormBuilder,private _snackbar : MatSnackBar, private router : Router,
-    private instituteService : InstituteManagementService,
+   constructor(conf: NgbModalConfig,private formBuilder : FormBuilder,private _snackbar : MatSnackBar, private router : Router,
+    private instituteService : InstituteManagementService,private modalService: NgbModal,
     private navbar : NavbarService) {
-      
+      conf.backdrop = 'static';
+      conf.keyboard = false;
      }
 
     ngOnInit()
@@ -116,6 +119,16 @@ import { SelectionModel } from '@angular/cdk/collections';
           this._snackbar.open("Error in loading institutes from edurex database! "+ err,null, {duration : 5000});
             
         })
+      }
+
+      view_institute(content,organisation_id : string)
+      {
+        this.open(content);
+      }
+
+      open(content)
+      {
+        this.modalService.open(content,{size : 'lg',centered : true})
       }
 
       delete_institute(id : String)

@@ -49,6 +49,7 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { NgxDocViewerModule} from 'ngx-doc-viewer';
 import { MatVideoModule } from 'mat-video';
 import { PlyrModule } from 'ngx-plyr';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -96,7 +97,8 @@ import { PlyrModule } from 'ngx-plyr';
     PdfJsViewerModule,
     NgxDocViewerModule,
     MatVideoModule,
-    PlyrModule
+    PlyrModule,
+    NgbModule
   ],
   providers : [],
   bootstrap: [BookExplorerComponent,CreateNewBooksComponent]

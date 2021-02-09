@@ -12,8 +12,9 @@ mat-card-footer
 .mat-card img
 {
     border-radius:5px;
-    height: 300px;
-    padding:1%;
+    height: 200px;
+    padding-left:10%;
+    padding-right : 10%;
     margin-bottom: 1rem;
 }
 
