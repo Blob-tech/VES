@@ -139,10 +139,53 @@ organisations.post('/add',async (req,res,next)=>{
 
 })
 
+//Deactivate an Organisation 
+organisations.put('/deactivate/:state/:id',(req,res,next)=>
+{
+    Organisation.findOne({organisation_id : req.params.id}).then
+    (
+        data=>
+        {
+            if(data)
+            {
+                if(req.params.state == 'true')
+                {
+                    Organisation.findOneAndUpdate({organisation_id : req.params.id},
+                        {
+                            $set : {isActivated : false}
+                        })
+                        .then(data => {
+                            res.json({"msg" : "Organisation has been deactivated Successfully" })
+                        }).catch(err => {
+                            res.json({"err" : "Error in deactivating Organisation" })
+                        })
+                }
+                else if(req.params.state == 'false')
+                {
+                    Organisation.findOneAndUpdate({organisation_id : req.params.id},
+                        {
+                            $set : {isActivated : true}
+                        })
+                        .then(data => {
+                            res.json({"msg" : "Organisation has been activated Successfully" })
+                        }).catch(err => {
+                            res.json({"err" : "Error in activating Organisation" })
+                        })
+
+                }
+
+            }
+        }
+    ).catch(err=>{
+        res.json({"err" : "Error in activating/deactivating Organisation from Edurex Database" + err});
+      })  
+
+})
+
 
 // Delete an organisation
 //Delete a Book
-organisations.put('/delete/:id', (req,res,next)=>
+organisations.delete('/delete/:id', (req,res,next)=>
 {
           Organisation.findOne({organisation_id : req.params.id}).
           then(data=>{  
@@ -152,13 +195,8 @@ organisations.put('/delete/:id', (req,res,next)=>
                fs.unlinkSync('./uploads/organisation/logo/'+data.avatar)
                
 
-                Organisation.findOneAndUpdate({organisation_id : req.params.id},
-                    {
-                        $set : {
-                            active : false
-                        }
-            
-                    }).then(data => {
+                Organisation.remove({organisation_id : req.params.id},)
+                .then(data => {
                         res.json({"msg" : "Organisation has been Deleted Successfully" })
                     }).catch(err => {
                         res.json({"err" : "Error in deleting Organisation" })

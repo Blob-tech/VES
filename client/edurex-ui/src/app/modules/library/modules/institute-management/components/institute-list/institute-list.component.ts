@@ -11,6 +11,7 @@ import { MatTableDataSource} from '@angular/material/table';
 import { Institute } from '../../models/institute';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { sync } from 'glob';
 
 
 
@@ -26,7 +27,7 @@ import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
     noInstitute = null;
     imgUrl = config.host + "organisation_logo/";
 
-    displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions'];
+    displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions', 'status'];
    
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -46,6 +47,8 @@ import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
     {
         this.getInstituteList();
     }
+
+    currentInstitute : any;
 
     selectedInstitute : Institute=
   {
@@ -121,8 +124,43 @@ import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
         })
       }
 
+      deactivate_institute(state:string,id : string)
+      {
+        this.instituteService.deactivate_institutes(state,id).subscribe(
+          data=>{
+            if(!(JSON.parse(JSON.stringify(data))['err']))
+            {
+              this._snackbar.open(data['msg'],null,{duration : 5000});
+            }
+            else
+            {
+              this._snackbar.open(data['err'],null,{duration : 5000});
+            }
+
+          },
+          err=>{
+            this._snackbar.open("Error ! " + JSON.stringify(err), null , {duration : 50000});
+
+          }
+        )
+      }
+
       view_institute(content,organisation_id : string)
       {
+        this.instituteService.view_institute(organisation_id).subscribe(
+          data=> {
+            if(!(JSON.parse(JSON.stringify(data))['err']))
+            {
+              this.currentInstitute = data[0] ;
+              this.open(content);
+            }
+          },
+          err=>
+          {
+            this._snackbar.open("Error in loading this institute ! "+ err,null, {duration : 5000});
+          }
+        )
+       
         this.open(content);
       }
 
@@ -133,7 +171,8 @@ import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
       delete_institute(id : String)
       {
-        var res = confirm("Are you sure want to delete this institution ?");
+        var res = confirm("Are you sure want to delete this institution ? Alert ! It will permanently delete the institute and " +
+        "all its related contents. Hence it is always advisable to deactivate the institute for future referrence. ");
         if( res == true) {
         this.instituteService.delete_institutes(id).subscribe(
           data=>

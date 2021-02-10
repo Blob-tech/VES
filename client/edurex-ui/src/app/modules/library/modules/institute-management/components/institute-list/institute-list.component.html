@@ -14,7 +14,6 @@
 <div class="paginator">
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
-
 <table id="InstituteTable" matSort  mat-table [dataSource]="dataSource" class="mat-elevation-z8 board-table">
 
   <ng-container matColumnDef="select">
@@ -52,11 +51,18 @@
 <ng-container matColumnDef="actions">
   <th mat-header-cell *matHeaderCellDef> Actions </th>
   <td mat-cell *matCellDef="let org">
-      <button matTooltip="view" (click) = "view_institute(instituteView,org.organisation_id)" mat-mini-fab class="action-button" color="primary"><i class="fas fa-eye"></i></button>
-      <button matTooltip="edit" routerLink= "#" mat-mini-fab class="action-button" color="accent" ><i class="fas fa-edit"></i></button>
-      <button matTooltip="delete" (click) = "delete_institute(org.organisation_id)" mat-mini-fab class="action-button" color="warn"><i class="fas fa-trash"></i></button>
+      <button [disabled]="!org.isActivated" matTooltip="view" (click) = "view_institute(instituteView,org.organisation_id)" mat-mini-fab class="action-button" color="primary"><i class="fas fa-eye"></i></button>
+      <button [disabled]="!org.isActivated" matTooltip="edit" routerLink= "#" mat-mini-fab class="action-button" color="accent" ><i class="fas fa-edit"></i></button>
+      <button [disabled]="!org.isActivated" matTooltip="delete" (click) = "delete_institute(org.organisation_id)" mat-mini-fab class="action-button" color="warn"><i class="fas fa-trash"></i></button>
      </td>
   </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let org">
+      <mat-slide-toggle [(ngModel)]="org.isActivated" (click)="deactivate_institute(org.isActivated,org.organisation_id)">{{org.isActivated ? "Active" : "Inactive"}}</mat-slide-toggle>
+       </td>
+    </ng-container>
 
 
 
@@ -72,12 +78,24 @@
 <!-- Institute View Modal -->
 <ng-template #instituteView let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <h2 class="modal-title">System Configuration </h2>
+      <h2 class="modal-title">
+        <img src= "{{currentInstitute.avatar ? imgUrl + currentInstitute.avatar : '/assets/images/insimg.png'}}" height=100 width = 100>
+   {{currentInstitute.organisation_name}} 
+      </h2>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      
+      <div>
+        <p><button class="btn btn-info">Instititute ID : </button>{{currentInstitute.organisation_id}} </p>
+        <p><button class="btn btn-info">Client ID : </button> {{currentInstitute.client_id}} </p>
+        <p><button class="btn btn-info">Contact Phone : </button> {{currentInstitute.contact_phone}} </p>
+        <p><button class="btn btn-info">Contact Email : </button> {{currentInstitute.contact_email}} </p>
+        <p><button class="btn btn-info">Contact Person : </button> {{currentInstitute.contact_person}} </p>
+        <p><button class="btn btn-info">Address : </button> {{currentInstitute.address}} </p>
+        <p><button class="btn btn-info">Status : </button>{{currentInstitute.isActivated ? "Active" : "Inactive"}} </p>
+        <p><button class="btn btn-info">Registered on : </button> {{currentInstitute.date_of_registration}} </p>
+      </div>
     </div>
   </ng-template>

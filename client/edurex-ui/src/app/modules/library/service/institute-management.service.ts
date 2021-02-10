@@ -28,8 +28,22 @@ export class InstituteManagementService {
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.put(this.URL + "delete/" + id , {headers : headers});
+    return this.httpClient.delete(this.URL + "delete/" + id , {headers : headers});
 
+  }
+
+  deactivate_institutes(state:String,id : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type", "application/json");
+    return this.httpClient.put(this.URL + "deactivate/"+ state + "/" + id, {headers : headers} );
+  }
+
+  view_institute(id: String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "view/" + id , {headers : headers});
   }
 }
 

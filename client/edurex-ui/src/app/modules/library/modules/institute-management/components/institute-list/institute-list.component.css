@@ -4,6 +4,11 @@
     padding: 1rem;
 }
 
+.modal-body button 
+{
+    margin-right: 10%;
+    width: 200px;
+}
 
 #InstituteTable
 {
@@ -72,6 +77,11 @@ mat-card-footer
     {
         margin-left: 1%;
         max-width: 98%;
+    }
+    .modal-body button 
+    {
+        margin-right: 10%;
+        width: 100px;
     }
 
     .filter
