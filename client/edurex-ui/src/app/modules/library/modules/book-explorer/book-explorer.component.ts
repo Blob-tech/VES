@@ -6,6 +6,7 @@ import {config} from 'src/conf';
 import { FormControl } from '@angular/forms';
 import { filter } from 'minimatch';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-book-explorer',
@@ -19,16 +20,17 @@ export class BookExplorerComponent implements OnInit {
   books = [];
   imgUrl = config.host + "thumbnail/";
   navFilter = new FormControl('');
+  configParams: any;
   constructor(private libCategoryService : LibraryCategoryService,private bookService : BookService,
     private _snackbar : MatSnackBar,private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.getCategories();
-    this.getLatestBooks();
+    this.getConfigParams();
   }
 
   getCategories()
-  {
+  {  
   this.libCategoryService.getArticleCategories().subscribe(
     data => {
       this.categories = data as Array<any>;
@@ -40,11 +42,11 @@ export class BookExplorerComponent implements OnInit {
   )
   }
 
-  getLatestBooks()
-  {
-    this.bookService.getLatestBooks().subscribe(
+  getLatestBooks(latest_number : string)
+  { 
+    this.bookService.getLatestBooks(latest_number).subscribe(
       data=>{
-        
+        this.getConfigParams()
         this.books = data as Array<any>;
       },
       err=>{
@@ -85,6 +87,26 @@ export class BookExplorerComponent implements OnInit {
   close()
   {
     this.modalService.dismissAll();
+  }
+
+  getConfigParams()
+  {
+    this.libCategoryService.getConfigParameters().subscribe(
+      data=>{
+        if(!JSON.parse(JSON.stringify(data))['err'])
+        {
+          this.configParams = data[0];
+          this.getLatestBooks(this.configParams.books_per_page);
+        }
+        else
+        {
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
+        }
+      },
+      err=>{
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+      }
+    )
   }
 
 }

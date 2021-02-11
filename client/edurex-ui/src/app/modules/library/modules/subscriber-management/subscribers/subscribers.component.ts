@@ -13,7 +13,7 @@ export class SubscribersComponent implements OnInit {
 
   subscriptions=[];
   institutes = [];
-  imgUrl = config.host + "organisation/";
+  imgUrl = config.host + "organisation_logo/";
   constructor(private libCategoryServices : LibraryCategoryService, private instituteServices : InstituteManagementService,
     private _snackbar : MatSnackBar) { }
 

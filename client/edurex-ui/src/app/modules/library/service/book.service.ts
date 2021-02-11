@@ -31,12 +31,12 @@ export class BookService {
 
   }
 
-  getLatestBooks()
+  getLatestBooks(latest_number : String)
   {
     
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"list/latest/",{headers:headers})
+    return this.httpClient.get(this.URL+"list/latest/"+latest_number,{headers:headers})
   }
 
   deleteBookById(id : String)

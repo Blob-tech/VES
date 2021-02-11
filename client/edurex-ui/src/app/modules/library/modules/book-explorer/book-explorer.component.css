@@ -30,7 +30,7 @@
 
   .mat-mini-fab
   {
-      margin: 1rem;
+      margin: 10px;
       text-align: center;
   }
 
@@ -114,6 +114,12 @@
       border-radius: 5px;
       padding: 1rem;
 
+  }
+
+  button
+  {
+    white-space: normal; 
+    word-wrap: break-word;
   }
 
   .avatar
