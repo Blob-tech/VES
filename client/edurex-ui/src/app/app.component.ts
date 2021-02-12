@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {HostBinding} from '@angular/core'
 import {OverlayContainer} from '@angular/cdk/overlay'
+import { LocalStorageService } from './shared/services/local-storage.service';
 
 const THEME_DARKNESS_SUFFIX = `-dark`
 
@@ -16,9 +17,17 @@ export class AppComponent {
   isThemeDark = false
   activeTheme: string
   
-  constructor(private overlayContainer: OverlayContainer) {
+  constructor(private overlayContainer: OverlayContainer,private localStorageService : LocalStorageService) {
     // Set default theme here:
-    this.setActiveTheme('light-green-grey', /* darkness: */ false)
+    
+    if(this.localStorageService.getter('dark-mode') != null)
+    {
+      this.setActiveTheme('light-green-grey', /* darkness: */ JSON.stringify(this.localStorageService.getter('dark-mode')) == "true" ? true : false);
+    }
+    else
+    {
+      this.setActiveTheme('light-green-grey', /* darkness: */ false);
+    }
   }
   
   setActiveTheme(theme: string, darkness: boolean = null) {
@@ -43,7 +52,9 @@ export class AppComponent {
   }
 
   toggleDarkness() {
-    this.setActiveTheme(this.activeTheme, !this.isThemeDark)
+    this.setActiveTheme(this.activeTheme, !this.isThemeDark);
+    this.localStorageService.setter("dark-mode", !this.isThemeDark ? JSON.parse("false") : JSON.parse("true"));
+    
   }
    
   

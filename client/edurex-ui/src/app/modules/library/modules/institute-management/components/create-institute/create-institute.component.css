@@ -20,6 +20,16 @@
     display: flex;
     justify-content: center;
     text-align: center;
+    color: black;
+}
+.header mat-card-title
+{
+    color : black;
+}
+
+.header mat-card-subtitle
+{
+    color: black;
 }
 
 mat-form-field

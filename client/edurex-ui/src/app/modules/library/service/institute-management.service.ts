@@ -45,6 +45,13 @@ export class InstituteManagementService {
     headers.append("Content-Type","application/json");
     return this.httpClient.get(this.URL + "view/" + id , {headers : headers});
   }
+
+ update_institute( form : FormData, id : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"edit/"+id,form,{headers:headers});
+  }
 }
 
 

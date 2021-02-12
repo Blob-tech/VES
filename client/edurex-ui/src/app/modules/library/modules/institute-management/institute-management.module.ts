@@ -27,9 +27,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatBadgeModule} from '@angular/material/badge';
 
-
-
-
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
@@ -47,10 +44,11 @@ import { MatVideoModule } from 'mat-video';
 import { PlyrModule } from 'ngx-plyr';
 import { InstituteManagementRoutingModule } from './institute-management.routing.module';
 import { InstituteListComponent } from './components/institute-list/institute-list.component';
+import { EditInstituteComponent } from './components/edit-institute/edit-institute.component';
 
 
 @NgModule({
-  declarations: [ InstituteManagementComponent ,CreateInstituteComponent, InstituteListComponent],
+  declarations: [ InstituteManagementComponent ,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
   imports: [
     CommonModule,
     MatSliderModule,
@@ -94,6 +92,6 @@ import { InstituteListComponent } from './components/institute-list/institute-li
   ],
   exports : [],
   providers : [],
-  bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent],
+  bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
 })
 export class InstituteManagementModule { }

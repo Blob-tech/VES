@@ -139,6 +139,29 @@ organisations.post('/add',async (req,res,next)=>{
 
 })
 
+//organisation update
+organisations.put('/edit/:id',(req,res,next)=>
+{
+    Organisation.findOneAndUpdate({organisation_id : req.params.id},
+        {
+            $set : {
+                organisation_name : req.body.organisation_name,
+                contact_email : req.body.contact_email,
+                contact_phone : req.body.contact_phone,
+                contact_person : req.body.contact_person,
+                address : req.body.address,
+                client_id : req.body.client_id
+            }
+
+        }).then(data => {
+            res.json({"msg" : "Institute has been Updated Successfully" })
+        }).catch(err => {
+            res.json({"err" : "Error in updating Institute"})
+        })
+    
+})
+
+
 //Deactivate an Organisation 
 organisations.put('/deactivate/:state/:id',(req,res,next)=>
 {

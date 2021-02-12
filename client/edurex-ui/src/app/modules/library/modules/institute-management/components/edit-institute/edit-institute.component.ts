@@ -1,14 +1,15 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, Validators, ValidatorFn, FormGroup } from '@angular/forms';
+import {config} from 'src/conf';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileValidator } from 'ngx-material-file-input';
 
 import { NavbarService } from 'src/app/components/navbar/navbar.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
-import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
 import { InstituteManagementService } from 'src/app/modules/library/service/institute-management.service';
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -17,31 +18,38 @@ import { InstituteManagementService } from 'src/app/modules/library/service/inst
 
 
 @Component({
-  selector: 'app-create-institute',
-  templateUrl: './create-institute.component.html',
-  styleUrls: ['./create-institute.component.css']
+  selector: 'app-edit-institute',
+  templateUrl: './edit-institute.component.html',
+  styleUrls: ['./edit-institute.component.css'],
+  providers : [NgbModalConfig, NgbModal]
 })
-export class CreateInstituteComponent implements OnInit {
+export class EditInstituteComponent implements OnInit {
 
   message = null;
   error = null;
   ishidden = true;
   languages;
-  counter;
+  current_institute;
   configParams;
   maxImgSize : number;
   avatarprogress: number;
   docprogress : number;
   url = "assets/images/user.png";
+  imgUrl = config.host + "organisation_logo/";
+
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
-    private navbar : NavbarService) { }
+    private navbar : NavbarService, private route : ActivatedRoute, conf: NgbModalConfig, private modalService: NgbModal)
+     {
+      conf.backdrop = 'static';
+    conf.keyboard = false;  }
 
     
   ngOnInit(): void {
     
+    this.get_institute(this.route.snapshot.paramMap.get('id'));
     this.getConfigParams();
-    this.getCounter();
+    
     
   }
 
@@ -52,6 +60,26 @@ export class CreateInstituteComponent implements OnInit {
   {
     
     
+  }
+
+  get_institute(id:String)
+  {
+    this.instituteService.view_institute(id).subscribe(
+      data=>{
+        this.current_institute = data[0];
+        this.editOrganisationForm.patchValue({
+          organisation_name : this.current_institute.organisation_name,
+          contact_email : this.current_institute.contact_email,
+          contact_phone : this.current_institute.contact_phone,
+          contact_person : this.current_institute.contact_person,
+          address : this.current_institute.address,
+          client_id : this.current_institute.client_id,
+        },{emitEvent : true});
+      },
+      err=>{
+        this._snackbar.open("Error in Loading the Institute with id :" + this.route.snapshot.paramMap.get('id'),null,{duration : 5000});
+      }
+    )
   }
 
   dismissMessageAlert()
@@ -70,9 +98,8 @@ export class CreateInstituteComponent implements OnInit {
 
 
 
-  organisationForm = this.formBuilder.group(
+  editOrganisationForm = this.formBuilder.group(
     {
-      organisation_id : ['',[Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z0-9]*$")]],
       organisation_name : ['',[Validators.required, Validators.maxLength(200)]],
       contact_email :['',[Validators.required,Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]],
       contact_phone :['',[Validators.required]],
@@ -84,12 +111,12 @@ export class CreateInstituteComponent implements OnInit {
   )
 
   get controls() {
-    return this.organisationForm.controls;
+    return this.editOrganisationForm.controls;
   }
 
   submitDisabled()
   {
-    if(this.organisationForm.status == "VALID")
+    if(this.editOrganisationForm.status == "VALID")
     {
       return false;
     }
@@ -99,39 +126,35 @@ export class CreateInstituteComponent implements OnInit {
     }
   }
 
-  get organisation_id()
-  {
-    return this.organisationForm.get('organisation_id');
-  }
   get organisation_name()
   {
-    return this.organisationForm.get('organisation_name');
+    return this.editOrganisationForm.get('organisation_name');
   }
   get contact_email()
   {
-    return this.organisationForm.get('contact_email');
+    return this.editOrganisationForm.get('contact_email');
   }
  get contact_phone()
  {
-   return this.organisationForm.get('contact_phone');
+   return this.editOrganisationForm.get('contact_phone');
  }
  get client_id()
  {
-   return this.organisationForm.get('client_id');
+   return this.editOrganisationForm.get('client_id');
  }
   get contact_person()
   {
-    return this.organisationForm.get('contact_person');
+    return this.editOrganisationForm.get('contact_person');
   }
 
   get address()
   {
-    return this.organisationForm.get('address');
+    return this.editOrganisationForm.get('address');
   }
   
   get avatar()
   {
-    return this.organisationForm.get('avatar');
+    return this.editOrganisationForm.get('avatar');
   }
 
   getConfigParams()
@@ -141,7 +164,7 @@ export class CreateInstituteComponent implements OnInit {
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
-          this.organisationForm.get('avatar').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
+          this.editOrganisationForm.get('avatar').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
         }
         else
         {
@@ -154,18 +177,7 @@ export class CreateInstituteComponent implements OnInit {
     )
   }
 
-  getCounter()
-  {
-    this.navbar.getCounterList().subscribe(
-      data=>{
-        this.counter = data;
-        this.organisationForm.patchValue({organisation_id : "INS"+this.counter[0].organisation},{emitEvent : true});
-      },
-      err=>{
-        this._snackbar.open("Error in loading counter",null,{duration : 5000});
-      }
-    )
-  }
+ 
 
  
   
@@ -187,19 +199,18 @@ export class CreateInstituteComponent implements OnInit {
 
   
 
-  register()
+ update(id : String)
   {
-    //console.log(this.organisationForm);
+    //console.log(this.editOrganisationForm);
     let formData = new FormData()
-    formData.append('avatar',this.imageFile);
     
-    for ( const key of Object.keys(this.organisationForm.value) ) {
-      const value = this.organisationForm.value[key];
+    
+    for ( const key of Object.keys(this.editOrganisationForm.value) ) {
+      const value = this.editOrganisationForm.value[key];
       formData.append(key, value);
     }
 
-    console.log(formData);
-    this.instituteService.register(formData).subscribe(
+    this.instituteService.update_institute(formData,id).subscribe(
       data=>
       {
         
@@ -219,7 +230,7 @@ export class CreateInstituteComponent implements OnInit {
       err =>
       {
         this.message = null;
-        this.error = "Error in adding new Institute to Edurex Database. Please try after few minutes."
+        this.error = "Error in updating an institute to Edurex Database. Please try after few minutes."
       }
     )
     
