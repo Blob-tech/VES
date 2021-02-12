@@ -157,72 +157,82 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
             <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span>{{tags.course_tag}}</span><button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span>
         </mat-tab>
         <mat-tab label="A">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('A') || tags.course_tag.startsWith('a')">{{tags.course_tag}} <button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('A') || tags.course_tag.startsWith('a')">{{tags.course_tag}} <button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="B">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('B') || tags.course_tag.startsWith('b')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('B') || tags.course_tag.startsWith('b')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="C">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('C') || tags.course_tag.startsWith('c')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('C') || tags.course_tag.startsWith('c')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="D">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('D') || tags.course_tag.startsWith('d')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('D') || tags.course_tag.startsWith('d')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="E">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('E') || tags.course_tag.startsWith('e')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('E') || tags.course_tag.startsWith('e')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="F">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('F') || tags.course_tag.startsWith('f')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('F') || tags.course_tag.startsWith('f')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="G">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('G') || tags.course_tag.startsWith('g')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('G') || tags.course_tag.startsWith('g')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="H">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('H') || tags.course_tag.startsWith('h')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('H') || tags.course_tag.startsWith('h')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="I">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('I') || tags.course_tag.startsWith('i')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('I') || tags.course_tag.startsWith('i')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="J">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('J') || tags.course_tag.startsWith('j')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('J') || tags.course_tag.startsWith('j')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="K">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('K') || tags.course_tag.startsWith('k')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('K') || tags.course_tag.startsWith('k')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="L">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('L') || tags.course_tag.startsWith('l')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('L') || tags.course_tag.startsWith('l')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab>
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('M') || tags.course_tag.startsWith('m')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('M') || tags.course_tag.startsWith('m')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="N">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('N') || tags.course_tag.startsWith('n')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('N') || tags.course_tag.startsWith('n')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="O">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('O') || tags.course_tag.startsWith('o')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('O') || tags.course_tag.startsWith('o')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="P">
-            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('P') || tags.course_tag.startsWith('p')">{{tags.course_tag}}<button style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('P') || tags.course_tag.startsWith('p')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="Q">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('Q') || tags.course_tag.startsWith('q')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="R">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('R') || tags.course_tag.startsWith('r')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="S">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('S') || tags.course_tag.startsWith('s')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="T">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('T') || tags.course_tag.startsWith('t')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="U">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('U') || tags.course_tag.startsWith('u')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="V">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('V') || tags.course_tag.startsWith('v')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="W">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('W') || tags.course_tag.startsWith('w')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="X">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('X') || tags.course_tag.startsWith('x')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="Y">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('Y') || tags.course_tag.startsWith('y')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         <mat-tab label="Z">
+            <span  *ngFor = 'let tags of courseTags' class="course-tag badge badge-pill badge-info"><span *ngIf="tags.course_tag.startsWith('Z') || tags.course_tag.startsWith('z')">{{tags.course_tag}}<button (click)="removeCourseTag(tags._id)" style="margin : 1%;border-radius: 5px; color:white; background-color: red;"><mat-icon>cancel</mat-icon></button></span></span>
         </mat-tab>
         
         

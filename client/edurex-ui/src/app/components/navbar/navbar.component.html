@@ -12,7 +12,7 @@
      <div class = "top-menu">
       <span>         
         
-        <mat-slide-toggle (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
+        <mat-slide-toggle [(ngModel)]="dark_mode" (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
         Dark Mode</mat-slide-toggle></span>
       <span><button matTooltip ="settings" mat-mini-fab color="basic" [matMenuTriggerFor]="settings"><mat-icon class="auto-flip">settings</mat-icon> </button></span>
 

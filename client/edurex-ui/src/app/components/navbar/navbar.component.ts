@@ -28,6 +28,7 @@ export class NavbarComponent implements OnInit {
 
    counterList;
    brand;
+   dark_mode;
    imgUrl:String;
    url = "assets/images/doc.png";
    thumbnailprogress:Number = 0;
@@ -35,6 +36,7 @@ export class NavbarComponent implements OnInit {
 
     this.getCounterList();
     this.getSystemBranding();
+    this.dark_mode = localStorage.getItem("dark-mode") == "true" ? true : false;
     this.imgUrl = config.host + "system/icon.png";
     
   }

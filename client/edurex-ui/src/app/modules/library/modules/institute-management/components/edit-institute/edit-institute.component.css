@@ -1,4 +1,4 @@
-.bookForm
+.orgForm
 {
     padding:2%;
     margin : 7%;
@@ -12,6 +12,15 @@
     
 }
 
+.logo
+{
+    height: 200px;
+    width : 200px;
+    border-radius: 50%;
+    border: 5px dashed lightblue;
+    margin : 1rem;
+}
+
 .header
 {
     background-color: lightblue;
@@ -20,7 +29,7 @@
     display: flex;
     justify-content: center;
     text-align: center;
-    color : black;
+    color: black;
 }
 
 .header mat-card-title
@@ -33,22 +42,10 @@
     color: black;
 }
 
-.thumbnail{
-    
-    height: 200px;
-    width : 200px;
-    border-radius: 50%;
-    border: 5px dashed lightblue;
-    margin : 1rem
-}
-
-.example-spacer {
-    flex: 1 1 auto;
-  }
-
-.avatar
+mat-form-field
 {
-    font-size: 200px;
+    width: 100%;
+    font-size :20px;
 }
 
 @media screen and (max-width : 800px)
@@ -57,13 +54,15 @@
     {
         width : 90%;
     }
-}
 
-@media screen and (max-width : 760px)
-{
-    .avatar
+    .form-group .org-img
     {
-        font-size:40px;
+      width : 90%;
+      margin-right : 20px;
     }
-    
+}
+.org-img
+{
+    width : 30%;
+    margin-right : 20px;
 }

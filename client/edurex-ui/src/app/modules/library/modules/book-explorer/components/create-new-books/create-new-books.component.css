@@ -26,6 +26,17 @@ mat-form-field
     display: flex;
     justify-content: center;
     text-align: center;
+    color : black;
+}
+
+.header mat-card-title
+{
+    color : black;
+}
+
+.header mat-card-subtitle
+{
+    color: black;
 }
 
 @media screen and (max-width : 800px)
