@@ -26,6 +26,8 @@ import { sync } from 'glob';
     institutes = [];
     noInstitute = null;
     imgUrl = config.host + "organisation_logo/";
+    bulkaction ='';
+    only_active = false;
 
     displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions', 'status'];
    
@@ -96,6 +98,34 @@ import { sync } from 'glob';
       this.dataSource.filter = filterValue.trim().toLowerCase();
     }
   
+    getActiveInstituteList()
+    {
+      this.instituteService.get_institutes().subscribe(
+        data=>{
+          if(!(JSON.parse(JSON.stringify(data))['err']))
+          {
+            this.institutes = data as Institute[];
+            this.institutes = this.institutes.filter(value => { return value.isActivated == true});
+            console.log(this.institutes);
+            if(this.institutes.length == 0)
+            {
+              this.noInstitute = "No Active Record Found ! Please Reload the page to get a list of All Institute/Organisation"
+            }
+            this.dataSource = new MatTableDataSource<Institute>(this.institutes);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+          }
+          else
+          {
+            this._snackbar.open("Error in loading institutes ! "+ data,null, {duration : 5000});
+            
+          }
+        },
+        err => {
+          this._snackbar.open("Error in loading institutes from edurex database! "+ err,null, {duration : 5000});
+            
+        })
+      }
 
     getInstituteList()
     {
@@ -131,6 +161,10 @@ import { sync } from 'glob';
             if(!(JSON.parse(JSON.stringify(data))['err']))
             {
               this._snackbar.open(data['msg'],null,{duration : 5000});
+              if(this.only_active)
+              {
+                this.getActiveInstituteList();
+              }
             }
             else
             {
@@ -169,6 +203,65 @@ import { sync } from 'glob';
         this.modalService.open(content,{size : 'lg',centered : true})
       }
 
+      only_active_institute()
+      {
+        if(this.only_active == true)
+        {
+          this.getInstituteList();
+          
+          
+        }
+        else
+        {
+          this.getActiveInstituteList();
+          
+        }
+
+      }
+
+      bulk_action(op : String)
+      {
+        if(op == "DELETE")
+        {
+          var res = confirm("Are you sure want to delete " + this.selection.selected.length  + " institutes/organisations ? Alert ! It will permanently delete the institute and " +
+        "all its related contents. Hence it is always advisable to deactivate the institute for future referrence. ");
+        if( res == true) {
+        this.instituteService.delete_many_institutes(this.selection.selected).subscribe(
+          data=>
+          { 
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+            this.getInstituteList();
+          },
+          err=>
+          {
+            this._snackbar.open("Error in deleting institute/organisation. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
+          }
+
+        )
+      }
+        }
+        else if(op == "DEACTIVATE")
+        {
+          var res = confirm("Are you sure want to deactivate " + this.selection.selected.length  + " institutes/organisations ?");
+        if( res == true) {
+        this.instituteService.deactivate_many_institutes(this.selection.selected).subscribe(
+          data=>
+          { 
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+            this.getInstituteList();
+            location.reload();
+          },
+          err=>
+          {
+            this._snackbar.open("Error in deactivating institute/organisation. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
+          }
+
+        )
+      }
+
+        }
+      }
+
       delete_institute(id : String)
       {
         var res = confirm("Are you sure want to delete this institution ? Alert ! It will permanently delete the institute and " +
@@ -179,6 +272,7 @@ import { sync } from 'glob';
           { 
             this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
             this.getInstituteList();
+            location.reload();
           },
           err=>
           {

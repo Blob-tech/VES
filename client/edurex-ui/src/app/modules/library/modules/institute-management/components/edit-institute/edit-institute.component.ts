@@ -1,15 +1,18 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { FormBuilder, Validators, ValidatorFn, FormGroup } from '@angular/forms';
+import { Component, OnInit, OnChanges, ViewChild, EventEmitter, TemplateRef } from '@angular/core';
+import { FormBuilder, Validators, ValidatorFn, FormGroup, FormControl } from '@angular/forms';
 import {config} from 'src/conf';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileValidator } from 'ngx-material-file-input';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 import { NavbarService } from 'src/app/components/navbar/navbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
 import { InstituteManagementService } from 'src/app/modules/library/service/institute-management.service';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommunicationService } from 'src/app/modules/library/service/communication.service';
 
 
 
@@ -25,23 +28,28 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class EditInstituteComponent implements OnInit {
 
-  message = null;
-  error = null;
-  ishidden = true;
-  languages;
-  current_institute;
-  configParams;
-  maxImgSize : number;
+  
+  public message = null;
+  public error = null;
+  public ishidden = true;
+  public languages;
+  public current_institute;
+  public configParams;
+  public maxImgSize : number;
+  public thumbnailprogress : number;
   avatarprogress: number;
   docprogress : number;
   url = "assets/images/user.png";
   imgUrl = config.host + "organisation_logo/";
 
+  @ViewChild('callEditLogo') callEditLogo: TemplateRef<any>;
+
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
-    private navbar : NavbarService, private route : ActivatedRoute, conf: NgbModalConfig, private modalService: NgbModal)
+    private navbar : NavbarService, private route : ActivatedRoute, conf: NgbModalConfig, private modalService: NgbModal,
+    public dialog: MatDialog, private communicationService : CommunicationService)
      {
-      conf.backdrop = 'static';
+      conf.backdrop = 'static'; 
     conf.keyboard = false;  }
 
     
@@ -49,8 +57,6 @@ export class EditInstituteComponent implements OnInit {
     
     this.get_institute(this.route.snapshot.paramMap.get('id'));
     this.getConfigParams();
-    
-    
   }
 
   ngOnChanges() : void {
@@ -61,12 +67,14 @@ export class EditInstituteComponent implements OnInit {
     
     
   }
-
+ 
+  logo = new FormControl('');
   get_institute(id:String)
   {
     this.instituteService.view_institute(id).subscribe(
       data=>{
         this.current_institute = data[0];
+        this.url = this.imgUrl + this.current_institute.avatar;
         this.editOrganisationForm.patchValue({
           organisation_name : this.current_institute.organisation_name,
           contact_email : this.current_institute.contact_email,
@@ -78,6 +86,26 @@ export class EditInstituteComponent implements OnInit {
       },
       err=>{
         this._snackbar.open("Error in Loading the Institute with id :" + this.route.snapshot.paramMap.get('id'),null,{duration : 5000});
+      }
+    )
+  }
+
+  getConfigParams()
+  {
+    this.libCategoryServices.getConfigParameters().subscribe(
+      data=>{
+        if(!JSON.parse(JSON.stringify(data))['err'])
+        {
+          this.configParams = data[0];
+          this.logo.setValidators([FileValidator.maxContentSize(this.configParams.logo_size*1024*1024)]);
+        }
+        else
+        {
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
+        }
+      },
+      err=>{
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
       }
     )
   }
@@ -109,6 +137,8 @@ export class EditInstituteComponent implements OnInit {
       avatar : ['']//1 MB
     },
   )
+
+ 
 
   get controls() {
     return this.editOrganisationForm.controls;
@@ -157,26 +187,11 @@ export class EditInstituteComponent implements OnInit {
     return this.editOrganisationForm.get('avatar');
   }
 
-  getConfigParams()
-  {
-    this.libCategoryServices.getConfigParameters().subscribe(
-      data=>{
-        if(!JSON.parse(JSON.stringify(data))['err'])
-        {
-          this.configParams = data[0];
-          this.editOrganisationForm.get('avatar').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
-        }
-        else
-        {
-          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
-        }
-      },
-      err=>{
-        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
-      }
-    )
+  
+  
+  openEditLogo() {
+    const dialogRef = this.dialog.open(this.callEditLogo);
   }
-
  
 
  
@@ -236,8 +251,48 @@ export class EditInstituteComponent implements OnInit {
     
   }
 
-  
 
-  
+  LogoFile : any;
+  onSelectThumbnail(event) {
+    this.thumbnailprogress = 0;
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      this.LogoFile = event.target.files[0]
+      reader.onload = (event: any) => {
+        this.thumbnailprogress = Math.round(100 * event.loaded / event.total);
+        this.url = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  save_logo()
+  {
+    let formData = new FormData()
+    formData.append('logo',this.LogoFile);
+    this.instituteService.edit_institute_logo(formData,this.current_institute.organisation_id.toString().trim()).subscribe(
+      data=>{
+        if(JSON.parse(JSON.stringify(data))['msg'])
+        {
+          this.error = null;
+          this.message = JSON.parse(JSON.stringify(data))['msg'];
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+          this.get_institute(this.current_institute.organisation_id);
+        }
+        else
+        {
+          this.message = null;
+          this.error =  JSON.parse(JSON.stringify(data))['err'];          
+        }
+      },
+      err => {
+        this.message = null;
+        this.error = "Error in updating an institute logo to Edurex Database. Please try after few minutes."; 
+      } 
+
+    )
+  }
+
+
+
 }
-

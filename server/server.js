@@ -209,7 +209,9 @@ app.put('/library/config/set',(req,res,next)=>{
                 release : req.body.release,
                 img_size : req.body.img_size,
                 doc_size : req.body.doc_size,
-                avatar_size : req.body.avatar_size
+                avatar_size : req.body.avatar_size,
+                logo_size : req.body.logo_size,
+                default_book_view : req.body.default_book_view
             }}).then(
                 data=>{
                     res.json({"msg":"Configuration Parameters Updated Successfully!"}) 

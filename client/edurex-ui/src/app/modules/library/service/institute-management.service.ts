@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { config } from "src/conf";
+import { Institute } from '../modules/institute-management/models/institute';
 
 @Injectable({
   providedIn: 'root'
@@ -46,11 +47,41 @@ export class InstituteManagementService {
     return this.httpClient.get(this.URL + "view/" + id , {headers : headers});
   }
 
+  get_institute_by_client_id(client_id : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "view_by_client_id/" + client_id, {headers : headers});
+  }
+
  update_institute( form : FormData, id : String)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
     return this.httpClient.put(this.URL+"edit/"+id,form,{headers:headers});
+  }
+
+  edit_institute_logo(logo : FormData, id : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"edit/logo/"+id,logo,{headers:headers})
+  }
+
+  delete_many_institutes(institutes : Institute[])
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json');
+
+    return this.httpClient.put(this.URL + 'bulkactions/delete/'+ institutes.length,institutes,{headers : headers})
+  }
+
+  deactivate_many_institutes(institutes : Institute[])
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json');
+
+    return this.httpClient.put(this.URL + 'bulkactions/deactivate/'+ institutes.length,institutes,{headers : headers})
   }
 }
 

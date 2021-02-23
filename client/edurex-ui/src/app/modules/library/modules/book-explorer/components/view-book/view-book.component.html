@@ -19,7 +19,7 @@
                     <p><strong>Book Id : </strong> {{book.book_id}}</p>
                     <p><strong>Published : </strong>{{book.date_of_published.substring(0,10)}} | {{book.publisher}}</p>
                     <p><strong>Genre : </strong>{{book.category}} | {{ book.subcategory ? book.subcategory : ''}}</p>
-                    <p *ngIf="language != null"><strong>Language :</strong>{{book.language.name}})</p>
+                    <p *ngIf="book.language != null"><strong>Language : </strong>{{book.language}}</p>
                     <p><strong>Description : </strong>{{book.description}}</p>
                     <p *ngIf="book.type === 'doc' || book.type === 'docx'"><i class="fas fa-file-word" style="color : blue"></i></p>
                     <p *ngIf="book.type === 'ppt' || book.type === 'pptx'"><i class="fas fa-file-powerpoint" style="color : orange"></i></p>

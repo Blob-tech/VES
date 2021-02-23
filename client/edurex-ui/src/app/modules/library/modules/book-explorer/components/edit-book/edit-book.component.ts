@@ -8,6 +8,8 @@ import { LibraryCategoryService } from 'src/app/modules/library/service/library-
 import { JsonPipe } from '@angular/common';
 import {config} from 'src/conf';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-edit-book',
@@ -26,10 +28,13 @@ export class EditBookComponent implements OnInit {
   message = null;
   error = null;
   currentBook;
+  dialogRef: any;
+  cover = new FormControl('');
+  book = new FormControl('');
   constructor(private bookService : BookService, private route : ActivatedRoute,
     private _snackbar : MatSnackBar,private formBuilder : FormBuilder,
     private libCategoryServices : LibraryCategoryService,
-    config: NgbModalConfig, private modalService: NgbModal) {
+    config: NgbModalConfig, private modalService: NgbModal,public dialog: MatDialog) {
       config.backdrop = 'static';
     config.keyboard = false;
      }
@@ -38,8 +43,10 @@ export class EditBookComponent implements OnInit {
     this.getBookById(this.route.snapshot.paramMap.get('id'));
     this.getCategories();
     this.getSubscriptionCategories();
+    this.getConfigParams();
     this.imgUrl = config.host + "thumbnail/"
   }
+
 
 
   ngOnChanges() : void {
@@ -63,6 +70,7 @@ export class EditBookComponent implements OnInit {
       {
        
         this.currentBook = data;
+        this.url = this.imgUrl + this.currentBook.thumbnail_source;
         this.editBookForm.patchValue({name : this.currentBook.book_name,
           author : this.currentBook.author, description : this.currentBook.description,
           subscription : this.currentBook.subscription,
@@ -84,8 +92,9 @@ export class EditBookComponent implements OnInit {
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
+          console.log(this.configParams);
           this.book.setValidators([Validators.required, FileValidator.maxContentSize(this.configParams.doc_size*1024*1024)]);
-          this.cover.get('cover').setValidators([Validators.required, FileValidator.maxContentSize(this.configParams.img_size*1024*1024)]);
+          this.cover.setValidators([Validators.required, FileValidator.maxContentSize(this.configParams.logo_size*1024*1024)]);
         }
         else
         {
@@ -122,8 +131,7 @@ export class EditBookComponent implements OnInit {
       subcategory : [''],
       subscription : ['',Validators.required],
     })
-   cover = new FormControl('');
-   book = new FormControl('');
+  
 
 
   submitDisabled()
@@ -262,7 +270,8 @@ export class EditBookComponent implements OnInit {
   }
 
   openModal(content) {
-    this.modalService.open(content,{ size: 'lg' , centered : true});
+    //this.modalService.open(content,{ size: 'lg' , centered : true});
+    this.dialogRef = this.dialog.open(content);
   }
 
 
@@ -306,20 +315,21 @@ export class EditBookComponent implements OnInit {
         {
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
+          this._snackbar.open(this.message,null,{duration : 5000});
           this.getBookById(this.currentBook.book_id);
-          this.modalService.dismissAll();
+          
         }
         else
         {
           this.message = null;
           this.error = JSON.parse(JSON.stringify(data))['err'];
-          this.modalService.dismissAll();
+          
         }
       },
       err => {
         this.message = null;
         this.error = "Error in updating Thumbnail Image, Please try after some times";
-        this.modalService.dismissAll();
+       
       } 
 
     )
@@ -337,23 +347,40 @@ export class EditBookComponent implements OnInit {
         {
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
+          this._snackbar.open(this.message,null,{duration : 5000});
           this.getBookById(this.currentBook.book_id);
-          this.modalService.dismissAll();
+          
         }
         else
         {
           this.message = null;
           this.error = JSON.parse(JSON.stringify(data))['err'];
-          this.modalService.dismissAll();
+          
         }
       },
       err => {
         this.message = null;
         this.error = "Error in updating Book, Please try after some times";
-        this.modalService.dismissAll();
+        
       } 
 
     )
 
   }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(EditThumbnailModal);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
+
+
+
+@Component({
+  selector: 'edit-thumbnail',
+  templateUrl: 'edit-thumbnail.html',
+})
+export class EditThumbnailModal {}

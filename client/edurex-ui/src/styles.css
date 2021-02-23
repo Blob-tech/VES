@@ -13,3 +13,11 @@ button:focus {
   outline: none;
   box-shadow: none;
 }
+
+@media screen and (max-width : 800px)
+{
+  mat-hint
+  {
+    font-size: 10px;
+  }
+}

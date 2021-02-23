@@ -23,7 +23,9 @@
         </mat-form-field>
         <mat-form-field class="form-group" appearance="outline" >
             <mat-label>Client Short Id</mat-label>
-            <input matInput formControlName="client_id"   placeholder="Enter Institute Short Id">
+            <input matInput formControlName="client_id" (keyup)="isClientIdValid($event)"  placeholder="Enter Institute Short Id">
+            <span *ngIf="client_id.value != '' && checkClientIDValidity" matSuffix><mat-icon matTooltip="Client Id Validated" style="color : green">check</mat-icon></span>
+            <span *ngIf="client_id.value != '' && !checkClientIDValidity" matSuffix><mat-icon matTooltip="Client Id already exist. Please try something different" style="color : red">clear</mat-icon></span>
             <mat-hint align="end">{{client_id.value?.length || 0}}/10</mat-hint>
             <mat-error *ngIf="client_id.hasError('required')">Value is required</mat-error>
             <mat-error *ngIf="client_id.hasError('maxlength')">Character Limit Exceeded</mat-error>
@@ -76,7 +78,7 @@
                                 </button>
                                 <mat-hint>Images in .jpg, .jpeg,.png  only allowed </mat-hint>
                                 <mat-error *ngIf="avatar.hasError('maxContentSize')">
-                                  The total size must not exceed {{configParams.avatar_size}} MB).
+                                  The total size must not exceed {{configParams.logo_size}} MB).
                                 </mat-error>
                               </mat-form-field>
                              
@@ -88,7 +90,7 @@
 
                         <br>
     
-                        <button type="submit"  mat-raised-button style="margin-right: 1rem;" color="accent"
+                        <button type="submit"  mat-raised-button style="margin-right: 1rem;" color="primary"
                         [disabled]="submitDisabled()">Save</button>
                         <button type="reset" mat-raised-button>Reset</button>
     

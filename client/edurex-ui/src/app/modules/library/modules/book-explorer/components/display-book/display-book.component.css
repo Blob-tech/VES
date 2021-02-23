@@ -4,6 +4,15 @@ mat-card-footer
     padding-bottom: 1rem;;
 }
 
+#BookTable
+{
+    margin-top : 10px;
+    margin-left:5%;
+    margin-bottom: 1%;
+    width : 90%;
+    border-radius: 10px;
+}
+
 .action-button
 {
     margin-left: 1rem;

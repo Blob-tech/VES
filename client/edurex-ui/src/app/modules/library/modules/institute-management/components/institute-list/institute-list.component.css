@@ -10,6 +10,16 @@
     width: 200px;
 }
 
+.inactive
+{
+    color: blue;
+}
+
+.active
+{
+    color: black;
+}
+
 #InstituteTable
 {
     margin-top : 10px;

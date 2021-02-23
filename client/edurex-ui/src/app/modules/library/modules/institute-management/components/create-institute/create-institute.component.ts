@@ -21,7 +21,7 @@ import { InstituteManagementService } from 'src/app/modules/library/service/inst
   templateUrl: './create-institute.component.html',
   styleUrls: ['./create-institute.component.css']
 })
-export class CreateInstituteComponent implements OnInit {
+export class CreateInstituteComponent implements OnInit,OnChanges {
 
   message = null;
   error = null;
@@ -32,6 +32,7 @@ export class CreateInstituteComponent implements OnInit {
   maxImgSize : number;
   avatarprogress: number;
   docprogress : number;
+  checkClientIDValidity = false;
   url = "assets/images/user.png";
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
@@ -46,12 +47,14 @@ export class CreateInstituteComponent implements OnInit {
   }
 
   ngOnChanges() : void {
+
+   
   }
 
   ngDoCheck() : void
   {
     
-    
+   
   }
 
   dismissMessageAlert()
@@ -89,7 +92,7 @@ export class CreateInstituteComponent implements OnInit {
 
   submitDisabled()
   {
-    if(this.organisationForm.status == "VALID")
+    if(this.organisationForm.status == "VALID" && this.checkClientIDValidity)
     {
       return false;
     }
@@ -141,7 +144,7 @@ export class CreateInstituteComponent implements OnInit {
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
-          this.organisationForm.get('avatar').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
+          this.organisationForm.get('avatar').setValidators([FileValidator.maxContentSize(this.configParams.logo_size*1024*1024)]);
         }
         else
         {
@@ -167,7 +170,28 @@ export class CreateInstituteComponent implements OnInit {
     )
   }
 
- 
+  isClientIdValid(event : Event)
+  {
+    this.get_institute_by_client_id(this.organisationForm.get('client_id').value);
+  }
+  get_institute_by_client_id(client_id : String)
+  {
+    this.instituteService.get_institute_by_client_id(client_id).subscribe(
+      data=>{
+         let result = data as Array<any>;
+        if(result.length != 0)
+        {
+          this.checkClientIDValidity = false;
+         
+        }
+        else
+        {
+          this.checkClientIDValidity = true;
+          
+        }
+      }
+    )
+  }
   
 
   

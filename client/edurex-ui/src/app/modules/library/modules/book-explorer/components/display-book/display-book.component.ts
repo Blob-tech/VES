@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { BookService } from 'src/app/modules/library/service/book.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, Validators } from '@angular/forms';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
-import {PageEvent} from '@angular/material/paginator';
+import {PageEvent, MatPaginator} from '@angular/material/paginator';
 import {config} from 'src/conf';
+import { MatTableDataSource } from '@angular/material/table';
+import { Book } from '../../models/book';
+import { MatSort } from '@angular/material/sort';
+import { SelectionModel } from '@angular/cdk/collections';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 
 @Component({
   selector: 'app-display-book',
@@ -31,10 +36,21 @@ export class DisplayBookComponent implements OnInit {
    pageSize = 5;
    pageSizeOptions: number[] = [5, 10, 25, 100];
    pageIndex = 0;
+   bookView;
+   bulkaction='';
+
+   displayedColumns: string[] = ['select','book_id', 'book_name', 'author', 'language',  'actions'];
+   
+    @ViewChild(MatSort, {static: true}) sort: MatSort;
+    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
+    
+   dataSource: MatTableDataSource<Book>;
 
   imgUrl = config.host + "thumbnail/";
   constructor(private bookService : BookService, private route : ActivatedRoute,
-    private _snackBar : MatSnackBar,private libCategoryServices : LibraryCategoryService) { }
+    private _snackBar : MatSnackBar,private libCategoryServices : LibraryCategoryService,
+    private localStorageService : LocalStorageService) { }
 
   ngOnInit(): void {
     this.getConfigParams();
@@ -46,7 +62,55 @@ export class DisplayBookComponent implements OnInit {
     });
   }
 
+  selectedBook : Book =
+{
+  book_id : '',
+  book_name : '',
+  author : '',
+  description : '',
+  category : '',
+  subcategory: '',
+  book_source : '',
+  thumbnail_source : '',
+  publisher : '',
+  subscription : [],
+  language : '',
+  date_of_published : new Date(),
+  total_view : 0,
+  total_like : 0,
+  total_dislike : 0,
+  total_download : 0,
+  total_rating : 0,
+  rating_count : 0,
+  type : '',
+  active : true,
   
+}
+
+  @Input()
+    selection = new SelectionModel<Book>(true, []);
+  
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
+  
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+      this.isAllSelected() ?
+          this.selection.clear() :
+          this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+  
+    /** The label for the checkbox on the passed row */
+    checkboxLabel(row?: Book): string {
+      if (!row) {
+        return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+      }
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.book_id + 1}`;
+    }
 
 
  
@@ -89,6 +153,9 @@ export class DisplayBookComponent implements OnInit {
       data=>
       {
         this.books = data as Array<any>;
+        this.dataSource = new MatTableDataSource<Book>(this.books);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
         this.copyBooks =data;
         if(this.books.length == 0)
         {
@@ -178,6 +245,20 @@ export class DisplayBookComponent implements OnInit {
     }
     return true;
   }
+
+  toggle_view()
+  {
+    if(this.bookView == 'GRID')
+    {
+      this.bookView = 'LIST';
+      this.localStorageService.setter('default-book-view',this.bookView);
+    }
+    else
+    {
+      this.bookView = 'GRID';
+      this.localStorageService.setter('default-book-view', this.bookView);
+    }
+  }
   getLanguages()
   {
     this.bookService.getLanguages().subscribe(
@@ -191,6 +272,32 @@ export class DisplayBookComponent implements OnInit {
     )
   }
 
+  bulk_action(op : String)
+      {
+        if(op == "DELETE")
+        {
+          var res = confirm("Are you sure want to delete " + this.selection.selected.length  + " books ?");
+        if( res == true) {
+        this.bookService.delete_many_books(this.selection.selected).subscribe(
+          data=>
+          { 
+            this._snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+            this.route.params.subscribe(routeParams => {
+              this.getBookCount(routeParams.category,routeParams.subcategory);
+              this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1);
+             
+            });
+          },
+          err=>
+          {
+            this._snackBar.open("Error in deleting Books. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
+          }
+
+        )
+      }
+        }
+        
+      }
 
 
   getConfigParams()
@@ -200,6 +307,14 @@ export class DisplayBookComponent implements OnInit {
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
+          if(this.localStorageService.getter('default-book-view') == null)
+          {
+            this.bookView = this.configParams.default_book_view;
+          }
+          else
+          {
+            this.bookView = this.localStorageService.getter('default-book-view');
+          }
         }
         else
         {
