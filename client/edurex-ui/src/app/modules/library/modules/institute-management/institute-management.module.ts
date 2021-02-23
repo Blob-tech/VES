@@ -44,7 +44,8 @@ import { MatVideoModule } from 'mat-video';
 import { PlyrModule } from 'ngx-plyr';
 import { InstituteManagementRoutingModule } from './institute-management.routing.module';
 import { InstituteListComponent } from './components/institute-list/institute-list.component';
-import { EditInstituteComponent } from './components/edit-institute/edit-institute.component';
+import { EditInstituteComponent} from './components/edit-institute/edit-institute.component';
+import { CommunicationService } from '../../service/communication.service';
 
 
 @NgModule({
@@ -91,7 +92,7 @@ import { EditInstituteComponent } from './components/edit-institute/edit-institu
     InstituteManagementRoutingModule
   ],
   exports : [],
-  providers : [],
+  providers : [CommunicationService],
   bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
 })
 export class InstituteManagementModule { }

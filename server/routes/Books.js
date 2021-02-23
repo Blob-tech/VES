@@ -220,7 +220,7 @@ books.post('/add',async (req, res, next)=>
                         {
                            await session.abortTransaction();
                             session.endSession();
-                            res.json({"err" : "Error in uploading Thumbnail Image. Image size should be less than 1 MB"})
+                            res.json({"err" : "Error in uploading Thumbnail Image. Image size is exceeding the limit"})
                         }
                         })
                     newBook.thumbnail_source = stored_name;
@@ -294,7 +294,7 @@ books.put('/edit/thumbnail/:id',(req,res,next)=>{
                                     (err)=>{
                                         if(err)
                                         {
-                                            res.json({"err" : "Error in uploading Thumbnail Image. Image size should be less than 1 MB"})
+                                            res.json({"err" : "Error in uploading Thumbnail Image. Image size is exceeding the limit"})
                                         }
                                         })
                                     
@@ -327,7 +327,32 @@ books.put('/edit/thumbnail/:id',(req,res,next)=>{
                 
 })
 
-                    
+//delete many books
+books.put("/bulkactions/delete/:n",(req,res,next)=>
+{
+    let id = [];
+    for(var i = 0 ; i < req.params.n ; i++)
+    {
+        id.push(req.body[i].book_id)
+    }
+    console.log(id);
+   
+    Books.updateMany(
+        {
+           book_id : { $in : id}
+        },
+        { 
+            active : false
+        }
+    ).then(
+        data => {
+            res.json({"msg": req.params.n + " Books has been successfully deleted"});
+        }
+    ).catch(err=>
+        {
+            res.json({"err": "Error in deleting "+req.params.n+" Books. Please try after few minutes." + err})
+        })
+});            
 
 
 //Edit a pdf content
@@ -356,7 +381,7 @@ books.put('/edit/content/:id',(req,res,next)=>{
                                     (err)=>{
                                         if(err)
                                         {
-                                            res.json({"err" : "Error in uploading Book. Document size should be less than 100 MB"})
+                                            res.json({"err" : "Error in uploading Book. Document size is exceeding the limite"})
                                         }
                                         })
                                     
@@ -376,7 +401,7 @@ books.put('/edit/content/:id',(req,res,next)=>{
 
                                             }})
                                             .then(data=>{
-                                                res.json({"msg" : "Book has been updated successfully!"});
+                                                res.json({"msg" : "Content has been updated successfully!"});
                                             }).catch(err=>{
                                                 res.json({"err" : "Error in setting the document path"});
                                             })

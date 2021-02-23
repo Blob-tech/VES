@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Edit Institute Logo</h1>
+<div mat-dialog-content>
+            <mat-form-field class="form-group" style=" width: 90%; display: inline-block; margin-right: 100px;"  appearance="outline">
+                    <mat-label>Logo Image</mat-label>
+                    <ngx-mat-file-input #removableInput [(formControl)]="logo" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                    (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
+                    <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                    <mat-hint>Images in .jpg, .jpeg  or .png only allowed </mat-hint>
+                    <mat-error *ngIf="logo.hasError('required')">
+                      Please select a file
+                    </mat-error>
+                    <mat-error *ngIf="logo.hasError('maxContentSize')">
+                      The total size must not exceed {{configParams.logo_size}} MB).
+                    </mat-error>
+                  </mat-form-field>
+            
+            <img style="height: 200px; width: 150px; margin-left : 10px;"  mat-card-image src="{{url}}" alt="Institute Logo"><br>
+                            <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                            <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+    
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary"  type="submit">Save</button>
+  <button mat-button mat-dialog-close>Close</button>
+</div>

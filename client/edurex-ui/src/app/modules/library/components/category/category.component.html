@@ -17,8 +17,8 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
       </form><br><br>
       <mat-accordion>
         <mat-expansion-panel *ngFor = "let articleCategory of articleCategories; let i = index">
-          <mat-expansion-panel-header style="background-color:{{header_color[i%8]}}">
-              <mat-panel-title style="color:black;display: flex;" >
+          <mat-expansion-panel-header>
+              <mat-panel-title style="display: flex;" >
                   {{articleCategory.book_category}}<span class="example-spacer"></span>
                   <button mat-mini-fab color="warn" (click)="removeCategory(articleCategory._id)"><mat-icon>delete</mat-icon></button>
                   </mat-panel-title>
@@ -120,6 +120,19 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
                   <mat-option [value]=100>100 MB</mat-option>
                 </mat-select>
               </mat-form-field><br>
+              <button mat-button >Institute Logo Size Limit</button>
+            <mat-form-field class="form-group" appearance="outline" >
+                <mat-label>Institute Logo Size Limit </mat-label>
+                <mat-select formControlName ="logo_size" placeholder="Enter maximum size limit for Institute/Organisation logo image" required>
+                  <mat-option [value]=1>1 MB</mat-option>
+                  <mat-option [value]=2>2 MB</mat-option>
+                  <mat-option [value]=5>5 MB</mat-option>
+                  <mat-option [value]=10>10 MB</mat-option>
+                  <mat-option [value]=25>25 MB</mat-option>
+                  <mat-option [value]=50>50 MB</mat-option>
+                  <mat-option [value]=100>100 MB</mat-option>
+                </mat-select>
+              </mat-form-field><br>
           <button mat-button >Document  Size Limit</button>
           <mat-form-field class="form-group" appearance="outline" >
               <mat-label>Document Size Limit </mat-label>
@@ -132,6 +145,15 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
                 <mat-option [value]=500>500 MB</mat-option>
                 <mat-option [value]=1024>1 GB</mat-option>
                 <mat-option [value]=10240>10 GB</mat-option>
+              </mat-select>
+            </mat-form-field>
+          <br>
+          <button mat-button >Default Book View</button>
+          <mat-form-field class="form-group" appearance="outline" >
+              <mat-label>Default Book View</mat-label>
+              <mat-select formControlName ="default_book_view" placeholder="Enter maximum size limit for Book/Article" required>
+                <mat-option [value]="'GRID'">Grid</mat-option>
+                <mat-option [value]="'LIST'">List</mat-option>
               </mat-select>
             </mat-form-field>
           <br>

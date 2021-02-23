@@ -1,5 +1,3 @@
-
-
 <mat-card class="orgForm" >
     <div class="alert alert-danger alert-dismissible fade-in" [hidden] = " error ? false : true">
         <button type="button" class="close" data-dismiss="alert" (click) = "dismissErrorAlert()">&times;</button>
@@ -19,7 +17,7 @@
     <div style="display: inline; margin:1rem">
             <img class="logo" src="{{imgUrl + current_institute.avatar}}">
         </div>
-        <button  mat-raised-button><mat-icon>camera_alt</mat-icon> Edit Logo</button>
+        <button (click)="openEditLogo()" mat-raised-button><mat-icon>camera_alt</mat-icon> Edit Logo</button>
 <form [formGroup]="editOrganisationForm" (ngSubmit)="update(current_institute.organisation_id)" >
     <mat-form-field class="form-group" appearance="outline" >
         <mat-label>Client Short Id</mat-label>
@@ -82,5 +80,70 @@
       </div>
 </mat-card>
 
+<!-- Edit Image Modal-->
+<!--ng-template #edit_image let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Edit Institute Logo</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+            <mat-form-field class="form-group" style=" width: 30%; display: inline-block; margin-right: 100px;"  appearance="outline">
+                    <mat-label>Institute Logo</mat-label>
+                    <ngx-mat-file-input #removableInput [(formControl)]="cover" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                    (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
+                    <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                    <mat-hint>Images in .jpg, .jpeg  or .png only allowed </mat-hint>
+                    <mat-error *ngIf="cover.hasError('required')">
+                      Please select a file
+                    </mat-error>
+                    <mat-error *ngIf="cover.hasError('maxContentSize')">
+                      The total size must not exceed {{configParams.img_size}} MB).
+                    </mat-error>
+                  </mat-form-field>
+            
+            <img style="height: 200px; width: 150px;"  mat-card-image src="{{url}}" alt="Chapter Photo"><br>
+                            <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                            <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="save_thumbnail()" [disabled]="cover.status === 'INVALID'" >Save</button>
+    </div>
+  </ng-template-->
 
+  <ng-template #callEditLogo> 
+      <h1 mat-dialog-title>Edit Institute Logo</h1>
+      <div mat-dialog-content>
+                  <mat-form-field class="form-group" style=" width: 90%; display: inline-block; margin-right: 100px;"  appearance="outline">
+                          <mat-label>Logo Image</mat-label>
+                          <ngx-mat-file-input #removableInput [(formControl)]="logo" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                          (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
+                          <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                            <mat-icon>clear</mat-icon>
+                          </button>
+                          <mat-hint>Images in .jpg, .jpeg  or .png only allowed </mat-hint>
+                          <mat-error *ngIf="logo.hasError('required')">
+                            Please select a file
+                          </mat-error>
+                          <mat-error *ngIf="logo.hasError('maxContentSize')">
+                            The total size must not exceed {{configParams.logo_size}} MB).
+                          </mat-error>
+                        </mat-form-field>
+                  
+                  <img style="height: 200px; width: 150px; margin-left : 10px;"  mat-card-image src="{{url}}" alt="Institute Logo"><br>
+                                  <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                  <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+          
+      
+      </div>
+      <div mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="save_logo()" type="submit" [disabled]="logo.status === 'INVALID'">Save</button>
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+      </div>
+      
+  </ng-template>
+ 
 

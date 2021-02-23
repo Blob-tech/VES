@@ -22,6 +22,19 @@ organisations.get('/list/all',(req,res,next)=>{
     })
 })
 
+//get a organisation by client id
+organisations.get('/view_by_client_id/:client_id',(req,res,next)=>{
+
+    Organisation.find({client_id : req.params.client_id})
+    .then(
+        data=>{
+            res.json(data);
+        }
+    ).catch(err => {
+        res.json({"err" :  "Server Error ! Error in get Organisation with client id :" +req.params.client_id +" : "+ JSON.stringify(err)} );
+    })
+})
+
 //get a organisation by id
 organisations.get('/view/:id',(req,res,next)=>{
 
@@ -80,7 +93,7 @@ organisations.post('/add',async (req,res,next)=>{
                         {
                             await session.abortTransaction();
                             session.endSession();
-                            res.json({"err" : "Error in uploading Organisation/Institute logo. Document size should be less than 100 MB"})
+                            res.json({"err" : "Error in uploading Organisation/Institute logo. Logo size exceeding the limit"})
                         }
                         })
                     newOrganisation.avatar = stored_name;
@@ -161,6 +174,58 @@ organisations.put('/edit/:id',(req,res,next)=>
     
 })
 
+//Edit Institute Logo
+organisations.put('/edit/logo/:id',(req,res,next)=>{
+
+    var stored_name="";
+    if(req.files)
+    {
+        Logo = req.files['logo'];
+        
+    }
+    
+
+                    Organisation.findOne({organisation_id : req.params.id}).then ( result => {
+                        if(result)
+                        {
+                            if(Logo)
+                            {
+                                var name = Logo.name.split(".");
+                                stored_name=result.organisation_name+"-"+Date.now()+"."+ name[name.length-1];
+                                    Logo.mv("./uploads/organisation/logo/"+stored_name, 
+                                    (err)=>{
+                                        if(err)
+                                        {
+                                            res.json({"err" : "Error in uploading Institute Logo. Logo size is exceeding the limit"})
+                                        }
+                                        })
+                                    
+                                        fs.unlinkSync("./uploads/organisation/logo/"+result.avatar);
+                                    
+                                        Organisation.findOneAndUpdate({organisation_id : req.params.id},
+                                            {$set : {avatar : stored_name}})
+                                            .then(data=>{
+                                                res.json({"msg" : "Institute/Organisation Logo Image has been updated successfully!"});
+                                            }).catch(err=>{
+                                                res.json({"err" : "Error in setting the thumbnail image path"});
+                                            })
+                                        }                  
+
+                        }
+                        else
+                        {
+                            res.json({"err" : "No Such Organisation Exists wit id : " + req.params.id});
+                        }
+
+                }).catch(
+                    err=>{
+                        res.json({"err" : "No Such Organisation Exists wit id : " + req.params.id + err});
+                    }
+                )
+})
+
+
+
 
 //Deactivate an Organisation 
 organisations.put('/deactivate/:state/:id',(req,res,next)=>
@@ -231,5 +296,58 @@ organisations.delete('/delete/:id', (req,res,next)=>
           })        
       
 })
+
+//delete many organisations
+organisations.put("/bulkactions/delete/:n",(req,res,next)=>
+{
+    let id = [];
+    for(var i = 0 ; i < req.params.n ; i++)
+    {
+        id.push(req.body[i].organisation_id)
+    }
+    console.log(id);
+   
+    Organisation.updateMany(
+        {
+           organisation_id : { $in : id}
+        },
+        { 
+            active : false
+        }
+    ).then(
+        data => {
+            res.json({"msg": req.params.n + " Institute/Organisations has been successfully deleted"});
+        }
+    ).catch(err=>
+        {
+            res.json({"err": "Error in deleting "+req.params.n+" Institute/Organisation. Please try after few minutes." + err})
+        })
+});
+
+//deactivate many organisations
+organisations.put("/bulkactions/deactivate/:n",(req,res,next)=>
+{
+    let id = [];
+    for(var i = 0 ; i < req.params.n ; i++)
+    {
+        id.push(req.body[i].organisation_id)
+    }
+   
+    Organisation.updateMany(
+        {
+           organisation_id : { $in : id}
+        },
+        {
+            isActivated : false
+        }
+    ).then(
+        data => {
+            res.json({"msg": req.params.n + " Institute/Organisations has been successfully deactivated"});
+        }
+    ).catch(err=>
+        {
+            res.json({"err": "Error in deactivating "+req.params.n+" Institute/Organisation. Please try after few minutes." + err})
+        })
+});
 
 module.exports = organisations;

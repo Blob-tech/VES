@@ -31,7 +31,9 @@ export class CategoryComponent implements OnInit {
       img_size : [1,Validators.required],
       doc_size : [1,Validators.required],
       avatar_size :[10,Validators.required],
-      books_per_page : [5,Validators.required] 
+      books_per_page : [5,Validators.required],
+      logo_size : [10,Validators.required],
+      default_book_view : ['GRID', Validators.required] 
     }
   )
   
@@ -121,6 +123,11 @@ export class CategoryComponent implements OnInit {
     return this.configForm.get('img_size');
   }
 
+  get logo_size()
+  {
+    return this.configForm.get('logo_size');
+  }
+
   get avatar_size()
   {
     return this.configForm.get('avatar_size');
@@ -134,6 +141,11 @@ export class CategoryComponent implements OnInit {
   get books_per_page()
   {
     return this.configForm.get('books_per_page');
+  }
+
+  get default_book_view()
+  {
+    return this.configForm.get('default_book_view');
   }
 
 
@@ -152,6 +164,8 @@ export class CategoryComponent implements OnInit {
             img_size : this.config_params.img_size,
             doc_size : this.config_params.doc_size,
             avatar_size : this.config_params.avatar_size,
+            logo_size : this.config_params.logo_size,
+            default_book_view : this.config_params.default_book_view
           })
         }
         else

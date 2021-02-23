@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {config} from 'src/conf';
+import { Book } from '../modules/book-explorer/models/book';
 @Injectable({
   providedIn: 'root'
 })
@@ -88,5 +89,13 @@ export class BookService {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
     return this.httpClient.put(this.URL+"edit/content/"+id,book,{headers:headers})
+  }
+
+  delete_many_books(books : Book[])
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json');
+
+    return this.httpClient.put(this.URL + 'bulkactions/delete/'+ books.length,books,{headers : headers})
   }
 }

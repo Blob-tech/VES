@@ -114,15 +114,10 @@
     </mat-card>
 
 <!-- Edit Image Modal-->
-    <ng-template #edit_image let-c="close" let-d="dismiss">
-            <div class="modal-header">
-              <h4 class="modal-title">Edit Thumbnail</h4>
-              <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                    <mat-form-field class="form-group" style=" width: 30%; display: inline-block; margin-right: 100px;"  appearance="outline">
+    <ng-template #edit_image>
+            <h1 mat-dialog-title>Edit Thumbnail</h1>
+            <div mat-dialog-content>
+                    <mat-form-field class="form-group" style=" width: 90%; display: inline-block; margin-right: 100px;"  appearance="outline">
                             <mat-label>Thumbnail Image</mat-label>
                             <ngx-mat-file-input #removableInput [(formControl)]="cover" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
                             (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
@@ -138,25 +133,21 @@
                             </mat-error>
                           </mat-form-field>
                     
-                    <img style="height: 200px; width: 150px;"  mat-card-image src="{{url}}" alt="Chapter Photo"><br>
+                    <img style="height: 200px; width: 150px; margin-left: 10px;"  mat-card-image src="{{url}}" alt="Chapter Photo"><br>
                                     <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
                                     <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-dark" (click)="save_thumbnail()" [disabled]="cover.status === 'INVALID'" >Save</button>
+            <div mat-dialog-actions>
+              <button type="button" mat-raised-button color="primary" (click)="save_thumbnail()" [disabled]="cover.status === 'INVALID'" >Save</button>
+              <button mat-raised-button color="warn" mat-dialog-close>Close</button>
             </div>
           </ng-template>
 
 
     <!-- Edit Content Modal-->
-    <ng-template #edit_content let-c="close" let-d="dismiss">
-        <div class="modal-header">
-          <h4 class="modal-title">Edit Book Content</h4>
-          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
+    <ng-template #edit_content >
+        <h1 mat-dialog-title>Edit Content</h1>
+        <div mat-dialog-content>
             <mat-form-field class="form-group" style=" width: 90%;"  appearance="outline">
                 <mat-label>Article/Book </mat-label>
                 <ngx-mat-file-input #removable [(formControl)]="book" accept=".doc,.pdf,.docx,.ppt,.pptx,.mp4,.mp3"  placeholder="Browse Documents" 
@@ -174,8 +165,10 @@
               </mat-form-field>
               <mat-progress-bar mode="determinate" value="{{docprogress}}"></mat-progress-bar>
         </div>
-        <div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark" (click)="republish()" [disabled]="book.status === 'INVALID'" >Republish</button>
-        </div>
+        <div mat-dialog-actions>
+            <button type="button" mat-raised-button color="primary" (click)="republish()" [disabled]="cover.status === 'INVALID'" >Republish</button>
+            <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+          </div>
+       
       </ng-template>
           

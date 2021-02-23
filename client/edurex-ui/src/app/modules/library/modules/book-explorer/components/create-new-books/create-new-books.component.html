@@ -121,7 +121,7 @@
                             <mat-label>Thumbnail Image</mat-label>
                             <ngx-mat-file-input #removableInput formControlName="cover" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
                             (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
-                            <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                            <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event);">
                               <mat-icon>clear</mat-icon>
                             </button>
                             <mat-hint>Images in .jpg, .jpeg,.png  only allowed </mat-hint>
