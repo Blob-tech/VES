@@ -15,11 +15,12 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
 
-<mat-form-field  appearance="outline" style="margin-left: 15%; margin-right: 10px;  width : 40%">
+<mat-form-field  appearance="outline" style="margin-left: 15%; margin-right: 10px;  width : 20%">
   <mat-label>Bulk Action</mat-label>
   <mat-select [(ngModel)]="bulkaction">
     <mat-option value="DELETE">Delete</mat-option>
     <mat-option value="DEACTIVATE">Deactivate</mat-option>
+    <mat-option value="ACTIVATE">Activate</mat-option>
   </mat-select>
 </mat-form-field>
 
@@ -49,7 +50,7 @@
 
 <ng-container matColumnDef="organisation_id">
 <th mat-header-cell *matHeaderCellDef mat-sort-header > Id </th>
-<td [style.color]="org.isActivated ? 'black' : 'grey'" mat-cell *matCellDef="let org"> {{org.organisation_id}} </td>
+<td [style.color]="org.isActivated ? '' : 'grey'" mat-cell *matCellDef="let org"> {{org.organisation_id}} </td>
 </ng-container>
 
 
@@ -57,8 +58,9 @@
 
 <ng-container matColumnDef="organisation_name">
 <th mat-header-cell *matHeaderCellDef mat-sort-header> Institute/Organisation Name </th>
-<td [style.color]="org.isActivated ? 'black' : 'grey'" mat-cell *matCellDef="let org">
-    <img src= "{{org.avatar ? imgUrl + org.avatar : '/assets/images/insimg.png'}}" height=30 width = 30>
+<td [style.color]="org.isActivated ? '' : 'grey'" mat-cell *matCellDef="let org">
+    <img [style.opacity]="!org.isActivated ? 0.2 : 1"
+    src= "{{org.avatar ? imgUrl + org.avatar : '/assets/images/insimg.png'}}" height=30 width = 30>
    {{org.organisation_name}} </td>
 </ng-container>
 

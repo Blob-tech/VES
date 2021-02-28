@@ -76,12 +76,12 @@ export class InstituteManagementService {
     return this.httpClient.put(this.URL + 'bulkactions/delete/'+ institutes.length,institutes,{headers : headers})
   }
 
-  deactivate_many_institutes(institutes : Institute[])
+  deactivate_many_institutes(institutes : Institute[], state : Boolean)
   {
     let headers = new HttpHeaders();
     headers.append('content-Type','application/json');
 
-    return this.httpClient.put(this.URL + 'bulkactions/deactivate/'+ institutes.length,institutes,{headers : headers})
+    return this.httpClient.put(this.URL + 'bulkactions/deactivate/'+ state + '/' +institutes.length,institutes,{headers : headers})
   }
 }
 

@@ -39,7 +39,7 @@ export class DisplayBookComponent implements OnInit {
    bookView;
    bulkaction='';
 
-   displayedColumns: string[] = ['select','book_id', 'book_name', 'author', 'language',  'actions'];
+   displayedColumns: string[] = ['select','book_id', 'book_name', 'author', 'language', 'book-type', 'actions'];
    
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -57,7 +57,7 @@ export class DisplayBookComponent implements OnInit {
     this.getLanguages();
     this.route.params.subscribe(routeParams => {
       this.getBookCount(routeParams.category,routeParams.subcategory);
-      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1);
+      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
      
     });
   }
@@ -124,7 +124,7 @@ export class DisplayBookComponent implements OnInit {
     this.pageIndex = event.pageIndex;
     this.route.params.subscribe(routeParams => {
       this.getBookCount(routeParams.category,routeParams.subcategory);
-      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1);
+      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
      
     });
   }
@@ -147,8 +147,36 @@ export class DisplayBookComponent implements OnInit {
       )
   }
 
-  getBooks(category,subcategory,books_per_page,page)
+  getBooks(category,subcategory,books_per_page,page,filter,cond)
   {
+    if(filter != null && cond != null)
+    {
+      this.bookService.getFilteredBooks(filter,cond,books_per_page,page).subscribe(
+        data=>
+        {
+          this.books = data as Array<any>;
+          this.dataSource = new MatTableDataSource<Book>(this.books);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.copyBooks =data;
+          if(this.books.length == 0)
+          {
+            this.noBook = "No Book Found ! Please Check your Subscription Categories"
+          }
+          else
+          {
+            this.noBook = null;
+          }
+        },
+        err=>{
+            this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+        }
+  
+      )
+
+      return;
+
+    }
     this.bookService.getBook(category,subcategory,books_per_page,page).subscribe(
       data=>
       {
@@ -185,7 +213,7 @@ export class DisplayBookComponent implements OnInit {
           {
             this._snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
             this.route.params.subscribe(routeParams => {
-            this.getBooks(routeParams.category,routeParams.subcategory,4,1);
+            this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
             });
           }
           else
@@ -284,7 +312,7 @@ export class DisplayBookComponent implements OnInit {
             this._snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
             this.route.params.subscribe(routeParams => {
               this.getBookCount(routeParams.category,routeParams.subcategory);
-              this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1);
+              this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
              
             });
           },

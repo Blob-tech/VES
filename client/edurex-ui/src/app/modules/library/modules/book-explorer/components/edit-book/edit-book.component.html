@@ -58,7 +58,7 @@
             </mat-form-field>
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Subscription Category</mat-label>
-                    <mat-select  formControlName = "subscription" required>
+                    <mat-select multiple formControlName = "subscription" required>
                             <mat-option *ngFor="let sub of subscriptions" [value]="sub.subscription_category">{{sub.subscription_category}}</mat-option>
                           </mat-select>
                           <mat-error *ngIf="subscription.hasError('required')">Value is required</mat-error>
@@ -138,7 +138,7 @@
                                     <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
             </div>
             <div mat-dialog-actions>
-              <button type="button" mat-raised-button color="primary" (click)="save_thumbnail()" [disabled]="cover.status === 'INVALID'" >Save</button>
+              <button type="button" mat-dialog-close mat-raised-button color="primary" (click)="save_thumbnail()" [disabled]="cover.status === 'INVALID'" >Save</button>
               <button mat-raised-button color="warn" mat-dialog-close>Close</button>
             </div>
           </ng-template>
@@ -166,7 +166,7 @@
               <mat-progress-bar mode="determinate" value="{{docprogress}}"></mat-progress-bar>
         </div>
         <div mat-dialog-actions>
-            <button type="button" mat-raised-button color="primary" (click)="republish()" [disabled]="cover.status === 'INVALID'" >Republish</button>
+            <button type="button"mat-dialog-close mat-raised-button color="primary" (click)="republish()" [disabled]="cover.status === 'INVALID'" >Republish</button>
             <button mat-raised-button color="warn" mat-dialog-close>Close</button>
           </div>
        

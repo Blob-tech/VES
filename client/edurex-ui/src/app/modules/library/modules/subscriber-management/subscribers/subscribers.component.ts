@@ -19,7 +19,7 @@ export class SubscribersComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getInstituteList();
+    this.getActiveInstituteList();
   }
 
   getSubscriptionCategories()
@@ -35,11 +35,12 @@ export class SubscribersComponent implements OnInit {
     )
   }
 
-  getInstituteList()
+  getActiveInstituteList()
   {
     this.instituteServices.get_institutes().subscribe(
       data=>{
         this.institutes = data as Array<any>;
+        this.institutes = this.institutes.filter(value => { return value.isActivated == true});
       },
       err => {
         this._snackbar.open("Error in Loading the Institute List. Please try after few minutes!",null,{duration : 5000});

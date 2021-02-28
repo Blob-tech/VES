@@ -37,6 +37,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { MatTableModule } from '@angular/material/table';
     AppComponent,
     NavbarComponent,
     LoginComponent,
+    
     
   ],
   imports: [
@@ -58,6 +60,8 @@ import { MatTableModule } from '@angular/material/table';
     MatMenuModule,
     MatCardModule,
     MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatFormFieldModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -82,6 +86,7 @@ import { MatTableModule } from '@angular/material/table';
     NgbModule,
 
   ],
+  exports:[],
   providers: [],
   bootstrap: [AppComponent]
 })

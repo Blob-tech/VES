@@ -11,7 +11,7 @@ organisations.use(cors());
 //get list of all organisation
 organisations.get('/list/all',(req,res,next)=>{
 
-    Organisation.find({active : true})
+    Organisation.find({active : true}).sort({organisation_name : 1})
     .then(
         data=>{
         res.json(data);
@@ -272,7 +272,6 @@ organisations.put('/deactivate/:state/:id',(req,res,next)=>
 
 
 // Delete an organisation
-//Delete a Book
 organisations.delete('/delete/:id', (req,res,next)=>
 {
           Organisation.findOne({organisation_id : req.params.id}).
@@ -305,15 +304,20 @@ organisations.put("/bulkactions/delete/:n",(req,res,next)=>
     {
         id.push(req.body[i].organisation_id)
     }
-    console.log(id);
+    Organisation.find({
+        organisation_id : { $in : id}
+     }).then(
+         data=>{
+             data.forEach(value =>
+                fs.unlinkSync('./uploads/organisation/logo/'+value.avatar)
+                )
+         }
+     )
    
-    Organisation.updateMany(
+    Organisation.deleteMany(
         {
            organisation_id : { $in : id}
         },
-        { 
-            active : false
-        }
     ).then(
         data => {
             res.json({"msg": req.params.n + " Institute/Organisations has been successfully deleted"});
@@ -325,14 +329,16 @@ organisations.put("/bulkactions/delete/:n",(req,res,next)=>
 });
 
 //deactivate many organisations
-organisations.put("/bulkactions/deactivate/:n",(req,res,next)=>
+organisations.put("/bulkactions/deactivate/:state/:n",(req,res,next)=>
 {
     let id = [];
     for(var i = 0 ; i < req.params.n ; i++)
     {
         id.push(req.body[i].organisation_id)
     }
-   
+    
+    if(req.params.state == 'false')
+    {
     Organisation.updateMany(
         {
            organisation_id : { $in : id}
@@ -348,6 +354,30 @@ organisations.put("/bulkactions/deactivate/:n",(req,res,next)=>
         {
             res.json({"err": "Error in deactivating "+req.params.n+" Institute/Organisation. Please try after few minutes." + err})
         })
+    }
+    else if(req.params.state == 'true')
+    {
+
+        Organisation.updateMany(
+            {
+               organisation_id : { $in : id}
+            },
+            {
+                isActivated : true
+            }
+        ).then(
+            data => {
+                res.json({"msg": req.params.n + " Institute/Organisations has been successfully activated"});
+            }
+        ).catch(err=>
+            {
+                res.json({"err": "Error in activating "+req.params.n+" Institute/Organisation. Please try after few minutes." + err})
+            })
+
+    }
 });
+
+
+
 
 module.exports = organisations;

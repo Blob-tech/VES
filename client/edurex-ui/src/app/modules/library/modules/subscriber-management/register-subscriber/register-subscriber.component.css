@@ -21,10 +21,30 @@ mat-form-field
 
 .header
 {
-    background-color: coral;
+    background-color: lightblue;
     padding: 1%;
     border-radius: 5px;
     display: flex;
     justify-content: center;
     text-align: center;
+    color: #000;
+}
+
+.header mat-card-subtitle
+{
+    color: #000;
+}
+
+@media screen and (max-width : 800px)
+{
+    .form-group 
+    {
+        width : 90%;
+    }
+
+    .form-group img
+    {
+      width : 90%;
+      margin-right : 20px;
+    }
 }

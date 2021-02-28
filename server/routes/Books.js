@@ -93,6 +93,23 @@ books.get('/list/latest/:latest_number',(req,res,next)=>
     })
 })
 
+//get list of latest release
+books.get('/filter-list/:filter/:cond/:books_per_page/:page',(req,res,next)=>
+{
+    let filterparam = req.params.filter;
+    Books.find({$and : [{active : true},
+    {filterparam : 'Test Author'}]})
+    .sort({date_of_published : -1})
+    .skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
+    .then(
+        data=>{
+            res.json(data);
+        }
+    ).catch(err=>{
+        res.json({"err": "Error in loading the list of Books from Edurex Database."})
+    })
+})
+
 // Get List of All Books;
 books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
 {

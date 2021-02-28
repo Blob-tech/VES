@@ -11,7 +11,9 @@
     width: 45%;
     
 }
-
+button:focus {
+    outline: none;
+  }
 .logo
 {
     height: 200px;

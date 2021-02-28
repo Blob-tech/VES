@@ -1,0 +1,20 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title [style.color]="!selectedUser.isActivated ? 'grey' : ''"
+       matTooltip="{{selectedUser.name}}"> <img *ngIf="mode == 'small'" [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
+       src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" height=80 width = 80
+        style="border-radius : 50%;" >
+          {{selectedUser.name.length < 30 ? selectedUser.name : selectedUser.name.substr(0,30) + '...'}}</mat-card-title>
+      <mat-card-subtitle *ngIf = "enabledSubtitle && mode == 'small'" ><p>Phone : {{selectedUser.phone}}</p><p>Email : {{selectedUser.email}}</p></mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image *ngIf="mode == 'large'"
+     src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
+     height="400" style="border-radius : 50%; padding: 10%;">
+    <mat-card-content *ngIf="mode == 'large'">
+      <p>Phone : {{selectedUser.phone}}</p><p>Email : {{selectedUser.email}}</p>
+    </mat-card-content>
+    <!--mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions-->
+  </mat-card>

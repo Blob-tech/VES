@@ -3,3 +3,117 @@
     margin: 1rem;
     padding: 1rem;
 }
+
+.modal-body button 
+{
+    margin-right: 10%;
+    width: 200px;
+}
+
+.inactive
+{
+    color: blue;
+}
+
+.active
+{
+    color: black;
+}
+
+#UserTable
+{
+    margin-top : 10px;
+    margin-left:15%;
+    margin-bottom: 1%;
+    width : 70%;
+    border-radius: 10px;
+}
+
+.only-active
+{
+    margin-left: 15%;
+}
+.action-button
+{
+    margin-right: 1rem;
+}
+button:focus {
+    outline: none;
+  }
+.alert
+{
+    margin-left : 20%;
+    width : 60%
+}
+
+.new
+{
+    margin-left: 15%;
+}
+
+
+mat-form-field
+{
+    width: 100%;
+    font-size :15px;
+}
+
+mat-card-footer
+{
+    padding-left: 30%;
+}
+
+.filter
+{
+    max-width: 70%;
+    margin-left: 15%;
+    margin-top:2%;
+    margin-bottom: 1%;
+    
+    padding: 5px;
+    border-radius : 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.paginator
+{
+    max-width: 70%;
+    margin-left: 15%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    
+    padding: 5px;
+    border-radius : 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+@media screen and (max-width : 450px)
+{
+    .paginator 
+    {
+        margin-left: 1%;
+        max-width: 98%;
+    }
+    .modal-body button 
+    {
+        margin-right: 10%;
+        width: 100px;
+    }
+
+    .filter
+    {
+        margin-left: 1%;
+        max-width: 98%;
+    }
+
+    #UserTable
+    {
+        margin-left: 1%;
+        width: 98%;
+    }
+
+    td
+    {
+        text-align: center;
+    }
+}

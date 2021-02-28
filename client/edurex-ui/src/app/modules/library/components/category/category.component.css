@@ -13,7 +13,9 @@ mat-tab-group
     padding: 2%;
     margin: 1% 5% 5% 5%;
 }
-
+button:focus {
+    outline: none;
+  }
 .course-tag 
 {
     font-size: 20px;
