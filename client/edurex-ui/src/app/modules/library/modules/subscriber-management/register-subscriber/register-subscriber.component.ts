@@ -58,7 +58,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     this.getSubscriptionCategories();
     this.getConfigParams();
     this.getCounter();
-    this.getInstituteList();
+    this.getActiveInstituteList();
     
   }
 
@@ -97,12 +97,9 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
       name : ['',[Validators.required, Validators.maxLength(200)]],
       email :['',[Validators.required,Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]],
       phone :['',[Validators.required]],
-      subscription : ['',Validators.required],
       address : ['',[Validators.maxLength(500)]],
       password : ['',[Validators.required,Validators.minLength(8),Validators.maxLength(15),Validators.pattern("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]*$")]],
       resetPassword : ['',[Validators.required]],
-      institute :['',Validators.required],
-      role : ['',Validators.required],
       avatar : ['']//1 MB
     },
     { validator: resetPassValidator}
@@ -140,10 +137,6 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
  {
    return this.subscriberForm.get('phone');
  }
- get institute_id()
- {
-   return this.subscriberForm.get('institute_id');
- }
  get password()
  {
    return this.subscriberForm.get('password');
@@ -152,22 +145,10 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
  {
    return this.subscriberForm.get('resetPassword');
  }
-  get subscription()
-  {
-    return this.subscriberForm.get('subscription');
-  }
-  get institute()
-  {
-    return this.subscriberForm.get('institute');
-  }
 
   get address()
   {
     return this.subscriberForm.get('address');
-  }
-  get role()
-  {
-    return this.subscriberForm.get('role');
   }
   get avatar()
   {
@@ -194,13 +175,14 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     )
   }
 
-  getInstituteList()
+  getActiveInstituteList()
   {
     this.instituteService.get_institutes().subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
           this.institutes = data as Array<any>;
+          this.institutes = this.institutes.filter(value => {return value.isActivated == true});
           this.institutes.sort((a,b) => a.organisation_name.localeCompare(b.organisation_name));
         }
         else
@@ -221,7 +203,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
-        this.subscriberForm.patchValue({user_id : "SBSCR"+this.counter[0].user},{emitEvent : true});
+        this.subscriberForm.patchValue({user_id : "USR"+this.counter[0].user},{emitEvent : true});
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});

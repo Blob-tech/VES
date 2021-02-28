@@ -46,3 +46,7 @@ mat-form-field
         width : 90%;
     }
 }
+
+button:focus {
+    outline: none;
+  }

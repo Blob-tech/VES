@@ -48,6 +48,7 @@ app.use('/thumbnail',express.static(path.join(__dirname, 'uploads/library/cover-
 app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')));
 app.use('/system',express.static(path.join(__dirname,'uploads/system/')));
 app.use('/organisation_logo',express.static(path.join(__dirname,'uploads/organisation/logo/')));
+app.use('/avatar',express.static(path.join(__dirname,'uploads/user/avatar')));
 app.use('/counters',Counters)
 app.use('/library/category',LibraryCategory);
 app.use('/library/books',Book);
@@ -167,7 +168,7 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
     else if(req.params.parameter == 'user')
     {
         collection.updateOne({},{$set : {user : Number(req.params.value)}}).then(data=>{
-        res.json({"msg":"Book Counter updated successfully"});
+        res.json({"msg":"User Counter updated successfully"});
         
     }).catch(err=>{
         res.json({"err" : "Error in updating counter Parameters"});
@@ -176,7 +177,7 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
     else if(req.params.parameter == 'organisation')
     {
         collection.updateOne({},{$set : {organisation : Number(req.params.value)}}).then(data=>{
-        res.json({"msg":"Book Counter updated successfully"});
+        res.json({"msg":"Organisation Counter updated successfully"});
         
     }).catch(err=>{
         res.json({"err" : "Error in updating counter Parameters"});
@@ -186,7 +187,7 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
     else if(req.params.parameter == 'course')
     {
         collection.updateOne({},{$set : {course : Number(req.params.value)}}).then(data=>{
-        res.json({"msg":"Book Counter updated successfully"});
+        res.json({"msg":"Course Counter updated successfully"});
         
     }).catch(err=>{
         res.json({"err" : "Error in updating counter Parameters"});
@@ -211,7 +212,8 @@ app.put('/library/config/set',(req,res,next)=>{
                 doc_size : req.body.doc_size,
                 avatar_size : req.body.avatar_size,
                 logo_size : req.body.logo_size,
-                default_book_view : req.body.default_book_view
+                default_book_view : req.body.default_book_view,
+                default_user_view : req.body.default_user_view
             }}).then(
                 data=>{
                     res.json({"msg":"Configuration Parameters Updated Successfully!"}) 

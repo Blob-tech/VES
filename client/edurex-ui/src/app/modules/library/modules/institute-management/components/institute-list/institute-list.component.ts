@@ -244,7 +244,7 @@ import { sync } from 'glob';
         {
           var res = confirm("Are you sure want to deactivate " + this.selection.selected.length  + " institutes/organisations ?");
         if( res == true) {
-        this.instituteService.deactivate_many_institutes(this.selection.selected).subscribe(
+        this.instituteService.deactivate_many_institutes(this.selection.selected,false).subscribe(
           data=>
           { 
             this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
@@ -254,6 +254,27 @@ import { sync } from 'glob';
           err=>
           {
             this._snackbar.open("Error in deactivating institute/organisation. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
+          }
+
+        )
+      }
+
+        }
+
+        else if(op == "ACTIVATE")
+        {
+          var res = confirm("Are you sure want to activate " + this.selection.selected.length  + " institutes/organisations ?");
+        if( res == true) {
+        this.instituteService.deactivate_many_institutes(this.selection.selected,true).subscribe(
+          data=>
+          { 
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+            this.getInstituteList();
+            location.reload();
+          },
+          err=>
+          {
+            this._snackbar.open("Error in activating institute/organisation. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
           }
 
         )

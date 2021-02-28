@@ -49,11 +49,18 @@ import { RegisterSubscriberComponent } from './register-subscriber/register-subs
 import { SubscriberRoutingModule } from './subscriber-routing.module';
 import { SubscribersComponent } from './subscribers/subscribers.component';
 import { SubscriberListComponent } from './subscriber-list/subscriber-list.component';
+import { ProfileGridComponent } from 'src/app/shared/widgets/profile-grid/profile-grid/profile-grid.component';
+import { AppModule } from 'src/app/app.module';
+import { InstituteManagementModule } from '../institute-management/institute-management.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MatChip, MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 
 
 @NgModule({
   declarations: [SubscriberManagementComponent, RegisterSubscriberComponent, SubscribersComponent, SubscriberListComponent,
-                  ],
+    ],
   imports: [
     CommonModule,
     MatSliderModule,
@@ -93,7 +100,10 @@ import { SubscriberListComponent } from './subscriber-list/subscriber-list.compo
     NgxDocViewerModule,
     MatVideoModule,
     PlyrModule,
-    SubscriberRoutingModule
+    SubscriberRoutingModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    SharedModule
   ],
   providers : [],
   bootstrap: [SubscriberManagementComponent]

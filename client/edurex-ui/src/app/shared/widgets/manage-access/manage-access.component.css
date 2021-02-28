@@ -1,0 +1,14 @@
+button:focus {
+    outline: none;
+  }
+
+  mat-form-field
+  {
+      width: 90%;
+      margin-left: 5%;
+      margin-right: 5%;
+  }
+
+  mat-form-field button:focus {
+    outline: none;
+  }

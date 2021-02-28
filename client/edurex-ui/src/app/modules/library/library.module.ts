@@ -42,6 +42,7 @@ import { CategoryComponent } from './components/category/category.component';
 import { LibraryHomeComponent } from './components/library-home/library-home.component';
 import { BookExplorerModule } from './modules/book-explorer/book-explorer.module';
 import { BookExplorerRoutingModule } from './modules/book-explorer/book-explorer.routing.module';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 
@@ -77,6 +78,7 @@ import { BookExplorerRoutingModule } from './modules/book-explorer/book-explorer
     MatAutocompleteModule,
     MatDividerModule,
     MatDialogModule,
+    MatChipsModule,
     MatMenuModule,
     MatCheckboxModule,
     MatPaginatorModule,

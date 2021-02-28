@@ -32,6 +32,9 @@ mat-form-field mat-error
     justify-items: center;
     display: flex;
 }
+button:focus {
+    outline: none;
+  }
  
 .example-spacer {
     flex: 1 1 auto;

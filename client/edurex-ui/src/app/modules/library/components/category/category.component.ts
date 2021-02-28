@@ -11,6 +11,33 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CategoryComponent implements OnInit {
 
   courseTags = [];
+  courseTagsA = [];
+  courseTagsB = [];
+  courseTagsC = [];
+  courseTagsD = [];
+  courseTagsE = [];
+  courseTagsF = [];
+  courseTagsG = [];
+  courseTagsH = [];
+  courseTagsI = [];
+  courseTagsJ = [];
+  courseTagsK = [];
+  courseTagsL = [];
+  courseTagsM = [];
+  courseTagsN = [];
+  courseTagsO = [];
+  courseTagsP = [];
+  courseTagsQ = [];
+  courseTagsR = [];
+  courseTagsS = [];
+  courseTagsT = [];
+  courseTagsU = [];
+  courseTagsV = [];
+  courseTagsW = [];
+  courseTagsX = [];
+  courseTagsY = [];
+  courseTagsZ = [];
+
   articleCategories = [];
   subscriptionCategories = [];
   config_params;
@@ -33,7 +60,8 @@ export class CategoryComponent implements OnInit {
       avatar_size :[10,Validators.required],
       books_per_page : [5,Validators.required],
       logo_size : [10,Validators.required],
-      default_book_view : ['GRID', Validators.required] 
+      default_book_view : ['GRID', Validators.required],
+      default_user_view : ['LIST', Validators.required], 
     }
   )
   
@@ -105,7 +133,10 @@ export class CategoryComponent implements OnInit {
     return this.articleCategoryForm.get('category_name');
   }
 
-
+  get default_user_view()
+  {
+    return this.articleCategoryForm.get('default_user_view');
+  }
 
   get subcategory_name()
   {
@@ -165,7 +196,8 @@ export class CategoryComponent implements OnInit {
             doc_size : this.config_params.doc_size,
             avatar_size : this.config_params.avatar_size,
             logo_size : this.config_params.logo_size,
-            default_book_view : this.config_params.default_book_view
+            default_book_view : this.config_params.default_book_view,
+            default_user_view : this.config_params.default_user_view
           })
         }
         else
@@ -217,6 +249,59 @@ export class CategoryComponent implements OnInit {
     this.libCategoryService.getCourseTags(nameStartsWith).subscribe(
       data=>{
       this.courseTags = data as Array<any>;
+      this.courseTagsA = this.courseTags.filter(tags =>
+         { return tags.course_tag.startsWith('A') || tags.course_tag.startsWith('a') });
+         this.courseTagsB = this.courseTags.filter(tags =>
+          { return tags.course_tag.startsWith('B') || tags.course_tag.startsWith('b') });
+          this.courseTagsC = this.courseTags.filter(tags =>
+            { return tags.course_tag.startsWith('C') || tags.course_tag.startsWith('c') });
+            this.courseTagsD = this.courseTags.filter(tags =>
+              { return tags.course_tag.startsWith('D') || tags.course_tag.startsWith('d') });
+              this.courseTagsE = this.courseTags.filter(tags =>
+                { return tags.course_tag.startsWith('E') || tags.course_tag.startsWith('E') });
+                this.courseTagsF = this.courseTags.filter(tags =>
+                  { return tags.course_tag.startsWith('F') || tags.course_tag.startsWith('f') });
+                  this.courseTagsG = this.courseTags.filter(tags =>
+                    { return tags.course_tag.startsWith('G') || tags.course_tag.startsWith('g') });
+                    this.courseTagsH = this.courseTags.filter(tags =>
+                      { return tags.course_tag.startsWith('H') || tags.course_tag.startsWith('h') });
+                      this.courseTagsI = this.courseTags.filter(tags =>
+                        { return tags.course_tag.startsWith('I') || tags.course_tag.startsWith('i') });
+                        this.courseTagsJ = this.courseTags.filter(tags =>
+                          { return tags.course_tag.startsWith('J') || tags.course_tag.startsWith('j') });
+                          this.courseTagsK = this.courseTags.filter(tags =>
+                            { return tags.course_tag.startsWith('K') || tags.course_tag.startsWith('k') });
+                            this.courseTagsL = this.courseTags.filter(tags =>
+                              { return tags.course_tag.startsWith('L') || tags.course_tag.startsWith('l') });
+                              this.courseTagsM = this.courseTags.filter(tags =>
+                                { return tags.course_tag.startsWith('M') || tags.course_tag.startsWith('m') });
+                                this.courseTagsN = this.courseTags.filter(tags =>
+                                  { return tags.course_tag.startsWith('N') || tags.course_tag.startsWith('n') });
+                                  this.courseTagsO = this.courseTags.filter(tags =>
+                                    { return tags.course_tag.startsWith('O') || tags.course_tag.startsWith('o') });
+                                    this.courseTagsP = this.courseTags.filter(tags =>
+                                      { return tags.course_tag.startsWith('P') || tags.course_tag.startsWith('p') });
+                                      this.courseTagsQ = this.courseTags.filter(tags =>
+                                        { return tags.course_tag.startsWith('Q') || tags.course_tag.startsWith('q') });
+                                        this.courseTagsR = this.courseTags.filter(tags =>
+                                          { return tags.course_tag.startsWith('R') || tags.course_tag.startsWith('r') });
+                                          this.courseTagsS = this.courseTags.filter(tags =>
+                                            { return tags.course_tag.startsWith('S') || tags.course_tag.startsWith('s') });
+                                            this.courseTagsT = this.courseTags.filter(tags =>
+                                              { return tags.course_tag.startsWith('T') || tags.course_tag.startsWith('t') });
+                                              this.courseTagsU = this.courseTags.filter(tags =>
+                                                { return tags.course_tag.startsWith('U') || tags.course_tag.startsWith('u') });
+                                                this.courseTagsV = this.courseTags.filter(tags =>
+                                                  { return tags.course_tag.startsWith('V') || tags.course_tag.startsWith('v') });
+                                                  this.courseTagsW = this.courseTags.filter(tags =>
+                                                    { return tags.course_tag.startsWith('W') || tags.course_tag.startsWith('w') });
+                                                    this.courseTagsX = this.courseTags.filter(tags =>
+                                                      { return tags.course_tag.startsWith('X') || tags.course_tag.startsWith('x') });
+                                                      this.courseTagsY = this.courseTags.filter(tags =>
+                                                        { return tags.course_tag.startsWith('Y') || tags.course_tag.startsWith('y') });
+                                                        this.courseTagsZ = this.courseTags.filter(tags =>
+                                                          { return tags.course_tag.startsWith('Z') || tags.course_tag.startsWith('z') });
+
       },
       err=>
       {

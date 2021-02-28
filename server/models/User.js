@@ -36,16 +36,6 @@ const userSchema = new schema(
            type : String,
            required : true
        },
-       institute :
-       {
-           type : [String],
-           required : true
-       },
-        subscription_category :
-       {
-            type : [String],
-            required : true,
-       },
        avatar : 
        {
            type : String,
@@ -78,11 +68,34 @@ const userSchema = new schema(
            required : true,
            default : "lime-blue"
        },
-       role : 
+       logged_in_form_ip :
        {
-           type : String,
-           required : true
+           type : [String],
+           required : true,
+           default : []
        },
+       failed_passord_attempt :
+       {
+            type : Number,
+            required : true,
+            default : 0
+       },
+       is_locked_out : 
+       {
+            type : Boolean,
+            required : true,
+            default : false
+       },
+       last_logged_in :
+       {
+            type : Date
+       },
+       isVerified :
+       {
+           type : Boolean,
+           required : true,
+           default : false,
+       }
        
 
 

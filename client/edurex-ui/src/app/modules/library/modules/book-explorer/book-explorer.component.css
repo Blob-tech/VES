@@ -117,6 +117,9 @@
 
   }
 
+  button:focus {
+    outline: none;
+  }
   button
   {
     white-space: normal; 

@@ -22,7 +22,9 @@
     text-align: center;
     color : black;
 }
-
+button:focus {
+    outline: none;
+  }
 .header mat-card-title
 {
     color : black;

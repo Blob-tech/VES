@@ -13,6 +13,10 @@ mat-card-footer
     border-radius: 10px;
 }
 
+button:focus {
+    outline: none;
+  }
+
 .action-button
 {
     margin-left: 1rem;

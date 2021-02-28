@@ -20,3 +20,10 @@ button.truncate {
 background-color: darkblue;
 font-size: 50px;
 }
+button:focus {
+  outline: none;
+}
+.mat-raised-button
+{
+  height : 200px;
+}

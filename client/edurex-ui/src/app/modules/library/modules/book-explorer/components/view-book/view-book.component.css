@@ -28,6 +28,9 @@
         width : 300px;
     }
 }
+button:focus {
+    outline: none;
+  }
 
 .auto-flip 
 {

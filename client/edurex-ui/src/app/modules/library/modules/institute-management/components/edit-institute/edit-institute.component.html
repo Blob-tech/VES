@@ -140,7 +140,7 @@
       
       </div>
       <div mat-dialog-actions>
-        <button mat-raised-button color="primary" (click)="save_logo()" type="submit" [disabled]="logo.status === 'INVALID'">Save</button>
+        <button mat-raised-button color="primary" mat-dialog-close (click)="save_logo()" type="submit" [disabled]="logo.status === 'INVALID'">Save</button>
         <button mat-raised-button color="warn" mat-dialog-close>Close</button>
       </div>
       

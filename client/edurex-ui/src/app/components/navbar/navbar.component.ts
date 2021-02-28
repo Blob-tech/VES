@@ -184,7 +184,7 @@ export class NavbarComponent implements OnInit {
         }
       },
       err=>{
-        this._snackbar.open("Error in updating book/article counter ",null,{duration : 500});
+        this._snackbar.open("Error in updating  counter ",null,{duration : 500});
       }
     )
   }

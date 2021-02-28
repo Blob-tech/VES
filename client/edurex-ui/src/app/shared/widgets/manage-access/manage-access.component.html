@@ -1,0 +1,44 @@
+<button [disabled]="disabled" (click)="open(access_id,accessManager)" matTooltip="Manage Access"  mat-mini-fab class="action-button" color='info' ><mat-icon>add_task</mat-icon></button>
+
+
+<!-- access Manage modal-->
+<ng-template #accessManager> 
+        <h1 mat-dialog-title> Manage User Access</h1>
+         <div mat-dialog-content>
+            <form [formGroup]="accessManagerForm">
+                <mat-form-field  class="form-group" appearance="outline">
+                    <mat-label>Role</mat-label>
+                    <mat-select formControlName="role" required (change)="resetAccessList($event)">
+                        <mat-option value="SADMIN">SYSTEM ADMIN</mat-option>
+                        <mat-option value="IADMIN">INSTITUTE ADMIN</mat-option>
+                        <mat-option value="CADMIN">CONTENT ADMIN</mat-option>
+                        <mat-option value="STUDENT">STUDENT ADMIN</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="role.hasError('required')">Value is required</mat-error>
+                </mat-form-field>  
+
+                <mat-form-field  class="form-group" appearance="outline">
+                        <mat-label >{{mode == 'institute' ? 'Institutes' : 'Users'}} </mat-label>
+                        <mat-select multiple [disabled]="role.value == 'SADMIN' ? true : false" formControlName="access_list"  placeholder="{{mode == 'institute' ? 'Add Institute' : 'Add User'}}">
+                                <mat-option *ngFor="let access of accessList" [(value)] = "mode == 'institute' ? access.organisation_id : access.user_id"  matTooltip="{{mode == 'institute' ? access.organisation_name : access.name}}">
+                                {{mode == 'institute' ? access.organisation_name : access.name}} 
+                            </mat-option>
+                              </mat-select>
+                              </mat-form-field>
+
+                <mat-form-field class="form-group" appearance="outline">
+                    <mat-label>Access valid upto</mat-label>
+                    <input [min]="minDate" matInput formControlName="valid_upto"  placeholder="Choose a date" [matDatepicker]="picker">
+                    <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>                           
+              </mat-form-field>
+            </form>
+                   
+         </div>
+         <div mat-dialog-actions>
+            <button mat-raised-button color="primary" 
+             mat-dialog-close><mat-icon>verified</mat-icon>Give Access</button>
+           <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+         </div>
+         
+       </ng-template>

@@ -61,6 +61,14 @@ export class BookService {
     "/" + page,{headers:headers})
   }
 
+  getFilteredBooks(filter : String,cond : String, books_per_page : Number, page : Number)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"filter-list/"+filter+"/" + cond + "/" + books_per_page + 
+    "/" + page,{headers:headers})
+  }
+
   addBook(book : FormData)
   {
 
@@ -76,6 +84,7 @@ export class BookService {
     headers.append("Content-Type","application/json");
     return this.httpClient.put(this.URL+"edit/"+id,form,{headers:headers})
   }
+ 
 
   editThumbnail(thumbnail : FormData, id : String)
   {
