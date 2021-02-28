@@ -120,7 +120,7 @@
                     word-wrap: break-word;">
                         <mat-icon class="auto-flip">import_contacts</mat-icon>
                         {{category.book_category}}
-                    </mat-panel-title>
+                    </mat-panel-title> 
                 </mat-expansion-panel-header>
                     <button routerLink = "/e-library/book-explorer/list/{{category.book_category}}/all" mat-raised-button color = "primary"> <mat-icon class="auto-flip">import_contacts</mat-icon>All</button>
                     <section *ngFor = "let subcat of category.book_subCategory">
