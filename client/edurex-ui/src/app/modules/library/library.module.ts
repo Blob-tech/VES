@@ -99,7 +99,8 @@ import { MatChipsModule } from '@angular/material/chips';
     
 
   ],
-  providers: [],
+  exports : [LibraryComponent],
+  providers: [LibraryComponent],
   bootstrap: [LibraryComponent, LibraryHomeComponent]
 })
 

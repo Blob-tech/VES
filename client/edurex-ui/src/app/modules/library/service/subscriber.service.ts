@@ -18,11 +18,19 @@ export class SubscriberService {
     return this.httpClient.post(this.URL+"add",formData,{headers : headers});
   }
 
-  getUserCount(institute : String)
+  getUserCount(institute : String, filter ?: String)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"count/"+institute,{headers : headers})
+    if(filter == undefined)
+    {
+      return this.httpClient.get(this.URL+"count/"+institute,{headers : headers})
+    }
+    else
+    {
+      return this.httpClient.get(this.URL+"count/"+institute+"/"+filter,{headers : headers})
+    }
+    
   }
 
   get_subscribers(institute : String, users_per_page : Number, page : Number)
@@ -33,6 +41,35 @@ export class SubscriberService {
     +users_per_page + "/" + page,{headers : headers});
   }
 
+  get_subscriber_by_id(user_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "view/" + user_id,{headers : headers});
+  }
+
+  update_profile_image(logo : FormData,user_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"edit/logo/"+user_id,logo,{headers:headers})
+  }
+
+  remove_profile_image(user_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.delete(this.URL+"remove/logo/"+user_id,{headers:headers})
+  }
+
+  get_subscribers_advance_search(institute : String, searchkey : String, users_per_page : Number, page : Number)
+  {
+    console.log(searchkey);
+    let headers = new HttpHeaders();
+    headers.append("Content-Type", "application/json" );
+    return this.httpClient.get(this.URL + "list/" + institute + "/" + searchkey +
+    "/" + users_per_page + "/" + page,{headers:headers});
+  }
   deactivate_subscribers(state:String,id : String)
   {
     let headers = new HttpHeaders();

@@ -58,6 +58,114 @@ users.get('/count/:institute',(req,res,next)=>
 
 })
 
+//Get total user count
+users.get('/count/:institute/:filter',(req,res,next)=>
+{
+    if(req.params.institute == 'unassigned')
+    {
+        searchkey = req.params.filter;
+        RoleAccess.find({active : true})
+            .then(
+                roles => 
+                {
+                    roles = roles.map(value => value.user_id);
+                    User.find({$and : [{active : true},
+                        {user_id : {$nin : roles}},
+                        {$or : [{name : new RegExp(searchkey,'i')},
+                            {email : new RegExp(searchkey,'i')},
+                            {phone : new RegExp(searchkey,'i')},
+                            {user_id : new RegExp(searchkey,'i')}
+                        ]}
+                    ]})
+                    .countDocuments((err,count) => {
+                        if(err)
+                        {
+                            res.json({"err": "Error in loading the list of Users from Edurex Database."})
+                        }
+                        else
+                        {
+                            
+                            res.json(count)
+                        }
+
+                    })}
+                    )
+                    .catch(err => {
+                        res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
+                    })
+                }
+                    else
+                    {
+                        User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
+                        .countDocuments((err,count) => {
+                            if(err)
+                            {
+                                res.json({"err": "Error in loading the list of Users from Edurex Database."})
+                            }
+                            else
+                            {
+
+                                res.json(count)
+                            }
+                        })
+
+                    }
+
+})
+
+
+users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
+
+    if(req.params.institute == 'unassigned')
+    {
+        RoleAccess.find({active : true})
+            .then(
+                roles => 
+                {
+                    roles = roles.map(value => value.user_id);
+                    searchkey = req.params.filter;
+                    User.find({$and : [
+                        {active : true},
+                        {user_id : {$nin : roles}},
+                        {$or : [{name : new RegExp(searchkey,'i')},
+                            {email : new RegExp(searchkey,'i')},
+                            {phone : new RegExp(searchkey,'i')},
+                            {user_id : new RegExp(searchkey,'i')}
+                        ]}
+                    ]}).sort({name : 1})
+                    .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
+                    .then(
+                        data => 
+                        {
+                            res.json(data);
+                        }
+                    ).catch(
+                        err=>{
+                            res.json({"err" : "Server Error ! Error in loading role access" + JSON.stringify(err)});
+                        }
+                    )
+                }
+            )
+            .catch(err => {
+                res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
+            })
+    }
+    else {
+    User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
+    .sort({name : 1})
+    .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
+    .then(
+        data=>{
+        res.json(data);
+        }
+    ).catch(err=>
+    {
+        res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)})
+    })
+}
+})
+
+
 
 //get Users depend upon role and institutes
 users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
@@ -100,6 +208,17 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
         res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)})
     })
 }
+})
+
+users.get('/view/:user_id', async(req,res,next)=> {
+    User.findOne({$and : [
+        {user_id : req.params.user_id},
+        {active : true}
+    ]}).then(data => {
+        res.json(data);
+    }).catch(err => {
+        res.json({"err" : "No Active user with user id : " + req.params.user_id});
+    })
 })
 
 
@@ -205,6 +324,90 @@ users.post('/add',async (req,res,next)=>{
 })
 
 
+//Edit User profile picture
+users.put('/edit/logo/:id',(req,res,next)=>{
+
+    var stored_name="";
+    if(req.files)
+    {
+        Logo = req.files['logo'];
+        
+    }
+    
+
+                    User.findOne({user_id : req.params.id}).then ( result => {
+                        if(result)
+                        {
+                            if(Logo)
+                            {
+                                var name = Logo.name.split(".");
+                                stored_name=result.name+"-"+Date.now()+"."+ name[name.length-1];
+                                    Logo.mv("./uploads/user/avatar/"+stored_name, 
+                                    (err)=>{
+                                        if(err)
+                                        {
+                                            res.json({"err" : "Error in uploading user profile picture. Image size is exceeding the limit"})
+                                        }
+                                        })
+                                         if(result.avatar != null)
+                                         {
+                                            fs.unlinkSync("./uploads/user/avatar/"+result.avatar);
+                                         }
+                                       
+                                    
+                                       User.findOneAndUpdate({user_id : req.params.id},
+                                            {$set : {avatar : stored_name}})
+                                            .then(data=>{
+                                                res.json({"msg" : "Profile Picture Image has been updated successfully!"});
+                                            }).catch(err=>{
+                                                res.json({"err" : "Error in setting the profile image path"});
+                                            })
+                                        }                  
+
+                        }
+                        else
+                        {
+                            res.json({"err" : "No Such User Exists wit id : " + req.params.id});
+                        }
+
+                }).catch(
+                    err=>{
+                        res.json({"err" : "No Such User Exists wit id : " + req.params.id + err});
+                    }
+                )
+})
+
+//Remove User profile picture
+users.delete('/remove/logo/:id',(req,res,next)=>{
+
+                    User.findOne({user_id : req.params.id}).then ( result => {
+                        if(result)
+                        {
+                            
+                            if(result.avatar != null)
+                            {
+                                fs.unlinkSync("./uploads/user/avatar/"+result.avatar);
+                            } 
+                            
+                                    
+                            User.findOneAndUpdate({user_id : req.params.id},
+                            {$set : {avatar : null}})
+                            .then(data=>{
+                            res.json({"msg" : "Profile Picture Image has been removed successfully!"});
+                            }).catch(err=>{
+                            res.json({"err" : "Error in removing the profile image path"});
+                            })
+                            }                  
+   
+                }).catch(
+                    err=>{
+                        res.json({"err" : "No Such User Exists wit id : " + req.params.id + err});
+                    }
+                )
+})
+
+
+
 //Deactivate an User
 users.put('/deactivate/:state/:id',(req,res,next)=>
 {
@@ -256,7 +459,8 @@ users.delete('/delete/:id', (req,res,next)=>
             if(data)
             {
 
-              // fs.unlinkSync('./uploads/user/avatar/'+data.avatar)
+              
+            //   fs.unlinkSync('./uploads/user/avatar/'+data.avatar)
                
 
                User.findOneAndUpdate({user_id : req.params.id},

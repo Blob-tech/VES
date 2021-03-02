@@ -26,6 +26,7 @@ export class DisplayBookComponent implements OnInit {
   filtered_languages;
   msg = null;
   noBook;
+  search='';
   configParams;
   search_author = new FormControl('');
   search_book = new FormControl('');
@@ -36,8 +37,10 @@ export class DisplayBookComponent implements OnInit {
    pageSize = 5;
    pageSizeOptions: number[] = [5, 10, 25, 100];
    pageIndex = 0;
+   pageFilterIndex = 0;
    bookView;
    bulkaction='';
+   reset=true;
 
    displayedColumns: string[] = ['select','book_id', 'book_name', 'author', 'language', 'book-type', 'actions'];
    
@@ -122,11 +125,21 @@ export class DisplayBookComponent implements OnInit {
     this.length = event.length;
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.route.params.subscribe(routeParams => {
-      this.getBookCount(routeParams.category,routeParams.subcategory);
-      this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
-     
-    });
+    if(this.search == '')
+    {
+      this.route.params.subscribe(routeParams => {
+        this.getBookCount(routeParams.category,routeParams.subcategory);
+        this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
+       
+      });
+
+    }
+    else
+    {
+      this.advance_search_click(this.search,false);
+    }
+
+    
   }
 
   setPageSizeOptions(setPageSizeOptionsInput: string) {
@@ -145,6 +158,60 @@ export class DisplayBookComponent implements OnInit {
           this._snackBar.open("Error in loading the list of books",null,{duration:5000});
       }
       )
+  }
+
+  getFilterBookCount(searchkey)
+  {
+      this.bookService.getFilterBookCount(searchkey).subscribe(
+        data=>{
+          this.length = Number(data);
+        },
+        err=>{
+          this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+      }
+      )
+  }
+
+  advance_search(event : Event)
+  {
+    const searchkey = (event.target as HTMLInputElement).value.trim();
+    this.pageFilterIndex = 0;
+    this.route.params.subscribe(routeParams => {
+      if(searchkey == '')
+      {
+        this.pageIndex=0;
+        this.getBookCount(routeParams.category,routeParams.subcategory);
+        this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
+      }
+      else
+      {
+        this.getFilterBookCount(searchkey);
+        this.getBooksBySearch(searchkey,this.pageSize,this.pageFilterIndex+1);  
+      }
+    });
+
+  }
+
+  advance_search_click(searchkey,reset)
+  {
+    if(reset == true)
+    {
+      this.pageFilterIndex = 0;
+    }
+    this.route.params.subscribe(routeParams => {
+      if(this.search == '')
+      {
+        this.pageIndex = 0
+        this.getBookCount(routeParams.category,routeParams.subcategory);
+        this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
+      }
+      else
+      {
+        this.getFilterBookCount(searchkey);
+        this.getBooksBySearch(searchkey,this.pageSize,this.pageFilterIndex+1); 
+      }
+    });
+
   }
 
   getBooks(category,subcategory,books_per_page,page,filter,cond)
@@ -258,6 +325,38 @@ export class DisplayBookComponent implements OnInit {
     const langfilterValue = (event.target as HTMLInputElement).value.trim();
     this.filtered_languages= langfilterValue ? this.languages.filter(value => value.name.toLowerCase().includes(langfilterValue.toLowerCase())) : this.languages;
   }
+
+  getBooksBySearch(searchkey,books_per_page, page)
+  {
+    this.bookService.getBooksByAdvanceSearch(searchkey,books_per_page,page).subscribe(
+      data=>{
+        if(!JSON.parse(JSON.stringify(data))['err'])
+        {
+          this.books = data as Array<any>;
+          this.dataSource = new MatTableDataSource<Book>(this.books);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.copyBooks =data;
+          if(this.books.length == 0)
+          {
+            this.noBook = "No Book Found ! Please Check your Subscription Categories"
+          }
+          else
+          {
+            this.noBook = null;
+          }
+        }
+        else
+        {
+          this._snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+        }
+      },
+      err=>{
+        this._snackBar.open("Error in loading the Books");
+      }
+    )
+  }
+
 
 
   isNew(date) : Boolean

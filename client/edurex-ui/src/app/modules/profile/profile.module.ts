@@ -27,47 +27,77 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatVideoModule } from 'mat-video';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatSortModule } from '@angular/material/sort';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgBreadcrumbModule } from 'ng-breadcrumb';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { PlyrModule } from 'ngx-plyr';
+import { BookExplorerComponent } from '../library/modules/book-explorer/book-explorer.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { LibraryModule } from '../library/library.module';
 
 
 
 @NgModule({
   declarations: [ProfileViewComponent],
   imports: [
-    CommonModule,
-    MatSidenavModule,
     MatSliderModule,
-    MaterialFileInputModule,
+    MatTabsModule,
     MatButtonModule,
     MatToolbarModule,
-    MatTreeModule,
-    MatMenuModule,
-    MatCardModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatExpansionModule,
-    MatSlideToggleModule,
-    MatGridListModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatFormFieldModule,
     MatTooltipModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
     MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatExpansionModule,
+    MatSidenavModule,
+    MatBadgeModule,
     MatTableModule,
-    MatDatepickerModule,
+    MatSortModule,
+    MatAutocompleteModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatGridListModule,
+    MatMenuModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatSlideToggleModule,
+    MatSelectModule,
+    MaterialFileInputModule,
+    MatProgressBarModule,
+    NgxMatSelectSearchModule,
+    NgBreadcrumbModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
     FormsModule,
+    MatExpansionModule,
     ReactiveFormsModule,
-    HttpClientModule,
-    NgxSpinnerModule,
+    PdfViewerModule,
+    PdfJsViewerModule,
+    NgxDocViewerModule,
     MatVideoModule,
+    PlyrModule,
     NgbModule,
+    SharedModule,
+    LibraryModule
+
 
   ],
+  exports : [MatSidenavModule],
+  providers : [BookExplorerComponent],
   bootstrap : [ProfileViewComponent]
 })
 export class ProfileModule { }
