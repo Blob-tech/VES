@@ -55,6 +55,13 @@ export class SubscriberService {
     return this.httpClient.put(this.URL+"edit/logo/"+user_id,logo,{headers:headers})
   }
 
+  update_subscriber(user_id : String,formdata : FormData)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"update/"+user_id,formdata,{headers:headers})
+  }
+
   remove_profile_image(user_id : string)
   {
     let headers = new HttpHeaders();

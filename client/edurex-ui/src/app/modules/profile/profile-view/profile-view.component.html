@@ -30,7 +30,48 @@
                         </mat-panel-description>
                       </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <p>basic info</p>
+                        <form [formGroup]="basicInfoForm">
+                          <button mat-raised-button color="accent" class="label-button">Name</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>User Name</mat-label>
+                                <input matInput formControlName="name" required placeholder="Enter user name" >
+                                <mat-hint>User name should not exceed more than 200 characters</mat-hint>
+                                <mat-hint align="end">{{name.value?.length || 0}}/200</mat-hint>
+                                <mat-error *ngIf="name.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                            </mat-form-field>
+                            <button mat-raised-button color="accent" class="label-button">Email</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput formControlName="email" required placeholder="Enter subscriber mail" >
+                                <mat-hint>Please enter a valid email. This mail will be used for all future communications</mat-hint>
+                                <mat-error *ngIf="email.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="email.hasError('pattern')">Please enter a valid email in the format xyz@abc.com</mat-error>
+                            </mat-form-field>
+                            <button mat-raised-button color="accent" class="label-button">Contact</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>Mobile/Phone Number</mat-label>
+                                 <span matPrefix>+91 &nbsp;</span>
+                                <input style="width : 60%" matInput type="tel" formControlName="phone" required placeholder="Enter subscriber mobile/phone number" maxlength="10">
+                                <mat-hint>Enter a 10 digit valid telephone number</mat-hint>
+                                <mat-error *ngIf="phone.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="phone.hasError('pattern')">Please enter a valid 10 digit mobile number</mat-error>
+                            </mat-form-field>
+                            
+                            <button mat-raised-button color="accent" class="label-button">Address</button><br>
+                                <mat-form-field class="form-group" appearance="outline" style="width:90%">
+                                    <mat-label>User Address</mat-label>
+                                    <textarea matInput formControlName="address"  placeholder="Enter user address" ></textarea>
+                                    <mat-hint>Subscriber address should not exceed more than 500 characters</mat-hint>
+                                    <mat-hint align="end">{{address.value?.length || 0}}/500</mat-hint>
+                                    <mat-error *ngIf="address.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                                </mat-form-field>
+                                
+                                <button type="submit" (click)="updateBasicInfo()" mat-raised-button style="margin-right: 1rem;" color="primary"
+                                [disabled]="updateBasicInfoDisabled()">Save</button>
+                    
+                                <button type="reset" mat-raised-button>Reset</button> 
+                        </form>            
                   </mat-expansion-panel>
                 <mat-expansion-panel>
                   <mat-expansion-panel-header>
@@ -99,6 +140,134 @@
             <div class="profile-mobile-view">
             <app-profile-grid [selectedUser] = "currentUser" 
             [enabledSubtitle] = true [mode]='mode'></app-profile-grid>
+
+            <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1><br>
+            <b style="margin-left : 2%">User Id : <span style="color : red">{{currentUser.user_id}}</span></b>
+            <div class="expansion-button">
+                <button mat-raised-button color="primary" (click)="accordion.openAll()">
+                    <mat-icon>zoom_in</mat-icon>
+                    Expand All</button>
+                <button mat-raised-button color="primary" (click)="accordion.closeAll()">
+                    <mat-icon>zoom_out</mat-icon>
+                    Collapse All</button>
+              </div>
+            <mat-accordion multi>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <b>Basic Info</b>
+                      
+                      <mat-panel-description>
+                          <mat-icon>info</mat-icon>
+                        </mat-panel-description>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                        <form [formGroup]="basicInfoForm">
+                          <button mat-raised-button color="accent" class="label-button">Name</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>User Name</mat-label>
+                                <input matInput formControlName="name" required placeholder="Enter user name" >
+                                <mat-hint>User name should not exceed more than 200 characters</mat-hint>
+                                <mat-hint align="end">{{name.value?.length || 0}}/200</mat-hint>
+                                <mat-error *ngIf="name.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                            </mat-form-field>
+                            <button mat-raised-button color="accent" class="label-button">Email</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput formControlName="email" required placeholder="Enter subscriber mail" >
+                                <mat-hint>Please enter a valid email. This mail will be used for all future communications</mat-hint>
+                                <mat-error *ngIf="email.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="email.hasError('pattern')">Please enter a valid email in the format xyz@abc.com</mat-error>
+                            </mat-form-field>
+                            <button mat-raised-button color="accent" class="label-button">Contact</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>Mobile/Phone Number</mat-label>
+                                 <span matPrefix>+91 &nbsp;</span>
+                                <input style="width : 60%" matInput type="tel" formControlName="phone" required placeholder="Enter subscriber mobile/phone number" maxlength="10">
+                                <mat-hint>Enter a 10 digit valid telephone number</mat-hint>
+                                <mat-error *ngIf="phone.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="phone.hasError('pattern')">Please enter a valid 10 digit mobile number</mat-error>
+                            </mat-form-field>
+                            
+                            <button mat-raised-button color="accent" class="label-button">Address</button><br>
+                                <mat-form-field class="form-group" appearance="outline" style="width:90%">
+                                    <mat-label>User Address</mat-label>
+                                    <textarea matInput formControlName="address"  placeholder="Enter user address" ></textarea>
+                                    <mat-hint>Subscriber address should not exceed more than 500 characters</mat-hint>
+                                    <mat-hint align="end">{{address.value?.length || 0}}/500</mat-hint>
+                                    <mat-error *ngIf="address.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                                </mat-form-field>
+                                
+                                <button type="submit" (click)="updateBasicInfo()" mat-raised-button style="margin-right: 1rem;" color="primary"
+                                [disabled]="updateBasicInfoDisabled()">Save</button>
+                    
+                                <button type="reset" mat-raised-button>Reset</button> 
+                        </form>            
+                  </mat-expansion-panel>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <b>Personal Details</b>
+                    
+                    <mat-panel-description>
+                        <mat-icon>account_circle</mat-icon>
+                      </mat-panel-description>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <p>personal details</p>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <b>Institutes</b>
+                    
+                    <mat-panel-description>
+                        <mat-icon>account_balance</mat-icon>
+                      </mat-panel-description>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <p>institutes</p>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <b>Subscriptions</b>
+                    
+                    <mat-panel-description>
+                        <mat-icon>subscriptions</mat-icon>
+                      </mat-panel-description> 
+                    </mat-panel-title>            
+                  </mat-expansion-panel-header>
+                  <p>subscription</p>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <b>Social Profiles</b>
+                   
+                    <mat-panel-description>
+                        <mat-icon>mood</mat-icon>
+                      </mat-panel-description>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <p>social profiles</p>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                     <b>Settings</b>
+                    
+                    <mat-panel-description>
+                        <mat-icon>settings_suggest</mat-icon>
+                      </mat-panel-description>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <p>settings</p>
+                  
+                </mat-expansion-panel>
+
+              </mat-accordion>
             </div>
 </mat-sidenav-container>
 <app-profile-grid [selectedUser] = "currentUser" 
