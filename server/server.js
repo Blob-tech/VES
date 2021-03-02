@@ -164,7 +164,16 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
     }).catch(err=>{
         res.json({"err" : "Error in updating counter Parameters"});
     })
-    }    
+    }
+    else if(req.params.parameter == 'library_prefix')
+    {
+        collection.updateOne({},{$set : {library_prefix : req.params.value}}).then(data=>{
+        res.json({"msg":"Book Counter Prefix updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating Book counter prefix"});
+    })
+    }
     else if(req.params.parameter == 'user')
     {
         collection.updateOne({},{$set : {user : Number(req.params.value)}}).then(data=>{
@@ -172,6 +181,15 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         
     }).catch(err=>{
         res.json({"err" : "Error in updating counter Parameters"});
+    })
+    }
+    else if(req.params.parameter == 'user_prefix')
+    {
+        collection.updateOne({},{$set : {user_prefix : req.params.value}}).then(data=>{
+        res.json({"msg":"User Counter Prefix updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating user counter prefix"});
     })
     }
     else if(req.params.parameter == 'organisation')
@@ -183,6 +201,15 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         res.json({"err" : "Error in updating counter Parameters"});
     })
     } 
+    else if(req.params.parameter == 'organisation_prefix')
+    {
+        collection.updateOne({},{$set : {organisation_prefix : req.params.value}}).then(data=>{
+        res.json({"msg":"Institute Counter Prefix updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating institute counter prefix"});
+    })
+    }
     
     else if(req.params.parameter == 'course')
     {
@@ -193,6 +220,15 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         res.json({"err" : "Error in updating counter Parameters"});
     })
     } 
+    else if(req.params.parameter == 'course_prefix')
+    {
+        collection.updateOne({},{$set : {course_prefix : req.params.value}}).then(data=>{
+        res.json({"msg":"User Course Prefix updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating course counter prefix"});
+    })
+    }
 })
 
 })

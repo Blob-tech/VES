@@ -64,7 +64,7 @@ export class ManageAccessComponent implements OnInit {
         })
       }
 
-    resetAccessList(event : Event)
+    resetAccessList(event)
     {
       console.log('Agnibha');
       if((event.target as HTMLInputElement).value.trim() == 'SADMIN')
@@ -101,5 +101,31 @@ export class ManageAccessComponent implements OnInit {
   open(access_id,content)
   {
       const dialogref = this.dialog.open(content)
+  }
+
+  disabledGiveAccess() : boolean
+  {
+    if((this.role.value.toString() != 'SADMIN' && this.access_list.value.toString() == '')||
+    this.role.value.toString() == '')
+    {
+      return true;
+    }
+    return false;
+  }
+
+  giveAccess()
+  {
+    var res = true;
+    if(this.valid_upto.value.toString() == '')
+    {
+      res=confirm("You haven't select any date upto which the access will remain valid. This will lead to"
+      +"the access for lifetime untill the access been manually removed. Are you sure you want to proceed ?");
+    }
+
+    if(res == true)
+    {
+
+    }
+    
   }
 }

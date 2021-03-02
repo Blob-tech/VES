@@ -38,7 +38,7 @@
         </mat-menu>
       
       <mat-menu #theme="matMenu">
-        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[0])"><mat-icon class="auto-flip" style="color:indigo">invert_colors</mat-icon>Candy</button>
+        <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList['0'])"><mat-icon class="auto-flip" style="color:indigo">invert_colors</mat-icon>Candy</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[1])"><mat-icon class="auto-flip" style="color:deeppink">invert_colors</mat-icon>Romance</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[2])"><mat-icon class="auto-flip" style="color:teal">invert_colors</mat-icon>Wave</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[3])"><mat-icon class="auto-flip" style="color:brown">invert_colors</mat-icon>Sand</button>
@@ -75,29 +75,58 @@
                 <input matInput type="number" [formControl]="library" required >
             </mat-form-field>
             <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(library.value,'library')">Save</button>
-            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'library')">Reset</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','library')">Reset</button>
+            <button mat-button>Books Counter Prefix</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Books/Article/Video Counter Prefix</mat-label>
+                <input matInput  [formControl]="library_prefix" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(library_prefix.value,'library_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('BK','library_prefix')">Reset</button>
             <button mat-button>Subscriber Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Subscriber Counter</mat-label>
                 <input matInput type="number" [formControl]="user" required >
             </mat-form-field>
             <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(user.value,'user')">Save</button>
-            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'user')">Reset</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','user')">Reset</button>
+            <button mat-button>Subscriber Counter Prefix</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Subscriber Counter Prefix</mat-label>
+                <input matInput  [formControl]="user_prefix" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(user_prefix.value,'user_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('USR','user_prefix')">Reset</button>
+            
             <button mat-button>Institute/Organisation Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Institute/Organisation Counter</mat-label>
                 <input matInput type="number" [formControl]="organisation" required >
             </mat-form-field>
             <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(organisation.value,'organisation')">Save</button>
-            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'organisation')">Reset</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','organisation')">Reset</button>
+            <button mat-button>Institute Counter Prefix</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Institute Counter Prefix</mat-label>
+                <input matInput  [formControl]="organisation_prefix" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(organisation_prefix.value,'organisation_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('INS','organisation_prefix')">Reset</button>
             <button mat-button>Course Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Course Counter</mat-label>
                 <input matInput type="number" [formControl]="course" required >
             </mat-form-field>
             <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(course.value,'course')">Save</button>
-            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter(0,'course')">Reset</button>
-          
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','course')">Reset</button>
+            <button mat-button>Course Counter Prefix</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Course Counter Prefix</mat-label>
+                <input matInput  [formControl]="course_prefix" required >
+            </mat-form-field>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(course_prefix.value,'course_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('CS','course_prefix')">Reset</button>
+            
           </form>
           </div>
         </div>

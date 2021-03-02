@@ -7,6 +7,7 @@ import { FileValidator } from 'ngx-material-file-input';
 import { Route } from '@angular/compiler/src/core';
 import { Router } from '@angular/router';
 import { config } from "src/conf";
+import { threadId } from 'worker_threads';
 
 
 
@@ -43,9 +44,13 @@ export class NavbarComponent implements OnInit {
   counterForm = this.formBuilder.group( { 
  
     library : ['',Validators.required],
+    library_prefix : ['',Validators.required],
     user : ['',Validators.required],
+    user_prefix : ['', Validators.required],
     organisation : ['', Validators.required],
-    course : ['', Validators.required]
+    organisation_prefix : ['', Validators.required],
+    course : ['', Validators.required],
+    course_prefix : ['', Validators.required]
   })
 
   systemForm = this.formBuilder.group({
@@ -62,9 +67,17 @@ export class NavbarComponent implements OnInit {
       return this.counterForm.get('library');
     }
 
+    get library_prefix()
+    {
+      return this.counterForm.get('library_prefix');
+    }
     get user()
     {
       return this.counterForm.get('user');
+    }
+    get user_prefix()
+    {
+      return this.counterForm.get('user_prefix');
     }
 
     get organisation()
@@ -72,10 +85,21 @@ export class NavbarComponent implements OnInit {
       return this.counterForm.get('organisation');
     }
 
+    get organisation_prefix()
+    {
+      return this.counterForm.get('organisation_prefix');
+    }
+
     get course()
     {
       return this.counterForm.get('course');
     } 
+
+    get course_prefix()
+    {
+      return this.counterForm.get('course_prefix');
+    } 
+
 
     get name()
     {
@@ -137,9 +161,13 @@ export class NavbarComponent implements OnInit {
       this.counterList = data;
       this.counterForm.patchValue({
         library : this.counterList[0].library,
+        library_prefix : this.counterList[0].library_prefix,
         user : this.counterList[0].user,
+        user_prefix : this.counterList[0].user_prefix,
         organisation : this.counterList[0].organisation,
-        course : this.counterList[0].course},
+        organisation_prefix : this.counterList[0].organisation_prefix,
+        course : this.counterList[0].course,
+        course_prefix : this.counterList[0].course_prefix},
         {emitEvent : true});
       },
       err=>{
@@ -164,7 +192,7 @@ export class NavbarComponent implements OnInit {
     )
   }
 
-  updateCounter(value : Number, param : String)
+  updateCounter(value : String, param : String)
   {
     var res = confirm("These will lead to duplicate ID and conflict in Entity Creation. Are you sure you want to update the counter value");
     if(res)

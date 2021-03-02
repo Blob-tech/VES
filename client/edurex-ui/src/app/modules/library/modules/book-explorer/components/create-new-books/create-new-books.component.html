@@ -19,7 +19,6 @@
         <mat-label>Book/Article Id</mat-label>
         <input matInput formControlName="book_id"  required placeholder="Enter a book or article Id" readonly>
         <mat-error *ngIf="book_id.hasError('required')">Value is required</mat-error>
-        <mat-error *ngIf="book_id.hasError('pattern')">Book Id should start with an alphabet and it should not contain any space or special characters.</mat-error>
     </mat-form-field>
     <mat-form-field class="form-group" appearance="outline">
         <mat-label>Book/Article Name</mat-label>
@@ -138,7 +137,7 @@
                                     <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
                     <br>
 
-                    <button type="submit" mat-raised-button style="margin-right: 1rem;" color="accent"
+                    <button type="submit" mat-raised-button style="margin-right: 1rem;" color="primary"
                     [disabled]="submitDisabled()">Save</button>
                     <button type="reset" mat-raised-button>Reset</button>
 

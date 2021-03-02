@@ -36,7 +36,7 @@
                    
          </div>
          <div mat-dialog-actions>
-            <button mat-raised-button color="primary" 
+            <button mat-raised-button color="primary" [disabled]="disabledGiveAccess()" (click)="giveAccess()"
              mat-dialog-close><mat-icon>verified</mat-icon>Give Access</button>
            <button mat-raised-button color="warn" mat-dialog-close>Close</button>
          </div>

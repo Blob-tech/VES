@@ -36,7 +36,7 @@ export class NavbarService {
     return this.http.get(this.URL+"counter/list/",{headers:headers})
   }
 
-  updateCounter(value : Number, parameter : String)
+  updateCounter(value : String, parameter : String)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");

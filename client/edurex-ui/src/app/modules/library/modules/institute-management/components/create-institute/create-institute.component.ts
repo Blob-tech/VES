@@ -162,7 +162,9 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
-        this.organisationForm.patchValue({organisation_id : "INS"+this.counter[0].organisation},{emitEvent : true});
+        const currentDate = new Date();
+        const currentDateYear = currentDate.getFullYear().toString();
+        this.organisationForm.patchValue({organisation_id : this.counter[0].organisation_prefix+currentDateYear+this.counter[0].organisation},{emitEvent : true});
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});

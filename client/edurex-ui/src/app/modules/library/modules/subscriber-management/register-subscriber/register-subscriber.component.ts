@@ -203,7 +203,9 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
-        this.subscriberForm.patchValue({user_id : "USR"+this.counter[0].user},{emitEvent : true});
+        const currentDate = new Date();
+        const currentDateYear = currentDate.getFullYear().toString()
+        this.subscriberForm.patchValue({user_id : this.counter[0].user_prefix+currentDateYear+this.counter[0].user},{emitEvent : true});
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});
