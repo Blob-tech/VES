@@ -39,6 +39,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ProfileRoutingModule } from './modules/profile/profile-routing.module';
+import { ProfileModule } from './modules/profile/profile.module';
 
 
 @NgModule({
@@ -86,6 +87,7 @@ import { ProfileRoutingModule } from './modules/profile/profile-routing.module';
     NgxSpinnerModule,
     MatVideoModule,
     NgbModule,
+    ProfileModule
 
   ],
   exports:[],

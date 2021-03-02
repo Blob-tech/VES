@@ -53,11 +53,28 @@ export class BookService {
     return this.httpClient.get(this.URL+"count/"+category + "/" + subcategory,{headers : headers})
   }
 
+  getFilterBookCount(searchkey : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"count/"+ searchkey,{headers : headers})
+  }
+
+
+
   getBook(category : String, subcategory : String, books_per_page : Number, page : Number)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
     return this.httpClient.get(this.URL+"list/"+category+"/" + subcategory + "/" + books_per_page + 
+    "/" + page,{headers:headers})
+  }
+
+  getBooksByAdvanceSearch(searchkey : String, books_per_page : String,page : String)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"list/"+searchkey + "/" + books_per_page + 
     "/" + page,{headers:headers})
   }
 

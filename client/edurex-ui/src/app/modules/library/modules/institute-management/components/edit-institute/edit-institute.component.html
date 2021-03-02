@@ -15,7 +15,7 @@
             <mat-card-subtitle>All fields marked * are required</mat-card-subtitle>
     </mat-card-header>
     <div style="display: inline; margin:1rem">
-            <img class="logo" src="{{imgUrl + current_institute.avatar}}">
+            <img class="logo" src="{{current_institute.avatar ? imgUrl + current_institute.avatar : '/assets/images/insimg.png'}}">
         </div>
         <button (click)="openEditLogo()" mat-raised-button><mat-icon>camera_alt</mat-icon> Edit Logo</button>
 <form [formGroup]="editOrganisationForm" (ngSubmit)="update(current_institute.organisation_id)" >

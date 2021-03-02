@@ -1,20 +1,61 @@
-<mat-card>
+<mat-card style="border-radius : 10px; max-width: 400px;">
     <mat-card-header>
-      <mat-card-title [style.color]="!selectedUser.isActivated ? 'grey' : ''"
-       matTooltip="{{selectedUser.name}}"> <img *ngIf="mode == 'small'" [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
+      <mat-card-title [style.color]="!selectedUser.isActivated ? 'grey' : ''"> <img
+         matTooltip="{{selectedUser.name}}" *ngIf="mode == 'small'" [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
        src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" height=80 width = 80
-        style="border-radius : 50%;" >
-          {{selectedUser.name.length < 30 ? selectedUser.name : selectedUser.name.substr(0,30) + '...'}}</mat-card-title>
+        style="border-radius : 50%;" ><a href="/profile/public/{{selectedUser.user_id}}">
+          {{selectedUser.name.length < 40 ? selectedUser.name : selectedUser.name.substr(0,40) + '...'}}</a></mat-card-title>
       <mat-card-subtitle *ngIf = "enabledSubtitle && mode == 'small'" ><p>Phone : {{selectedUser.phone}}</p><p>Email : {{selectedUser.email}}</p></mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image *ngIf="mode == 'large'"
+  <img mat-card-image *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
      src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
-     height="400" style="border-radius : 50%; padding: 10%;">
-    <mat-card-content *ngIf="mode == 'large'">
-      <p>Phone : {{selectedUser.phone}}</p><p>Email : {{selectedUser.email}}</p>
+     height="350"  style="border-radius : 50%; padding-left : 5%; padding-right : 5%;">
+     <button style="border : 5px solid white; margin-left : 70%; margin-top:-50% "
+      *ngIf="selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>camera_alt</mat-icon></button>
+     <button style="border : 5px solid white; margin-left : 70%; margin-top:-50% " 
+     *ngIf="!selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>add_a_photo</mat-icon></button>
+    <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem;">
+      <p><mat-icon color="green">call</mat-icon> <b> : {{selectedUser.phone}}</b>
+      </p><p><mat-icon color="green">mail_outline</mat-icon><b> : {{selectedUser.email}}</b></p>
+    <p><mat-icon color="green">location_city</mat-icon> : {{selectedUser.address}}</p>
     </mat-card-content>
     <!--mat-card-actions>
       <button mat-button>LIKE</button>
       <button mat-button>SHARE</button>
     </mat-card-actions-->
   </mat-card>
+
+
+  <ng-template #editProfileImage> 
+      <h1 mat-dialog-title>Edit Profile Image</h1>
+      <div mat-dialog-content>
+                  <mat-form-field class="form-group" style=" width: 90%; display: inline-block; margin-right: 100px;"  appearance="outline">
+                          <mat-label>Profile Image</mat-label>
+                          <ngx-mat-file-input #removableInput [(formControl)]="logo" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                          (change)="onSelectThumbnail($event)" required ></ngx-mat-file-input>
+                          <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                            <mat-icon>clear</mat-icon>
+                          </button>
+                          <mat-hint>Images in .jpg, .jpeg  or .png only allowed </mat-hint>
+                          <mat-error *ngIf="logo.hasError('required')">
+                            Please select a file
+                          </mat-error>
+                          <mat-error *ngIf="logo.hasError('maxContentSize')">
+                            The total size must not exceed {{configParams.avatar_size}} MB).
+                          </mat-error>
+                        </mat-form-field>
+                  
+                  <img style="height: 200px; width: 150px; margin-left : 10px;"  mat-card-image src="{{url}}" alt="Profile Image"><br>
+                                  <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                  <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+          
+      
+      </div>
+      <div mat-dialog-actions>
+        <button mat-raised-button color="primary" mat-dialog-close (click)="save_profile_image()" type="submit" [disabled]="logo.status === 'INVALID'">Save</button>
+        <button mat-raised-button color="accent" mat-dialog-close (click)="remove_profile_image()" type="submit">
+          <mat-icon>person_remove</mat-icon>Remove Image</button>
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+      </div>
+      
+  </ng-template>

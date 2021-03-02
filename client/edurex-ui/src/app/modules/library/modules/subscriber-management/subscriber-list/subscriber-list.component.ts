@@ -35,13 +35,15 @@ export class SubscriberListComponent implements OnInit {
    pageSize = 5;
    pageSizeOptions: number[] = [5, 10, 25, 100];
    pageIndex = 0;
+   filterPageIndex = 0;
    userView = 'LIST' ;
    bulkaction='';
    imgUrl = config.host + "avatar/";
    onlyActive=false;
    bulckaction='';
    configParams;
-
+   reset=true;
+   search='';
 
    visible = true;
   selectable = true;
@@ -138,11 +140,19 @@ export class SubscriberListComponent implements OnInit {
     this.length = event.length;
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.route.params.subscribe(routeParams => {
-      this.getUserCount(routeParams.cat);
-      this.getActiveSubscribers(routeParams.cat,this.pageSize,this.pageIndex+1,this.onlyActive);
-     
-    });
+    if(this.search == '')
+    {
+      this.route.params.subscribe(routeParams => {
+        this.getUserCount(routeParams.cat);
+        this.getActiveSubscribers(routeParams.cat,this.pageSize,this.pageIndex+1,this.onlyActive);
+       
+      });
+    }
+    else
+    {
+      this.advance_search_click(this.search,false); 
+    }
+    
      
     // });
   }
@@ -176,17 +186,28 @@ export class SubscriberListComponent implements OnInit {
   }
 
   getUserCount(institute)
-  {
+  {  
       this.subscriberService.getUserCount(institute).subscribe(
         data=>{
           this.length = Number(data);
         },
         err=>{
-          this._snacbar.open("Error in loading the list of books",null,{duration:5000});
+          this._snacbar.open("Error in loading the list of users",null,{duration:5000});
       }
       )
   }
 
+  getFilterUserCount(institute,filter)
+  {  
+    this.subscriberService.getUserCount(institute,filter).subscribe(
+      data=>{
+        this.length = Number(data);
+      },
+      err=>{
+        this._snacbar.open("Error in loading the list of users",null,{duration:5000});
+    }
+    )
+}
   
 
   open(user,content) {
@@ -231,7 +252,83 @@ export class SubscriberListComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           if(this.subscriberList.length == 0)
           {
-            this.noSubs = "Alert ! No User Found. Please register an User for" + institute;
+            this.noSubs = "Alert ! No Active User Found. Please register an User for " + institute;
+          }
+          else
+          {
+            this.noSubs = null;
+          }
+        }
+        else
+        {
+          this._snacbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+        }
+      },
+      err=>{
+        this._snacbar.open("Error in loading the subscribers");
+      }
+    )
+  }
+
+  advance_search(event : Event)
+  {
+    const searchkey = (event.target as HTMLInputElement).value.trim();
+    this.filterPageIndex=0;
+    this.route.params.subscribe(routeParams => {
+      this.getFilterUserCount(routeParams.cat,searchkey);
+      if(this.search == '')
+      {
+        this.getActiveSubscribers(routeParams.cat,this.pageSize, this.filterPageIndex+1,this.onlyActive);
+      }
+      else
+      {
+        this.getActiveSubscribersBySearch(routeParams.cat,searchkey,this.pageSize,this.filterPageIndex+1); 
+      }
+    });
+
+  }
+
+  advance_search_click(searchkey,reset)
+  {
+    if(reset==true)
+    {
+      this.filterPageIndex = 0;
+    }
+    this.route.params.subscribe(routeParams => {
+      this.getFilterUserCount(routeParams.cat,searchkey);
+      if(this.search == '')
+      {
+        this.getActiveSubscribers(routeParams.cat,this.pageSize, this.filterPageIndex+1,this.onlyActive);
+      }
+      else
+      {
+        this.getActiveSubscribersBySearch(routeParams.cat,searchkey,this.pageSize,this.pageIndex+1); 
+      }
+    });
+
+  }
+
+  getActiveSubscribersBySearch(institute,searchkey,users_per_page, page)
+  {
+    this.subscriberService.get_subscribers_advance_search(institute,searchkey,users_per_page,page).subscribe(
+      data=>{
+        if(!JSON.parse(JSON.stringify(data))['err'])
+        {
+          this.subscriberList = data as Array<any>;
+          if(this.onlyActive == true)
+          {
+            this.subscriberList = this.subscriberList.filter(value => {return value.isActivated == true});
+          }
+          this.dataSource = new MatTableDataSource<User>(this.subscriberList);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          if(this.subscriberList.length == 0)
+          {
+            this.noSubs = "Alert ! No Active User Found. Please register an User for " + institute;
+          }
+          else
+          {
+            this.noSubs = null;
           }
         }
         else

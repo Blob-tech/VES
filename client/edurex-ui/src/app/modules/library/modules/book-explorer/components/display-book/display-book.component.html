@@ -6,7 +6,7 @@
     <strong>Alert!</strong> Only PDF files can be previewed in the website. Doc and PPT files are required to be downloaded to view them.
     Videos can be played online only
   </div>
-<mat-form-field class="form-group" appearance="outline" >
+<!--mat-form-field class="form-group" appearance="outline" >
     <mat-label>Search by Author</mat-label>
     <input matInput (keyup)="filterByAuthor($event)" [formControl]="search_author"  placeholder="Enter an Author name" >
 </mat-form-field>
@@ -33,10 +33,16 @@
         {{lang.name}}({{lang.nativeName}})
       </mat-option>
     </mat-autocomplete>
-  </mat-form-field>
+  </mat-form-field-->
 
   <button style="margin-left: 15px;" (click) = "toggle_view()" *ngIf="bookView == 'LIST'" mat-mini-fab matTooltip="GRID VIEW" color="primary"><mat-icon>window</mat-icon></button>
   <button style="margin-left: 15px;" (click) = "toggle_view()" *ngIf="bookView == 'GRID'"  mat-mini-fab matTooltip="LIST VIEW" color="primary"><mat-icon>list</mat-icon></button>
+  <mat-form-field appearance="outline"  style="margin-left: 5%; margin-right: 5%; width : 70%">
+      <mat-label>Advance Search</mat-label>
+      <input matInput [(ngModel)]="search" placeholder="Search by book id, name, author, category or publishers" (keyup)="advance_search($event)">
+      <button  (click)=" advance_search_click(search,reset)" mat-mini-fab color="primary" matSuffix><mat-icon>manage_search</mat-icon></button>
+      <mat-hint>Search by book id, name, author, category or publishers</mat-hint> 
+    </mat-form-field>
 
   <div style="margin:1rem" sclass="alert alert-info alert-dismissible fade-in" [hidden] = " noBook ? false : true">
       <strong>Alert!</strong> {{noBook}} 

@@ -200,7 +200,11 @@ organisations.put('/edit/logo/:id',(req,res,next)=>{
                                         }
                                         })
                                     
-                                        fs.unlinkSync("./uploads/organisation/logo/"+result.avatar);
+                                        if(result.avatar != null)
+                                        {
+                                            fs.unlinkSync("./uploads/organisation/logo/"+result.avatar);
+                                        }
+                                        
                                     
                                         Organisation.findOneAndUpdate({organisation_id : req.params.id},
                                             {$set : {avatar : stored_name}})
@@ -279,7 +283,10 @@ organisations.delete('/delete/:id', (req,res,next)=>
             if(data)
             {
 
-               fs.unlinkSync('./uploads/organisation/logo/'+data.avatar)
+                if(result.avatar != null)
+                {
+                    fs.unlinkSync("./uploads/organisation/logo/"+result.avatar);
+                }
                
 
                 Organisation.remove({organisation_id : req.params.id},)
@@ -308,8 +315,13 @@ organisations.put("/bulkactions/delete/:n",(req,res,next)=>
         organisation_id : { $in : id}
      }).then(
          data=>{
-             data.forEach(value =>
-                fs.unlinkSync('./uploads/organisation/logo/'+value.avatar)
+             data.forEach(value =>{
+                if(value.avatar != null)
+                {
+                    fs.unlinkSync("./uploads/organisation/logo/"+value.avatar);
+                }
+             }
+                
                 )
          }
      )

@@ -74,7 +74,7 @@ export class EditInstituteComponent implements OnInit {
     this.instituteService.view_institute(id).subscribe(
       data=>{
         this.current_institute = data[0];
-        this.url = this.imgUrl + this.current_institute.avatar;
+        this.url = this.current_institute.avatar ? this.imgUrl + this.current_institute.avatar : "assets/images/insimg.png";
         this.editOrganisationForm.patchValue({
           organisation_name : this.current_institute.organisation_name,
           contact_email : this.current_institute.contact_email,

@@ -63,6 +63,34 @@ books.get('/count/:category/:subcategory',(req,res,next)=>
 
 })
 
+
+//Get total books count
+books.get('/count/:filter',(req,res,next)=>
+{
+            const searchkey = req.params.filter
+            Books.find({$and : [{active  : {$eq : true}},
+                {$or : [{book_name : new RegExp(searchkey,'i')},
+                {author : new RegExp(searchkey,'i')},
+                {category : new RegExp(searchkey,'i')},
+                {subcategory : new RegExp(searchkey,'i')},
+                {publisher : new RegExp(searchkey,'i')},
+                {book_id : new RegExp(searchkey,'i')},
+                {language : new RegExp(searchkey,'i') }
+            ]}]})
+            .count((err,count)=>{
+                if(err)
+                {
+                    res.json({"err": "Error in loading the list of Books from Edurex Database."})
+                }
+                else
+                {
+                    res.json(count);
+                }
+            })
+        
+
+})
+
 //Get Book by Id
 books.get('/view/:id',(req,res,next)=>
 {
@@ -165,6 +193,39 @@ books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
     }
     
 })
+
+
+
+// Get List of All Books based on advance filter;
+books.get('/list/:filter/:books_per_page/:page',(req,res,next)=>
+{  
+            searchkey = req.params.filter;
+            Books.find({$and : [{active  : {$eq : true}},
+                {$or : [{book_name : new RegExp(searchkey,'i')},
+                            {author : new RegExp(searchkey,'i')},
+                            {category : new RegExp(searchkey,'i')},
+                            {subcategory : new RegExp(searchkey,'i')},
+                            {publisher : new RegExp(searchkey,'i')},
+                            {book_id : new RegExp(searchkey,'i')},
+                            {language : new RegExp(searchkey,'i') }
+                        ]}
+            ]})
+            .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
+                .then(
+                    data => 
+                    {
+                        res.json(data)
+                    }
+                )
+                .catch(err =>
+                    {
+                        res.json({"err": "Error in loading the list of Books from Edurex Database."})
+                    })
+        
+    
+    
+})
+
 
 
 // Add a new  Book to the database
