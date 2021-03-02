@@ -5,6 +5,20 @@
       padding-top: 150px;
   }
 
+  .label-button{
+
+    margin-right : 15px;
+    width : 150px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
+  mat-form-field, mat-form-field text-area
+  {
+    width : 60%;   
+    margin-right : 10%; 
+  }
+
   .profile-desktop-view
   {
       padding-top: 150px ;
@@ -26,7 +40,15 @@
 
   .expansion-button button
   {
-      margin-left: 1rem;
+      margin-left: 2%;
+  }
+  .profile-mobile-view h1
+  {
+    color: cornflowerblue;
+    font-size: 20px;
+    margin-left : 2%;
+    margin-right: 2%;
+
   }
   .profile-desktop-view h1
   {
@@ -64,5 +86,19 @@
       .profile-mobile-view
       {
           display: block;
+      }
+
+      .label-button{
+
+        margin-right : 2px;
+        width : 100px;
+        white-space: normal;
+    word-wrap: break-word;
+      }
+    
+      mat-form-field, mat-form-field text-area
+      {
+        width : 60%;   
+        margin-right : 5%; 
       }
   }

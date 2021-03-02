@@ -96,7 +96,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
       user_id : ['',[Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z0-9]*$")]],
       name : ['',[Validators.required, Validators.maxLength(200)]],
       email :['',[Validators.required,Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]],
-      phone :['',[Validators.required]],
+      phone :['',[Validators.required, Validators.pattern("^[0-9]{10}$")]],
       address : ['',[Validators.maxLength(500)]],
       password : ['',[Validators.required,Validators.minLength(8),Validators.maxLength(15),Validators.pattern("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]*$")]],
       resetPassword : ['',[Validators.required]],
@@ -257,7 +257,6 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
       formData.append(key, value);
     }
 
-    console.log(formData);
     this.subscriberService.register(formData).subscribe(
       data=>
       {

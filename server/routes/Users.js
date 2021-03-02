@@ -377,6 +377,24 @@ users.put('/edit/logo/:id',(req,res,next)=>{
                 )
 })
 
+//update basic info of users
+users.put('/update/:id', (req,res,next)=>{
+    User.findOneAndUpdate({user_id : req.params.id},
+        {
+            $set : {
+                name : req.body.name,
+                email : req.body.email,
+                phone : req.body.phone,
+                address : req.body.address,
+
+            }
+        }).then( result=> {
+            res.json({"msg" : "User Basic Info has been updated successfully"});}
+        ).catch(err => {
+            res.json({"err" : "Server Error !  Error in updating user with id : " + req.params.id});
+})
+})
+
 //Remove User profile picture
 users.delete('/remove/logo/:id',(req,res,next)=>{
 
