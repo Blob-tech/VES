@@ -70,7 +70,7 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
   subcategories =[]
   createBookForm = this.formBuilder.group(
     {
-      book_id : ['',[Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z0-9]*$")]],
+      book_id : ['',[Validators.required]],
       name : ['',[Validators.required, Validators.maxLength(200)]],
       author : ['',[Validators.required, Validators.maxLength(100),Validators.pattern('^[a-zA-Z. \'\t\r\s]*$')]],
       publisher : ['',[Validators.required, Validators.maxLength(100),Validators.pattern('^[a-zA-Z. \'\t\r\s]*$')]],
@@ -198,7 +198,9 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
-        this.createBookForm.patchValue({book_id : "BK"+this.counter[0].library},{emitEvent : true});
+        const  currentDate = new Date();
+        const currentDateYear = currentDate.getFullYear().toString();
+        this.createBookForm.patchValue({book_id : this.counter[0].library_prefix+ currentDateYear+this.counter[0].library},{emitEvent : true});
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});
