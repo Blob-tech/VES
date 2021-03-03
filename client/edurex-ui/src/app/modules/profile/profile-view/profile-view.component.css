@@ -50,6 +50,15 @@
     margin-right: 2%;
 
   }
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+  .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .profile-desktop-view h1
   {
       color: cornflowerblue;

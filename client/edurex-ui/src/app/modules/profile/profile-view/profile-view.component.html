@@ -23,12 +23,12 @@
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                       <mat-panel-title>
-                        <b>Basic Info</b>
-                      
+                        <b>Basic Info </b>
+                      </mat-panel-title>
                       <mat-panel-description>
+                          <mat-slide-toggle>Visible</mat-slide-toggle>
                           <mat-icon>info</mat-icon>
                         </mat-panel-description>
-                      </mat-panel-title>
                     </mat-expansion-panel-header>
                         <form [formGroup]="basicInfoForm">
                           <button mat-raised-button color="accent" class="label-button">Name</button>
@@ -77,11 +77,12 @@
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>account_circle</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                   
                   </mat-expansion-panel-header>
                   <p>personal details</p>
                 </mat-expansion-panel>
@@ -89,11 +90,12 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Institutes</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>account_balance</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                  
                   </mat-expansion-panel-header>
                   <p>institutes</p>
                 </mat-expansion-panel>
@@ -101,23 +103,26 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Subscriptions</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>subscriptions</mat-icon>
                       </mat-panel-description> 
-                    </mat-panel-title>            
+                             
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
+                      
                       <b>Social Profiles</b>
-                   
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>mood</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                    
                   </mat-expansion-panel-header>
                   <p>social profiles</p>
                 </mat-expansion-panel>
@@ -125,11 +130,12 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                      <b>Settings</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>settings_suggest</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+              
                   </mat-expansion-panel-header>
                   <p>settings</p>
                   
@@ -143,24 +149,18 @@
 
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1><br>
             <b style="margin-left : 2%">User Id : <span style="color : red">{{currentUser.user_id}}</span></b>
-            <div class="expansion-button">
-                <button mat-raised-button color="primary" (click)="accordion.openAll()">
-                    <mat-icon>zoom_in</mat-icon>
-                    Expand All</button>
-                <button mat-raised-button color="primary" (click)="accordion.closeAll()">
-                    <mat-icon>zoom_out</mat-icon>
-                    Collapse All</button>
-              </div>
+           <br><br>
             <mat-accordion multi>
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                       <mat-panel-title>
                         <b>Basic Info</b>
-                      
+                      </mat-panel-title>
                       <mat-panel-description>
+                          <mat-slide-toggle>Visible</mat-slide-toggle>
                           <mat-icon>info</mat-icon>
                         </mat-panel-description>
-                      </mat-panel-title>
+                     
                     </mat-expansion-panel-header>
                         <form [formGroup]="basicInfoForm">
                           <button mat-raised-button color="accent" class="label-button">Name</button>
@@ -209,11 +209,12 @@
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>account_circle</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                  
                   </mat-expansion-panel-header>
                   <p>personal details</p>
                 </mat-expansion-panel>
@@ -221,11 +222,12 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Institutes</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>account_balance</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                   
                   </mat-expansion-panel-header>
                   <p>institutes</p>
                 </mat-expansion-panel>
@@ -233,11 +235,12 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Subscriptions</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>subscriptions</mat-icon>
                       </mat-panel-description> 
-                    </mat-panel-title>            
+                           
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
@@ -245,11 +248,12 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Social Profiles</b>
-                   
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>mood</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                    
                   </mat-expansion-panel-header>
                   <p>social profiles</p>
                 </mat-expansion-panel>
@@ -257,11 +261,12 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                      <b>Settings</b>
-                    
+                    </mat-panel-title>
                     <mat-panel-description>
+                        <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>settings_suggest</mat-icon>
                       </mat-panel-description>
-                    </mat-panel-title>
+                    
                   </mat-expansion-panel-header>
                   <p>settings</p>
                   
