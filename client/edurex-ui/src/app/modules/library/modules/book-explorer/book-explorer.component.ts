@@ -77,6 +77,7 @@ export class BookExplorerComponent implements OnInit {
     this.categories = filterValue != '' ? this.copyCategories.filter(value =>
       value.book_category.toLowerCase().includes(filterValue.toLowerCase()) 
     ) : this.copyCategories;
+    
   }
 
   open(content)

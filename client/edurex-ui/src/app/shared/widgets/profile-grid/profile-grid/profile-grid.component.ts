@@ -7,6 +7,7 @@ import { FileValidator } from 'ngx-material-file-input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-grid',
@@ -35,7 +36,7 @@ export class ProfileGridComponent implements OnInit {
 
   imgUrl = config.host + "avatar/";
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,
-    public dialog : MatDialog, private subscriberService : SubscriberService) { }
+    public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router) { }
 
   ngOnInit(): void {
 
@@ -51,6 +52,8 @@ export class ProfileGridComponent implements OnInit {
     this.url = this.selectedUser.avatar ? this.imgUrl + this.selectedUser.avatar : this.url;
     const dialogRef = this.dialog.open(content);
   }
+
+  
  
   imageFile : any
   onSelectThumbnail(event)
@@ -86,6 +89,15 @@ export class ProfileGridComponent implements OnInit {
         this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
       }
     )
+  }
+
+  viewProfile(user_id : string)
+  {
+    if(this.mode == 'small')
+    {
+      this.router.navigateByUrl("/profile/public/"+user_id);
+    }
+    
   }
 
   save_profile_image()

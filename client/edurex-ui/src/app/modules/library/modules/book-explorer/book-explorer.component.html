@@ -1,20 +1,14 @@
 <mat-toolbar class="mobile-menu">
-    <button matTooltip="home" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>home</mat-icon></button>
     <button matTooltip="bookmarks" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>bookmarks</mat-icon></button>
     <button matTooltip="recent books" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>history</mat-icon></button>
     <button matTooltip="my reviews" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>star</mat-icon></button>
-    <button matTooltip="my whishlist" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>favorite</mat-icon></button>
-    <button matTooltip="notifications" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>notifications</mat-icon></button>
     <button (click)="open(book_filter)" matTooltip="filter"  mat-mini-fab color="primary" ><mat-icon>filter_alt</mat-icon></button>
  </mat-toolbar>
 <mat-sidenav-container class="example-container" >
         <mat-sidenav opened mode="side" class="sidenav" style="width :15%;" >
-            <button matTooltip="home" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>home</mat-icon></button>
-            <button matTooltip="bookmarks" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>bookmarks</mat-icon></button>
+           <button matTooltip="bookmarks" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>bookmarks</mat-icon></button>
             <button matTooltip="recent books" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>history</mat-icon></button>
             <button matTooltip="my reviews" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>star</mat-icon></button>
-            <button matTooltip="my whishlist" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>favorite</mat-icon></button>
-            <button matTooltip="notifications" routerLink="/e-library/home" mat-mini-fab color="primary" ><mat-icon>notifications</mat-icon></button>
             <button routerLink="/e-library/book-explorer/list/all/all" class="action-button" mat-raised-button style="margin-left: 1rem; width : 90%" color="primary">
                 <mat-icon>book</mat-icon> All Books </button>
             <mat-form-field class="form-group" appearance="outline" style="margin-left:1rem; width:90%">
@@ -103,9 +97,7 @@
 
       <!-- mobile book filter-->
       <ng-template #book_filter let-c="close" let-d="dismiss">
-        <div class="modal-header">
-            <button (click)="close()" class="btn btn-success" mat-raised-button color="primary">Apply Filter</button>
-        </div>
+       
 
         <div class="modal-body">
             <mat-form-field class="form-group" appearance="outline" style="margin-left:1rem; width:90%">
@@ -113,6 +105,8 @@
                 <mat-label>Navigation Filter</mat-label>
                 <input matInput formControlName="navFilter" required placeholder="Search categories" (keyup)="filterNavigate($event)" >
             </mat-form-field>
+            <button (click)="close()" routerLink="/e-library/book-explorer/list/all/all" class="action-button" mat-raised-button style="margin-left: 1rem; width : 90%" color="primary">
+                <mat-icon>book</mat-icon> All Books </button>
         <mat-accordion *ngFor="let category of categories">
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -122,15 +116,13 @@
                         {{category.book_category}}
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                    <button routerLink = "/e-library/book-explorer/list/{{category.book_category}}/all" mat-raised-button color = "primary"> <mat-icon class="auto-flip">import_contacts</mat-icon>All</button>
+                    <button (click)="close()" routerLink = "/e-library/book-explorer/list/{{category.book_category}}/all" mat-raised-button color = "primary"> <mat-icon class="auto-flip">import_contacts</mat-icon>All</button>
                     <section *ngFor = "let subcat of category.book_subCategory">
-                            <button  routerLink = "/e-library/book-explorer/list/{{category.book_category}}/{{subcat}}" mat-raised-button color = "accent"> <mat-icon class="auto-flip">category</mat-icon>{{subcat}}</button>
+                            <button (click)="close()" routerLink = "/e-library/book-explorer/list/{{category.book_category}}/{{subcat}}" mat-raised-button color = "accent"> <mat-icon class="auto-flip">category</mat-icon>{{subcat}}</button>
                     </section>
                 
             </mat-expansion-panel>
         </mat-accordion>
         </div>
-        <div class="modal-footer">
-         <button (click)="close()" class="btn btn-success" mat-raised-button color="primary">Apply Filter</button>
-        </div>
+      
       </ng-template>

@@ -80,7 +80,7 @@ libraryCategories.post('/subscriptions/add', (req, res, next)=>
             active : true,
         }
     );
-
+    
    
             SubscriptionCategory.create(newCategory)
             .then(data=>

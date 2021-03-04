@@ -1,4 +1,4 @@
-<mat-card style="border-radius : 10px; max-width: 400px;">
+<mat-card (click)="viewProfile(selectedUser.user_id)" style="border-radius : 10px; max-width: 400px;">
     <mat-card-header>
       <mat-card-title [style.color]="!selectedUser.isActivated ? 'grey' : ''"> <img
          matTooltip="{{selectedUser.name}}" *ngIf="mode == 'small'" [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
@@ -15,6 +15,7 @@
      <button style="border : 5px solid white; margin-left : 70%; margin-top:-50% " 
      *ngIf="!selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>add_a_photo</mat-icon></button>
     <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem;">
+        <app-social-links></app-social-links>
       <p><mat-icon color="green">call</mat-icon> <b> : {{selectedUser.phone}}</b>
       </p><p><mat-icon color="green">mail_outline</mat-icon><b> : {{selectedUser.email}}</b></p>
     <p><mat-icon color="green">location_city</mat-icon> : {{selectedUser.address}}</p>

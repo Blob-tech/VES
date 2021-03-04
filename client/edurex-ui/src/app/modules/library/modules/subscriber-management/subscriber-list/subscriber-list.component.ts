@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { SubscriberService } from '../../../service/subscriber.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {config} from 'src/conf';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -68,7 +68,8 @@ export class SubscriberListComponent implements OnInit {
   constructor(private subscriberService : SubscriberService,private _snacbar : MatSnackBar,
     private instituteService : InstituteManagementService,
     private route : ActivatedRoute,public dialog: MatDialog,private formBuilder : FormBuilder,
-    private localStorageService : LocalStorageService, private libraryCategoryService : LibraryCategoryService)
+    private localStorageService : LocalStorageService, private router : Router,
+     private libraryCategoryService : LibraryCategoryService)
      {
       this.getFilteredInstitutes();
       }
@@ -196,6 +197,8 @@ export class SubscriberListComponent implements OnInit {
       }
       )
   }
+
+
 
   getFilterUserCount(institute,filter)
   {  

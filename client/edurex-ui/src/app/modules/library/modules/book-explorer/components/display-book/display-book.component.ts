@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { BookService } from 'src/app/modules/library/service/book.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, Validators } from '@angular/forms';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
@@ -53,7 +53,7 @@ export class DisplayBookComponent implements OnInit {
   imgUrl = config.host + "thumbnail/";
   constructor(private bookService : BookService, private route : ActivatedRoute,
     private _snackBar : MatSnackBar,private libCategoryServices : LibraryCategoryService,
-    private localStorageService : LocalStorageService) { }
+    private localStorageService : LocalStorageService, private router : Router) { }
 
   ngOnInit(): void {
     this.getConfigParams();
@@ -426,6 +426,10 @@ export class DisplayBookComponent implements OnInit {
         
       }
 
+      viewBook(id:String)
+      {
+        this.router.navigateByUrl("/e-library/book-explorer/view/"+id);
+      }
 
   getConfigParams()
   {

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../library/modules/subscriber-management/models/subscriber';
 import { SubscriberService } from '../../library/service/subscriber.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -16,7 +16,7 @@ export class ProfileViewComponent implements OnInit {
   currentUser : User;
   mode='large';
   constructor(private subscriberServices : SubscriberService, private snackBar : MatSnackBar,
-    private route : ActivatedRoute,private formBuilder : FormBuilder) { }
+    private route : ActivatedRoute,private formBuilder : FormBuilder, private router : Router) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(routeParams => {
@@ -98,7 +98,7 @@ export class ProfileViewComponent implements OnInit {
       return true;
     }
   }
-
+  
 
   updateBasicInfo()
   {
