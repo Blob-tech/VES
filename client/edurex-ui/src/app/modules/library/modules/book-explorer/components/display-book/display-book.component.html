@@ -58,7 +58,7 @@
     <div class="row">
    <div class="col-sm-4 col-md-4 col-lg-4 book" *ngFor="let book of books;let i = index;">
     
-    <mat-card>
+    <mat-card (click)="viewBook(book.book_id)">
         <mat-card-header style="margin : 1rem; border-radius : 2px">
             <div mat-card-avatar>
                  <p *ngIf="book.type === 'doc' || book.type === 'docx'"><i class="avatar fas fa-file-word" style="color : blue"></i></p>

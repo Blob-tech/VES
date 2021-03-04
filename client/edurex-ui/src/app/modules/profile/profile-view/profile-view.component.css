@@ -59,6 +59,7 @@
     align-items: center;
   }
 
+  
   .profile-desktop-view h1
   {
       color: cornflowerblue;
@@ -78,6 +79,14 @@
   app-profile-grid 
   {
       margin: 1rem;
+  }
+
+  app-profile-grid  button:focus {
+    outline: none;
+  }
+
+  button:focus {
+    outline: none;
   }
 
   @media screen and (max-width : 1100px)

@@ -436,7 +436,7 @@ export class CategoryComponent implements OnInit {
 
   removeSubCategory(subcat:String, id : String)
   {
-    var res = confirm("Are you sure you want to delete this subcategory ?")
+    var res = confirm("Are you sure you want to delete this subcategory ?Alert ! Books having this subcategory cannot be filtered using this subcategory any more");
     if(res == true)
     {
       this.libCategoryService.removeSubCategory(subcat,id).subscribe
@@ -463,7 +463,7 @@ export class CategoryComponent implements OnInit {
 
   removeCategory(id : String)
   {
-    var res = confirm("Are you sure, you want to remove this category ?")
+    var res = confirm("Are you sure, you want to remove this category ?Alert ! Content having this category cannot be filtered anymore.");
     if(res == true)
     {
     this.libCategoryService.removeCategory(id)

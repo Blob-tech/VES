@@ -43,11 +43,12 @@ import { ProfileGridComponent } from './widgets/profile-grid/profile-grid/profil
 import { ManageAccessComponent } from './widgets/manage-access/manage-access.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SocialLinksComponent } from './widgets/social-links/social-links.component';
 
 
 
 @NgModule({
-  declarations: [ProfileGridComponent, ManageAccessComponent],
+  declarations: [ProfileGridComponent, ManageAccessComponent, SocialLinksComponent],
   imports: [
     CommonModule,
     MatSliderModule,
@@ -90,7 +91,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatVideoModule,
     PlyrModule,
   ],
-  exports : [ProfileGridComponent,ManageAccessComponent],
+  exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent],
   providers : [MatDatepickerModule],
   bootstrap: [ProfileGridComponent,ManageAccessComponent]
 })
