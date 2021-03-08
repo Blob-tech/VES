@@ -27,6 +27,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatVideoModule } from 'mat-video';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSliderModule } from '@angular/material/slider';
+import {MatRadioModule} from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSortModule } from '@angular/material/sort';
@@ -45,18 +46,40 @@ import { PlyrModule } from 'ngx-plyr';
 import { BookExplorerComponent } from '../library/modules/book-explorer/book-explorer.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LibraryModule } from '../library/library.module';
+import { MatChipsModule } from '@angular/material/chips';
+import { BrowserModule } from '@angular/platform-browser';
+import {A11yModule} from '@angular/cdk/a11y';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {PortalModule} from '@angular/cdk/portal';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {CdkStepperModule} from '@angular/cdk/stepper';
+import {CdkTableModule} from '@angular/cdk/table';
+import {CdkTreeModule} from '@angular/cdk/tree';
 
 
 
 @NgModule({
   declarations: [ProfileViewComponent],
   imports: [
+    A11yModule,
+    ClipboardModule,
+    PortalModule,
+    ScrollingModule,
+    CdkStepperModule,
+    CdkTableModule,
+    CdkTreeModule,
+    DragDropModule,
+    BrowserModule,
+    MatRadioModule,
     MatSliderModule,
     MatTabsModule,
+    MatDatepickerModule,
     MatButtonModule,
     MatToolbarModule,
     MatTooltipModule,
     MatCardModule,
+    MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
@@ -70,6 +93,7 @@ import { LibraryModule } from '../library/library.module';
     MatDialogModule,
     MatGridListModule,
     MatMenuModule,
+    MatChipsModule,
     MatCheckboxModule,
     MatPaginatorModule,
     MatSnackBarModule,
@@ -90,6 +114,7 @@ import { LibraryModule } from '../library/library.module';
     NgxDocViewerModule,
     MatVideoModule,
     PlyrModule,
+    CommonModule,
     NgbModule,
     SharedModule,
     LibraryModule

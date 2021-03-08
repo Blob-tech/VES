@@ -1,6 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import {MatChipInputEvent} from '@angular/material/chips';
+import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
+import { SocialProfile } from 'src/app/modules/profile/profile-view/profile-view.component';
+
 
 @Component({
   selector: 'app-social-links',
@@ -10,13 +14,18 @@ import { MatDialog } from '@angular/material/dialog';
 export class SocialLinksComponent implements OnInit {
 
   @Input()
-  socialLinkList = ["https://www.instagram.com/digiartlicks/","https://www.facebook.com",
-  "dribbble.com/ah","linkedin.com/ajk",'abehance.net','google.com','whatsapp','twittergjsl','dtrjyfgjuh'];
+  userID;
+
+  socialLinkList : SocialProfile[] = [];
+  userMetas: any;
+ 
 
 
-  constructor(private router : Router, private dialog : MatDialog) { }
+  constructor(private router : Router, private dialog : MatDialog,
+    private subscriberServices : SubscriberService) { }
 
   ngOnInit(): void {
+    this.getuserMetas(this.userID);
   }
 
   getSocialIcon(link : string)  : String
@@ -58,9 +67,26 @@ export class SocialLinksComponent implements OnInit {
 
   }
 
+  getuserMetas(user_id : string)
+  {
+    this.subscriberServices.get_user_metas(user_id).subscribe(
+      data=>{
+        this.userMetas = data;
+        if(this.userMetas != null && this.userMetas.social_profiles != undefined)
+          {
+            this.socialLinkList = this.userMetas.social_profiles as SocialProfile[];
+          }
+      },
+      err=>
+      {
+          
+      }
+    )
+  }
+
   goToSocialLink(url : string)
   {
-    window.open(url, "_blank");
+    window.open(url, "_blank" );
   }
 
   open(content)

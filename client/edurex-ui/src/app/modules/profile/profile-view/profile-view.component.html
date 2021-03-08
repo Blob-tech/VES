@@ -2,7 +2,7 @@
 <mat-sidenav-container class="profile-sidenav">
     <mat-sidenav opened mode="side" class="sidenav" >
         <app-profile-grid [selectedUser] = "currentUser" 
-        [enabledSubtitle] = true [mode]='mode'></app-profile-grid>
+        [enabledSubtitle] = true [mode]='mode' [bio]="bio.value"></app-profile-grid>
         </mat-sidenav>
         <!--mat-sidenav opened mode="side" position="end" class="sidenav" >
            
@@ -19,6 +19,7 @@
                     <mat-icon>zoom_out</mat-icon>
                     Collapse All</button>
               </div>
+
             <mat-accordion multi>
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
@@ -84,7 +85,49 @@
                       </mat-panel-description>
                    
                   </mat-expansion-panel-header>
-                  <p>personal details</p>
+                 <form [formGroup]="personalDetailsForm">
+                   <mat-form-field class="form-group"appearance="outline" style="width:90%">
+                      <mat-label>Bio</mat-label>
+                                    <textarea matInput formControlName="bio"  placeholder="Enter your bio" ></textarea>
+                                    <mat-hint>Bio should not exceed more than 500 characters</mat-hint>
+                                    <mat-hint align="end">{{bio.value?.length || 0}}/500</mat-hint>
+                                    <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                   </mat-form-field>
+                  
+                        <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
+                        <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>DOB</mat-label>
+                            <input  [max]="maxDate" matInput formControlName="dob"  placeholder="Choose a date" [matDatepicker]="picker">
+                            <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>                           
+                      </mat-form-field>
+                        <button mat-raised-button color="accent" class="label-button">Insterests</button>
+                        <mat-form-field class="form-group"appearance="outline">
+                           <mat-label>Interest</mat-label>
+                           <mat-chip-list #interestList >
+                        <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true
+                        [removable]=true (removed)="removeInterest(interest)">
+                        {{interest.interest}}
+                          <mat-icon matChipRemove >cancel</mat-icon>
+                        </mat-chip>
+                </mat-chip-list>
+                           <input  matInput 
+                           [matChipInputFor]="interestList" 
+                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                           [matChipInputAddOnBlur]=true
+                           (matChipInputTokenEnd)="addInterest($event)" placeholder="Add new interets">  
+                        </mat-form-field><br>  </form>
+
+                         <button mat-raised-button color="accent" class="label-button">Gender</button>
+                      <mat-radio-group [(ngModel)]="user_gender" aria-label="Select an option">
+                          <mat-radio-button value="MALE"><mat-icon>male</mat-icon>MALE</mat-radio-button>
+                          <mat-radio-button value="FEMALE"><mat-icon>female</mat-icon>FEMALE</mat-radio-button>
+                          <mat-radio-button value="TRANSGENDER"><mat-icon>transgender</mat-icon>TRANSGENDER</mat-radio-button>
+                        </mat-radio-group><br><br>
+                        <button mat-raised-button color="primary" (click)="savePersonalInfo()">Save</button>
+                        
+               
+
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -97,7 +140,14 @@
                       </mat-panel-description>
                   
                   </mat-expansion-panel-header>
-                  <p>institutes</p>
+                  <mat-accordion multi>
+                    <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title><img height=40 width=40 src="{{ins.avatar ? imgUrl + ins.avatar : '/assets/images/insimg.png'}}"></mat-panel-title>
+                        <mat-panel-description matTooltip="{{ins.organisation_name}}">{{ins.organisation_name.length < 100 ? ins.organisation_name : ins.organisation_name.substr(0,101) + '...'}}</mat-panel-description>
+                      </mat-expansion-panel-header>
+                    </mat-expansion-panel>
+                  </mat-accordion>
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -122,9 +172,26 @@
                         <mat-slide-toggle>Visible</mat-slide-toggle>
                         <mat-icon>mood</mat-icon>
                       </mat-panel-description>
-                    
                   </mat-expansion-panel-header>
-                  <p>social profiles</p>
+                      <mat-form-field class="form-group"appearance="outline" style="width : 90%">
+                          <mat-label>Social profile links</mat-label>
+                      <input matInput [(ngModel)]="newSocialLink" placeholder="Add Social Profile Link">
+                      <button mat-mini-fab color="primary" matSuffix (click)="addSocialLink()">
+                        <mat-icon>person_add_alt_1</mat-icon></button>
+                      </mat-form-field>
+                    <mat-chip-list 
+                        class="example-chip"
+                        cdkDropList 
+                        cdkDropListOrientation="horizontal"
+                        (cdkDropListDropped)="dropSocialLink($event)">
+                            <mat-chip class="example-box"
+                            selected color="primary" cdkDrag *ngFor="let link of socialLinks" [selectable]= true
+                            [removable]=true (removed)="removeSocialLink(link)">
+                            {{link.link_url}}
+                              <mat-icon matChipRemove >cancel</mat-icon>
+                            </mat-chip>
+                    </mat-chip-list><br>
+                    <button mat-raised-button color="primary" (click)="saveSocialProfile()">Save</button>          
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -145,7 +212,7 @@
             </div>
             <div class="profile-mobile-view">
             <app-profile-grid [selectedUser] = "currentUser" 
-            [enabledSubtitle] = true [mode]='mode'></app-profile-grid>
+            [enabledSubtitle] = true [mode]='mode' [bio]="bio.value"></app-profile-grid>
 
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1><br>
             <b style="margin-left : 2%">User Id : <span style="color : red">{{currentUser.user_id}}</span></b>
@@ -216,7 +283,49 @@
                       </mat-panel-description>
                   
                   </mat-expansion-panel-header>
-                  <p>personal details</p>
+                    <form [formGroup]="personalDetailsForm">
+                   <mat-form-field class="form-group"appearance="outline" style="width:90%">
+                      <mat-label>Bio</mat-label>
+                                    <textarea matInput formControlName="bio"  placeholder="Enter your bio" ></textarea>
+                                    <mat-hint>Bio should not exceed more than 500 characters</mat-hint>
+                                    <mat-hint align="end">{{bio.value?.length || 0}}/500</mat-hint>
+                                    <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                   </mat-form-field><br>
+                        <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
+                        <mat-form-field class="form-group"appearance="outline">
+                           <mat-label>DOB</mat-label>
+                           <input [max]="maxDate" matInput formControlName="dob" placeholder="Choose a date" [matDatepicker]="dbpicker">
+                           <mat-datepicker-toggle  matSuffix [for]="dbpicker"></mat-datepicker-toggle>
+                           <mat-datepicker #dbpicker></mat-datepicker>   
+                        </mat-form-field><br>
+                        <button mat-raised-button color="accent" class="label-button">Insterests</button>
+                        <mat-form-field class="form-group"appearance="outline">
+                           <mat-label>Interests</mat-label>
+                           <mat-chip-list #interestList >
+                        <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true
+                        [removable]=true (removed)="removeInterest(interest)">
+                        {{interest.interest}}
+                          <mat-icon matChipRemove >cancel</mat-icon>
+                        </mat-chip>
+                </mat-chip-list>
+                           <input  matInput 
+                           [matChipInputFor]="interestList" 
+                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                           [matChipInputAddOnBlur]=true
+                           (matChipInputTokenEnd)="addInterest($event)" placeholder="Add new interets">  
+                        </mat-form-field><br>
+                      </form>
+                      <button mat-raised-button color="accent" class="label-button">Gender</button><br>
+                      <mat-radio-group [(ngModel)]="user_gender" aria-label="Select an option">
+                          <mat-radio-button value="MALE"><mat-icon>male</mat-icon>MALE</mat-radio-button><br>
+                          <mat-radio-button value="FEMALE"><mat-icon>female</mat-icon>FEMALE</mat-radio-button><br>
+                          <mat-radio-button value="TRANSGENDER"><mat-icon>transgender</mat-icon>TRANSGENDER</mat-radio-button>
+                        </mat-radio-group><br><br>
+                        <button mat-raised-button color="primary" (click)="savePersonalInfo()">Save</button>
+                        
+                        
+              
+
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -229,7 +338,15 @@
                       </mat-panel-description>
                    
                   </mat-expansion-panel-header>
-                  <p>institutes</p>
+                  <mat-accordion multi>
+                      <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title><img height=40 width=40 src="{{ins.avatar ? imgUrl + ins.avatar : '/assets/images/insimg.png'}}"></mat-panel-title>
+                          <mat-panel-description>{{ins.client_id}}</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <b style="color : cornflowerblue">{{ins.organisation_name}}</b>
+                      </mat-expansion-panel>
+                    </mat-accordion>
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -255,7 +372,23 @@
                       </mat-panel-description>
                     
                   </mat-expansion-panel-header>
-                  <p>social profiles</p>
+                  <mat-form-field class="form-group"appearance="outline" style="width : 90%">
+                      <mat-label>Social profile links</mat-label>
+                  <input matInput [(ngModel)]="newSocialLink" placeholder="Add Social Profile Link">
+                  <button mat-mini-fab color="primary" matSuffix (click)="addSocialLink()">
+                    <mat-icon>person_add_alt_1</mat-icon></button>
+                  </mat-form-field>
+                <mat-chip-list 
+                    cdkDropList 
+                    cdkDropListOrientation="horizontal"
+                    (cdkDropListDropped)="dropSocialLink($event)">
+                        <mat-chip selected color="primary" cdkDrag *ngFor="let link of socialLinks" [selectable]= true
+                        [removable]=true (removed)="removeSocialLink(link)">
+                        {{link.link_url}}
+                          <mat-icon matChipRemove >cancel</mat-icon>
+                        </mat-chip>
+                </mat-chip-list><br>
+                <button mat-raised-button color="primary" (click)="saveSocialProfile()">Save</button>
                 </mat-expansion-panel>
                 <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -275,6 +408,5 @@
               </mat-accordion>
             </div>
 </mat-sidenav-container>
-<app-profile-grid [selectedUser] = "currentUser" 
-        [enabledSubtitle] = true [mode]='mode'></app-profile-grid>
+
 

@@ -8,7 +8,8 @@ const fs = require('fs');
 
 const User = require('../models/User');
 const RoleAccess = require('../models/RoleAccess');
- 
+const UserMeta = require('../models/UserMeta');
+
 users.use(cors());
 
 //Get total user count
@@ -39,20 +40,58 @@ users.get('/count/:institute',(req,res,next)=>
                         res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
                     })
                 }
+                else if(req.params.institute == 'sadmin')
+                {
+                    RoleAccess.find({$and : [{active : true},
+                    {role : "SADMIN"}]})
+                    .then(
+                        roles => 
+                        {
+                            roles = roles.map(value => value.user_id);
+                            User.find({$and : [{active : true},{user_id : {$in : roles}}]})
+                            .countDocuments((err,count) => {
+                                if(err)
+                                {
+                                    res.json({"err": "Error in loading the list of Users from Edurex Database."})
+                                }
+                                else
+                                {
+                                    
+                                    res.json(count)
+                                }
+        
+                            })}
+                            )
+                            .catch(err => {
+                                res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
+                            })
+                }
                     else
                     {
-                        User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
-                        .countDocuments((err,count) => {
-                            if(err)
+                        RoleAccess.find({$and : [{active : true},
+                            {institute_id : req.params.institute},
+                        {role : {$ne : "SADMIN"}}]})
+                        .then(
+                            roles => 
                             {
-                                res.json({"err": "Error in loading the list of Users from Edurex Database."})
-                            }
-                            else
-                            {
-
-                                res.json(count)
-                            }
-                        })
+                                roles = roles.map(value => value.user_id);
+                                User.find({$and : [{active : true},{user_id : {$in : roles}}]})
+                                .countDocuments((err,count) => {
+                                    if(err)
+                                    {
+                                        res.json({"err": "Error in loading the list of Users from Edurex Database."})
+                                    }
+                                    else
+                                    {
+                                        
+                                        res.json(count)
+                                    }
+            
+                                })}
+                                )
+                                .catch(err => {
+                                    res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
+                                })
 
                     }
 
@@ -94,21 +133,77 @@ users.get('/count/:institute/:filter',(req,res,next)=>
                         res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
                     })
                 }
+
+                else if(req.params.institute = 'sadmin')
+                {
+                    searchkey = req.params.filter;
+                        RoleAccess.find({$and : [{active : true},
+                    {role :  "SADMIN"}]})
+                            .then(
+                                roles => 
+                                {
+                                    roles = roles.map(value => value.user_id);
+                                    User.find({$and : [{active : true},
+                                        {user_id : {$in : roles}},
+                                        {$or : [{name : new RegExp(searchkey,'i')},
+                                            {email : new RegExp(searchkey,'i')},
+                                            {phone : new RegExp(searchkey,'i')},
+                                            {user_id : new RegExp(searchkey,'i')}
+                                        ]}
+                                    ]})
+                                    .countDocuments((err,count) => {
+                                        if(err)
+                                        {
+                                            res.json({"err": "Error in loading the list of Users from Edurex Database."})
+                                        }
+                                        else
+                                        {
+                                            
+                                            res.json(count)
+                                        }
+                
+                                    })}
+                                    )
+                                    .catch(err => {
+                                        res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
+                                    })
+                        
+                }
                     else
                     {
-                        User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
-                        .countDocuments((err,count) => {
-                            if(err)
-                            {
-                                res.json({"err": "Error in loading the list of Users from Edurex Database."})
-                            }
-                            else
-                            {
-
-                                res.json(count)
-                            }
-                        })
-
+                        searchkey = req.params.filter;
+                        RoleAccess.find({$and : [{active : true},
+                        {institute_id : req.params.institute},
+                    {role : {$ne : "SADMIN"}}]})
+                            .then(
+                                roles => 
+                                {
+                                    roles = roles.map(value => value.user_id);
+                                    User.find({$and : [{active : true},
+                                        {user_id : {$in : roles}},
+                                        {$or : [{name : new RegExp(searchkey,'i')},
+                                            {email : new RegExp(searchkey,'i')},
+                                            {phone : new RegExp(searchkey,'i')},
+                                            {user_id : new RegExp(searchkey,'i')}
+                                        ]}
+                                    ]})
+                                    .countDocuments((err,count) => {
+                                        if(err)
+                                        {
+                                            res.json({"err": "Error in loading the list of Users from Edurex Database."})
+                                        }
+                                        else
+                                        {
+                                            
+                                            res.json(count)
+                                        }
+                
+                                    })}
+                                    )
+                                    .catch(err => {
+                                        res.json({"err" : "Server Error ! Error in loading User Counter" + JSON.stringify(err)});
+                                    })
+                        
                     }
 
 })
@@ -150,19 +245,76 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
                 res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
             })
     }
-    else {
-    User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
-    .sort({name : 1})
-    .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
-    .then(
-        data=>{
-        res.json(data);
-        }
-    ).catch(err=>
+    else if(req.params.institute == 'sadmin')
     {
-        res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)})
-    })
-}
+        RoleAccess.find({and : [{active : true},{role : 'SADMIN'}]})
+        .then(
+            roles => 
+            {
+                roles = roles.map(value => value.user_id);
+                searchkey = req.params.filter;
+                User.find({$and : [
+                    {active : true},
+                    {user_id : {$in : roles}},
+                    {$or : [{name : new RegExp(searchkey,'i')},
+                        {email : new RegExp(searchkey,'i')},
+                        {phone : new RegExp(searchkey,'i')},
+                        {user_id : new RegExp(searchkey,'i')}
+                    ]}
+                ]}).sort({name : 1})
+                .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
+                .then(
+                    data => 
+                    {
+                        res.json(data);
+                    }
+                ).catch(
+                    err=>{
+                        res.json({"err" : "Server Error ! Error in loading role access" + JSON.stringify(err)});
+                    }
+                )
+            }
+        )
+        .catch(err => {
+            res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
+        })
+    }
+    else {
+
+        RoleAccess.find({$and : [{active : true},
+        {institute_id : req.params.institute},
+        {role : {$ne : "SADMIN"}}]})
+        .then(
+            roles => 
+            {
+                roles = roles.map(value => value.user_id);
+                searchkey = req.params.filter;
+                User.find({$and : [
+                    {active : true},
+                    {user_id : {$in : roles}},
+                    {$or : [{name : new RegExp(searchkey,'i')},
+                        {email : new RegExp(searchkey,'i')},
+                        {phone : new RegExp(searchkey,'i')},
+                        {user_id : new RegExp(searchkey,'i')}
+                    ]}
+                ]}).sort({name : 1})
+                .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
+                .then(
+                    data => 
+                    {
+                        res.json(data);
+                    }
+                ).catch(
+                    err=>{
+                        res.json({"err" : "Server Error ! Error in loading role access" + JSON.stringify(err)});
+                    }
+                )
+            }
+        )
+        .catch(err => {
+            res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
+        })
+            }
 })
 
 
@@ -195,18 +347,61 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
                 res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
             })
     }
-    else {
-    User.find({ $and : [{active:true},{institute : {$elemMatch : {$eq : req.params.institute}}}]})
-    .sort({name : 1})
-    .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
-    .then(
-        data=>{
-        res.json(data);
-        }
-    ).catch(err=>
+    else if(req.params.institute == 'sadmin')
     {
-        res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)})
-    })
+        RoleAccess.find({$and :
+            [{active : true},
+             {role :  "SADMIN"}
+           ]})
+       .then(
+           roles => 
+           {
+               roles = roles.map(value => value.user_id);
+               User.find({$and : [{active : true},{user_id : {$in : roles}}]}).sort({name : 1})
+               .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
+               .then(
+                   data => 
+                   {
+                       res.json(data);
+                   }
+               ).catch(
+                   err=>{
+                       res.json({"err" : "Server Error ! Error in loading role access" + JSON.stringify(err)});
+                   }
+               )
+           }
+       )
+       .catch(err => {
+           res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
+       })
+    }
+    else {
+        RoleAccess.find({$and :
+             [{active : true},
+              {institute_id : req.params.institute},
+              {role : {$ne : "SADMIN"}}
+            ]})
+        .then(
+            roles => 
+            {
+                roles = roles.map(value => value.user_id);
+                User.find({$and : [{active : true},{user_id : {$in : roles}}]}).sort({name : 1})
+                .skip((Number(req.params.page)-1)*(Number(req.params.users_per_page))).limit(Number(req.params.users_per_page))
+                .then(
+                    data => 
+                    {
+                        res.json(data);
+                    }
+                ).catch(
+                    err=>{
+                        res.json({"err" : "Server Error ! Error in loading role access" + JSON.stringify(err)});
+                    }
+                )
+            }
+        )
+        .catch(err => {
+            res.json({"err" : "Server Error ! Error in loading Users" + JSON.stringify(err)});
+        })
 }
 })
 
@@ -476,14 +671,14 @@ users.delete('/delete/:id', (req,res,next)=>
           then(data=>{  
             if(data)
             {
-
               
             //   fs.unlinkSync('./uploads/user/avatar/'+data.avatar)
                
 
                User.findOneAndUpdate({user_id : req.params.id},
                 {
-                    $set : {active : false}
+                    $set : {active : false,
+                            deleted_on : dateFormat(new Date(),"yyyy-mm-dd'T'HH:MM:ss") }
                 })
                 .then(data => {
                     res.json({"msg" : "User has been deleted Successfully" })
@@ -521,7 +716,8 @@ users.put("/bulkactions/delete/:n",(req,res,next)=>
            user_id : { $in : id}
         },
         {
-            active : false
+            active : false,
+            deleted_on : dateFormat(new Date(),"yyyy-mm-dd'T'HH:MM:ss")
         }
     ).then(
         data => {
@@ -582,7 +778,52 @@ users.put("/bulkactions/deactivate/:state/:n",(req,res,next)=>
     }
 });
 
+users.get('/usermetas/view/:user_id',(req,res,next)=>{
+   
+UserMeta.findOne({user_id : req.params.user_id}).then(
+    data=>{
+        res.json(data);
+    }).catch(err=>{
+        res.json(null);
+    })
+})
 
+
+users.post('/social_profiles/add/:user_id',(req,res,next)=>{
+
+    UserMeta.updateOne({user_id : req.params.user_id},
+        {$set : {
+            social_profiles : req.body
+        }},
+        {upsert : true}
+    ).then(
+            data=>{
+                res.json({"msg" : "Social Profile Links for user with id : " + req.params.user_id 
+                + " has been successfully updated"});
+            },
+        ).catch(err => {
+            res.json({"err" : "Server Error ! Error in updating social profiles"});
+        })
+
+})
+
+users.post('/personal_info/add/:user_id',(req,res,next)=>{
+
+    UserMeta.updateOne({user_id : req.params.user_id},
+        {$set : {
+            personal_info : req.body
+        }},
+        {upsert : true}
+    ).then(
+            data=>{
+                res.json({"msg" : "Personal info for user with id : " + req.params.user_id 
+                + " has been successfully updated"});
+            },
+        ).catch(err => {
+            res.json({"err" : "Server Error ! Error in updating Personal Info"});
+        })
+
+})
 
 
 module.exports = users;

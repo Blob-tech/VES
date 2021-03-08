@@ -43,6 +43,7 @@ var User = require('./routes/Users');
 var Course = require('./routes/Course');
 var Module = require('./routes/Modules');
 var Organisation = require('./routes/Organisations');
+var RoleAccess = require('./routes/RoleAccess');
 
 app.use('/thumbnail',express.static(path.join(__dirname, 'uploads/library/cover-photos/')));
 app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')));
@@ -56,6 +57,7 @@ app.use('/user',User);
 app.use('/course',Course);
 app.use('/course/module',Module);
 app.use('/organisation',Organisation);
+app.use('/role',RoleAccess);
 
 
 

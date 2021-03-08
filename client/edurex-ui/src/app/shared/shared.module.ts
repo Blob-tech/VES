@@ -44,6 +44,7 @@ import { ManageAccessComponent } from './widgets/manage-access/manage-access.com
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SocialLinksComponent } from './widgets/social-links/social-links.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 
@@ -78,6 +79,7 @@ import { SocialLinksComponent } from './widgets/social-links/social-links.compon
     MaterialFileInputModule,
     MatProgressBarModule,
     NgxMatSelectSearchModule,
+    MatChipsModule,
     NgBreadcrumbModule,
     MatGridListModule,
     MatProgressSpinnerModule,
