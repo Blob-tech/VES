@@ -1,14 +1,15 @@
 <div>
     <span *ngFor="let link of socialLinkList; let i = index">
-            <button *ngIf="i<3" (click)="goToSocialLink(link)"  mat-mini-fab color="primary" matTooltip="{{link}}">
-            <i *ngIf="getSocialIcon(link)=='facebook'" class="fab fa-facebook"></i>
-            <i *ngIf="getSocialIcon(link)=='instagram'" class="fab fa-instagram"></i>
-            <i *ngIf="getSocialIcon(link)=='linkedin'" class="fab fa-linkedin"></i>
-            <i *ngIf="getSocialIcon(link)=='behance'" class="fab fa-behance"></i>
-            <i *ngIf="getSocialIcon(link)=='dribbble'" class="fab fa-dribbble"></i>
-            <i *ngIf="getSocialIcon(link)=='google'" class="fab fa-google"></i>
-            <i *ngIf="getSocialIcon(link)=='whatsapp'" class="fab fa-whatsapp"></i>
-            <i *ngIf="getSocialIcon(link)=='twitter'" class="fab fa-twitter"></i>
+            <button *ngIf="i<3" (click)="goToSocialLink(link.link_url)"  mat-mini-fab color="primary" matTooltip="{{link.link_url}}">
+            <i *ngIf="getSocialIcon(link.link_url)=='facebook'" class="fab fa-facebook"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='instagram'" class="fab fa-instagram"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='linkedin'" class="fab fa-linkedin"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='behance'" class="fab fa-behance"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='dribbble'" class="fab fa-dribbble"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='google'" class="fab fa-google"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='whatsapp'" class="fab fa-whatsapp"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='twitter'" class="fab fa-twitter"></i>
+            <i *ngIf="getSocialIcon(link.link_url)=='web'" class="fas fa-globe"></i>
             </button>  
     </span>
     <span><button (click)="open(moreSocialLinks)" *ngIf="socialLinkList.length > 3" mat-mini-fab color="accent" matTooltip="more"><mat-icon>more_horiz</mat-icon></button></span>
@@ -20,17 +21,17 @@
         <div mat-dialog-content>
         </div>
         <span *ngFor="let link of socialLinkList; let i = index">
-                <button (click)="goToSocialLink(link)"  mat-mini-fab color="primary" matTooltip="{{link}}">
-                <i *ngIf="getSocialIcon(link)=='facebook'" class="fab fa-facebook"></i>
-                <i *ngIf="getSocialIcon(link)=='instagram'" class="fab fa-instagram"></i>
-                <i *ngIf="getSocialIcon(link)=='linkedin'" class="fab fa-linkedin"></i>
-                <i *ngIf="getSocialIcon(link)=='behance'" class="fab fa-behance"></i>
-                <i *ngIf="getSocialIcon(link)=='dribbble'" class="fab fa-dribbble"></i>
-                <i *ngIf="getSocialIcon(link)=='google'" class="fab fa-google"></i>
-                <i *ngIf="getSocialIcon(link)=='whatsapp'" class="fab fa-whatsapp"></i>
-                <i *ngIf="getSocialIcon(link)=='twitter'" class="fab fa-twitter"></i>
-                <i *ngIf="getSocialIcon(link)=='web'" class="fas fa-globe"></i>
-                </button><a href="{{link}}"> {{link}}</a><br><br>  
+                <button (click)="goToSocialLink(link.link_url)"  mat-mini-fab color="primary" matTooltip="{{link.link_url}}">
+                <i *ngIf="getSocialIcon(link.link_url)=='facebook'" class="fab fa-facebook"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='instagram'" class="fab fa-instagram"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='linkedin'" class="fab fa-linkedin"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='behance'" class="fab fa-behance"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='dribbble'" class="fab fa-dribbble"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='google'" class="fab fa-google"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='whatsapp'" class="fab fa-whatsapp"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='twitter'" class="fab fa-twitter"></i>
+                <i *ngIf="getSocialIcon(link.link_url)=='web'" class="fas fa-globe"></i>
+                </button><a href="{{link.link_url}}"> {{link.link_url}}</a><br><br>  
         </span>
         <div mat-dialog-actions>
                 <button mat-raised-button color="warn" mat-dialog-close>Close</button>

@@ -5,7 +5,7 @@ import { InstituteManagementService } from 'src/app/modules/library/service/inst
 import { Institute } from 'src/app/modules/library/modules/institute-management/models/institute';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';import { now } from 'moment';
-4
+import { RoleAccessService } from '../../services/role-access.service';
 
 
 
@@ -30,7 +30,7 @@ export class ManageAccessComponent implements OnInit {
   accessList = []
   constructor(private formBuilder : FormBuilder, private subscriberServices : SubscriberService,
     private instituteService : InstituteManagementService, private _snacbar : MatSnackBar,
-    public dialog: MatDialog)
+    public dialog: MatDialog, private roleAccessService : RoleAccessService)
      {
        this.minDate  = new Date() ;
 
@@ -66,8 +66,7 @@ export class ManageAccessComponent implements OnInit {
 
     resetAccessList(event)
     {
-      console.log('Agnibha');
-      if((event.target as HTMLInputElement).value.trim() == 'SADMIN')
+      if(event.value.trim() == 'SADMIN')
       {
         this.access_list.setValue('');
       }
@@ -124,7 +123,32 @@ export class ManageAccessComponent implements OnInit {
 
     if(res == true)
     {
-
+      let formData = new FormData();
+      let validupto : Date;
+      if(this.valid_upto.value)
+      {
+        validupto = new Date(this.valid_upto.value);
+        validupto.setDate(validupto.getDate()+1);
+      }   
+      formData.append('users', this.access_id);
+      formData.append('institutes',this.access_list.value);
+      formData.append('role',this.role.value);
+      formData.append('valid_upto',this.valid_upto.value ? validupto.toDateString() : '');
+      this.roleAccessService.giveRoleAccess(formData).subscribe(
+        data=>{
+          if(!(JSON.parse(JSON.stringify(data))['err']))
+          {
+            this._snacbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+          }
+          else
+          {
+            this._snacbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          }
+        },
+        err=>{
+          this._snacbar.open("Error in Giving Access ! Please try after few minutes", null , {duration : 5000} );
+        }
+      )
     }
     
   }

@@ -20,6 +20,9 @@ export class ProfileGridComponent implements OnInit {
   selectedUser : User;
 
   @Input()
+  bio : string ='';
+
+  @Input()
   enabledSubtitle ?: boolean=true ;
 
   @Input()
@@ -32,7 +35,7 @@ export class ProfileGridComponent implements OnInit {
   enabeledDetails ?: boolean = true;
 
   @Input()
-  enabeledSocialLins ?: boolean = true;
+  enabeledSocialLinks ?: boolean = true;
 
   imgUrl = config.host + "avatar/";
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,

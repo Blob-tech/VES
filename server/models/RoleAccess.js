@@ -16,7 +16,8 @@ const roleAccessSchema = new schema(
        role :
        {
            type : String,
-           required : true
+           required : true,
+           default : ''
        },
        access_given :
        {
@@ -34,6 +35,12 @@ const roleAccessSchema = new schema(
            type : Boolean,
            required : true,
            default: true,
+       },
+       is_activated :
+       {
+           type : Boolean,
+           required : true,
+           default : false,
        }
 
     }

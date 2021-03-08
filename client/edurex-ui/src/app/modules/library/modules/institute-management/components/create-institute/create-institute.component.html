@@ -51,6 +51,7 @@
             <input matInput type="tel" formControlName="contact_phone" required placeholder="Enter Organisation/Institute mobile/phone number" maxlength="10">
             <mat-hint>Enter a 10 digit valid telephone number</mat-hint>
             <mat-error *ngIf="contact_phone.hasError('required')">Value is required</mat-error>
+            <mat-error *ngIf="contact_phone.hasError('pattern')">Please enter a valid 10 digit mobile number</mat-error>
         </mat-form-field>
         <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Organisation/Institute Contact Person</mat-label>

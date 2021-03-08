@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { config } from "src/conf";
 import { User } from '../modules/subscriber-management/models/subscriber';
+import { SocialProfile } from '../../profile/profile-view/profile-view.component';
 
 @Injectable({
   providedIn: 'root'
@@ -106,4 +107,26 @@ export class SubscriberService {
 
     return this.httpClient.put(this.URL + 'bulkactions/deactivate/'+ state + '/' +users.length,users,{headers : headers})
   }
+
+  get_user_metas(user_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json')
+    return this.httpClient.get(this.URL + 'usermetas/view/'+user_id,{headers : headers});
+  }
+
+  update_social_profile(user_id : string,socialProfile : SocialProfile[])
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json');
+    return this.httpClient.post(this.URL + 'social_profiles/add/'+user_id,socialProfile,{headers : headers});
+  }
+
+  update_personal_info(user_id : string,formData : FormData)
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json');
+    return this.httpClient.post(this.URL + 'personal_info/add/'+user_id,formData,{headers : headers});
+  }
+
 }

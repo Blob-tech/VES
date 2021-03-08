@@ -66,7 +66,7 @@ const userSchema = new schema(
        {
            type : String,
            required : true,
-           default : "lime-blue"
+           default : "light-green-grey"
        },
        logged_in_form_ip :
        {
@@ -88,7 +88,13 @@ const userSchema = new schema(
        },
        last_logged_in :
        {
-            type : Date
+            type : Date,
+            default : ''
+       },
+       deleted_on : 
+       {
+           type :Date,
+           default : ''
        },
        isVerified :
        {

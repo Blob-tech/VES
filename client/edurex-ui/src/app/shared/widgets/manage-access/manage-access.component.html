@@ -8,11 +8,11 @@
             <form [formGroup]="accessManagerForm">
                 <mat-form-field  class="form-group" appearance="outline">
                     <mat-label>Role</mat-label>
-                    <mat-select formControlName="role" required (change)="resetAccessList($event)">
+                    <mat-select formControlName="role" required (selectionChange)="resetAccessList($event)">
                         <mat-option value="SADMIN">SYSTEM ADMIN</mat-option>
                         <mat-option value="IADMIN">INSTITUTE ADMIN</mat-option>
                         <mat-option value="CADMIN">CONTENT ADMIN</mat-option>
-                        <mat-option value="STUDENT">STUDENT ADMIN</mat-option>
+                        <mat-option value="STUDENT">STUDENT</mat-option>
                       </mat-select>
                       <mat-error *ngIf="role.hasError('required')">Value is required</mat-error>
                 </mat-form-field>  

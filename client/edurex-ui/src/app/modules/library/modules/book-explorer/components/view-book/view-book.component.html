@@ -37,9 +37,10 @@
             </div>
                 
         </mat-grid-tile>
-      </mat-grid-list>
-
-      <div class="container pdf-container" *ngIf="book.type == 'pdf'"
+        <mat-grid-tile
+            [colspan]="2"
+            [rowspan]="6">
+        <div class="container pdf-container" *ngIf="book.type == 'pdf'"
       >
             <ng2-pdfjs-viewer [fullScreen]="true"
             pdfSrc="{{docSrc + book.book_source}}"></ng2-pdfjs-viewer>
@@ -65,6 +66,9 @@
       </mat-video-->
       
     </div>
+</mat-grid-tile>
+      </mat-grid-list>
 
+      
     
 </div>

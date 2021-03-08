@@ -78,7 +78,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
       organisation_id : ['',[Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z0-9]*$")]],
       organisation_name : ['',[Validators.required, Validators.maxLength(200)]],
       contact_email :['',[Validators.required,Validators.pattern("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]],
-      contact_phone :['',[Validators.required]],
+      contact_phone :['',[Validators.required,Validators.pattern("^[0-9]{10}$")]],
       contact_person : ['',[Validators.required, Validators.maxLength(100)]],
       address : ['',[Validators.maxLength(500)]],
       client_id :['',[Validators.required, Validators.maxLength(10)]],
