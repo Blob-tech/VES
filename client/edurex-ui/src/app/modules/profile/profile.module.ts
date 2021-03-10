@@ -99,6 +99,7 @@ import {CdkTreeModule} from '@angular/cdk/tree';
     MatSnackBarModule,
     MatSlideToggleModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     MaterialFileInputModule,
     MatProgressBarModule,
     NgxMatSelectSearchModule,

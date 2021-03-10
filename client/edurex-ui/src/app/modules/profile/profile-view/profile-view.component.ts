@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { User } from '../../library/modules/subscriber-management/models/subscriber';
 import { SubscriberService } from '../../library/service/subscriber.service';
@@ -40,10 +40,25 @@ export class ProfileViewComponent implements OnInit {
   maxDate : Date;
   instituteList = [];
   imgUrl = config.host + "organisation_logo/";
+  dark_mode;
+
+
+  visibilitySettings = {
+
+  viewBasicInfo  : true,
+  viewPersonalDetails : true,
+  viewInstitute : true,
+  viewSubscriptions : true,
+  viewSocialProfile : true,
+  viewProfileImage : true,
+
+  }
+
 
   socialLinks: SocialProfile[] = [];
   personalInterests : PersonaInterest[] = [];
   user_gender : string;
+  showLoader = true;
  
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   roleList: any;
@@ -53,13 +68,79 @@ export class ProfileViewComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.showLoader=true;
     this.maxDate = new Date();
+    this.dark_mode = localStorage.getItem("dark-mode") == "true" ? true : false;
+    
     
     this.route.params.subscribe(routeParams => {
       this.getCurrentUser(routeParams.user_id);
       this.getuserMetas(routeParams.user_id);
       this.getInstituteAndRole(routeParams.user_id);
     })
+    
+  }
+
+  toggleVisibility(param:string)
+  {
+    if(param == 'basic_info')
+    {
+      this.visibilitySettings.viewBasicInfo = !this.visibilitySettings.viewBasicInfo;
+    }
+    else if(param == 'personal_details')
+    {
+      this.visibilitySettings.viewPersonalDetails = !this.visibilitySettings.viewPersonalDetails;
+    }
+    else if(param == 'institutes')
+    {
+      this.visibilitySettings.viewInstitute = !this.visibilitySettings.viewInstitute;
+    }
+    else if( param == 'subscriptions')
+    {
+      this.visibilitySettings.viewSubscriptions = !this.visibilitySettings.viewSubscriptions;
+    }
+    else if(param == 'social_profile')
+    {
+      this.visibilitySettings.viewSocialProfile = !this.visibilitySettings.viewSocialProfile;
+    }
+    else if(param == 'profile_image')
+    {
+      this.visibilitySettings.viewProfileImage = !this.visibilitySettings.viewProfileImage;
+    }
+    this.subscriberServices.set_visibility(this.currentUser.user_id,this.visibilitySettings)
+      .subscribe(
+        data=>{
+          if(!JSON.parse(JSON.stringify(data))['err'])
+          {
+            this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+          }
+          else
+          {
+            this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          }
+          
+        },
+        err=>{
+          this.snackBar.open("Error in setting Visibility",null,{duration : 5000});
+        }
+      )
+  }
+
+  @Output("toggleDarkness")
+  toggleDarkness : EventEmitter<any> = new EventEmitter();
+
+  @Output("setTheme")
+  setTheme : EventEmitter<String> = new EventEmitter<String>();
+
+  changeTheme(theme : String)
+  {
+    this.setTheme.next(theme);
+  }
+
+
+  toggleDarkMode()
+  {
+      this.toggleDarkness.emit();
   }
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -78,10 +159,13 @@ export class ProfileViewComponent implements OnInit {
             address : this.currentUser.address,
           },{emitEvent : true});
         }
+       
       },
       err => {
         this.snackBar.open("Error in getting user details" + err , null, {duration : 5000});
+        
       }
+      
     )
   }
 
@@ -172,10 +256,12 @@ export class ProfileViewComponent implements OnInit {
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
+          this.showLoader = true
           this.route.params.subscribe(routeParams => {
             this.getCurrentUser(routeParams.user_id);
           })
           this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+          this.showLoader = false;
         }
         else
         {
@@ -253,6 +339,10 @@ export class ProfileViewComponent implements OnInit {
               JSON.stringify(JSON.parse(this.userMetas.personal_info.dob)).split('T')[0].substr(1) : ''
             })
           }
+          if(this.userMetas !=null && this.userMetas.settings.visibility != undefined)
+          {
+            this.visibilitySettings = this.userMetas.settings.visibility;
+          }
         },
         err=>
         {
@@ -261,7 +351,6 @@ export class ProfileViewComponent implements OnInit {
       )
     }
 
-  
 
     saveSocialProfile()
     {
@@ -328,15 +417,44 @@ export class ProfileViewComponent implements OnInit {
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
           }
-
+          this.showLoader=false;
         },
         err=>{
           this.snackBar.open("Error in Loading Institutes" + err,null,{duration : 5000});
+          this.showLoader=false;
         }
        
          
         
       )
+    }
+
+    getRoles(institute_id : string) 
+    {
+      let instRole = this.roleList.filter(value => {
+        return value.institute_id == institute_id &&  value.user_id == this.currentUser.user_id;
+      })
+
+      return instRole;
+    }
+
+    isRoleExpired(role) : boolean
+    {
+      let currentDate = new Date()
+      if(currentDate > new Date(role.valid_upto.split('T')[0]))
+      {
+        return true;
+      }
+      return false;
+    }
+
+    isSysAdmin()
+    {
+     let sysadmin = this.roleList.filter(value => {
+       return  value.role == 'SADMIN' && value.user_id == this.currentUser.user_id
+       
+     })
+     return sysadmin;
     }
    
 

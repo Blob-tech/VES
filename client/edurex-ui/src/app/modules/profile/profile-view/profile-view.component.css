@@ -12,6 +12,23 @@ mat-radio-button
   margin-right: 10px;
 }
 
+mat-spinner
+{
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+}
+
+.loader
+{
+  top : 0;
+  left : 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: black;
+}
 .sidenav
   {
       max-height: 100%;
@@ -36,6 +53,7 @@ mat-radio-button
   .profile-desktop-view
   {
       padding-top: 150px ;
+      align-self: auto;
 
   }
 
@@ -88,6 +106,15 @@ mat-radio-button
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .tab
+  {
+    tab-size: 4;
   }
 
   app-profile-grid 

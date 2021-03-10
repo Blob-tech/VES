@@ -825,5 +825,23 @@ users.post('/personal_info/add/:user_id',(req,res,next)=>{
 
 })
 
+users.post('/visibility/:user_id',(req,res,next)=>{
+    let param = req.params.param
+    UserMeta.updateOne({user_id : req.params.user_id},
+        {$set : {
+            settings : {
+                visibility : req.body
+            } 
+        }},
+        {upsert : true}
+    ).then(
+            data=>{
+                res.json({"msg" : "Visibility set"});
+            },
+        ).catch(err => {
+            res.json({"err" : "Server Error ! Error in setting visibility"});
+        })
+})
+
 
 module.exports = users;

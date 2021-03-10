@@ -11,6 +11,7 @@ import {MatFormFieldModule, MatFormFieldControl} from '@angular/material/form-fi
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -45,11 +46,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SocialLinksComponent } from './widgets/social-links/social-links.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { RoleTranslatePipe } from './pipes/role-translate.pipe';
+import { SearchGridComponent } from './widgets/search/search-grid/search-grid.component';
 
 
 
 @NgModule({
-  declarations: [ProfileGridComponent, ManageAccessComponent, SocialLinksComponent],
+  declarations: [ProfileGridComponent, ManageAccessComponent, SocialLinksComponent, RoleTranslatePipe, SearchGridComponent],
   imports: [
     CommonModule,
     MatSliderModule,
@@ -74,6 +77,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatCheckboxModule,
     MatPaginatorModule,
     MatSnackBarModule,
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatSelectModule,
     MaterialFileInputModule,
@@ -93,7 +98,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatVideoModule,
     PlyrModule,
   ],
-  exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent],
+  exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent,
+    SearchGridComponent, RoleTranslatePipe],
   providers : [MatDatepickerModule],
   bootstrap: [ProfileGridComponent,ManageAccessComponent]
 })

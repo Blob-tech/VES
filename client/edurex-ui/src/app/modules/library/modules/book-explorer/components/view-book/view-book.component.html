@@ -29,17 +29,27 @@
                 </h5>
                 <button *ngIf="book.type != 'mp4' && book.type != 'mp3' && book.type != 'avi'"
                 mat-raised-button color="primary" style="margin-right: 1rem;" style="color : black"><mat-icon class="auto-flip">save_alt</mat-icon><a target="_blank"  href="{{docSrc + book.book_source}}" style="color: black">Download</a></button>
-                <button mat-raised-button color = "accent"  style="margin: 1rem;">{{book.subscription}}</button>
+                <!--button mat-raised-button color = "accent"  style="margin: 1rem;">{{book.subscription}}</button-->
                 <br><br>
                 <mat-icon class="auto-flip like">thumb_up</mat-icon>{{book.total_like}}
                 <mat-icon class="auto-flip like">thumb_down</mat-icon> {{book.total_dislike}}
                 <mat-icon class="auto-flip">visibility</mat-icon> {{book.total_view}}
             </div>
-                
+            
+        </mat-grid-tile>
+        <mat-grid-tile 
+        [colspan]="2"
+        [rowspan]="1"
+        *ngIf="book.type == 'doc' || book.type === 'docx'|| book.type == 'ppt' || book.type === 'pptx'">
+        <div style="margin : 1rem;" class="alert alert-info alert-dismissible fade-in" >
+                <strong>Alert!</strong> Only PDF files can be previewed in the website. Doc and PPT files are required to be downloaded to view them.
+                Videos can be played online only
+              </div>
         </mat-grid-tile>
         <mat-grid-tile
             [colspan]="2"
             [rowspan]="6">
+           
         <div class="container pdf-container" *ngIf="book.type == 'pdf'"
       >
             <ng2-pdfjs-viewer [fullScreen]="true"

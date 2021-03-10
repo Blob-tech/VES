@@ -40,6 +40,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ProfileRoutingModule } from './modules/profile/profile-routing.module';
 import { ProfileModule } from './modules/profile/profile.module';
+import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { ProfileModule } from './modules/profile/profile.module';
     NgxSpinnerModule,
     MatVideoModule,
     NgbModule,
-    ProfileModule
+    ProfileModule,
+    SharedModule,
 
   ],
   exports:[],

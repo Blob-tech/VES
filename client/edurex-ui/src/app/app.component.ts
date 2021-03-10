@@ -12,7 +12,7 @@ const THEME_DARKNESS_SUFFIX = `-dark`
 })
 export class AppComponent {
   
-  title = 'Edurex';
+  title = 'VES|BLOBTECH';
   @HostBinding('class') activeThemeCssClass: string
   isThemeDark = false
   activeTheme: string
