@@ -3,19 +3,27 @@
       <mat-card-title [style.color]="!selectedUser.isActivated ? 'grey' : ''"> <img
          matTooltip="{{selectedUser.name}}" *ngIf="mode == 'small'" [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
        src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" height=80 width = 80
-        style="border-radius : 50%;" ><a href="/profile/public/{{selectedUser.user_id}}">
+        style="border-radius : 50%;" ><a  href="/profile/public/{{selectedUser.user_id}}">
           {{selectedUser.name.length < 40 ? selectedUser.name : selectedUser.name.substr(0,40) + '...'}}</a></mat-card-title>
       <mat-card-subtitle *ngIf = "enabledSubtitle && mode == 'small'" ><p>Phone : {{selectedUser.phone}}</p><p>Email : {{selectedUser.email}}</p></mat-card-subtitle>
     </mat-card-header>
-  <img mat-card-image *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
+  <!--img mat-card-image *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
      src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
-     height="350"  style="border-radius : 50%; padding-left : 5%; padding-right : 5%;">
-     <button style="border : 5px solid white; margin-left : 70%; margin-top:-50% "
+     height="350"  style="border-radius : 50%; padding-left : 5%; padding-right : 5%;"-->
+     <button mat-mini-fab style="margin: 5px;opacity: 0.8;"><mat-icon>camera_alt</mat-icon></button>
+     <img *ngIf="mode == 'large'" src="/assets/images/default-cover.jpg" style="width : 100%; height : 200px;z-index: 3;margin-top : -50px">
+     <img *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
+     src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
+     height="200" width="200"  style="border-radius : 50%; border : solid white;
+     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+     margin-left: 20%;margin-top: -150px; z-index: 5; ">
+     
+     <button style="border : 5px solid white; margin-left : 55%; margin-top:-200px "
       *ngIf="selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>camera_alt</mat-icon></button>
-     <button style="border : 5px solid white; margin-left : 70%; margin-top:-50% " 
+     <button style="border : 5px solid white; margin-left : 55%; margin-top:-80% " 
      *ngIf="!selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>add_a_photo</mat-icon></button>
-    <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem;"><br>
-      <span style="color: cornflowerblue; font-size: 10px; text-align: center;padding: 5px;">{{bio}}</span>
+    <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem; text-align: center;"><br>
+      <span style="color: cornflowerblue; font-size: 15px; text-align: center;padding: 5px;">{{bio}}</span><br>
         <app-social-links [userID]="selectedUser.user_id"></app-social-links>
       <p><mat-icon color="green">call</mat-icon> <b> : {{selectedUser.phone}}</b>
       </p><p><mat-icon color="green">mail_outline</mat-icon><b> : {{selectedUser.email}}</b></p>
@@ -26,7 +34,6 @@
       <button mat-button>SHARE</button>
     </mat-card-actions-->
   </mat-card>
-
 
   <ng-template #editProfileImage> 
       <h1 mat-dialog-title>Edit Profile Image</h1>

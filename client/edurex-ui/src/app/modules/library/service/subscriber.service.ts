@@ -129,4 +129,11 @@ export class SubscriberService {
     return this.httpClient.post(this.URL + 'personal_info/add/'+user_id,formData,{headers : headers});
   }
 
+  set_visibility(user_id : string,body:any)
+  {
+    let headers = new HttpHeaders();
+    headers.append('content-Type','application/json');
+    return this.httpClient.post(this.URL + 'visibility/'+user_id,body,{headers : headers});
+  }
+
 }

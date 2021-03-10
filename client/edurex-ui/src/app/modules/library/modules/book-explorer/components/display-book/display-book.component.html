@@ -2,10 +2,6 @@
 <div class="alert alert-info alert-dismissible fade-in" [hidden] = " msg ? false : true">
     <strong>Alert!</strong> {{msg}}
   </div>
-  <div style="margin : 1rem" class="alert alert-info alert-dismissible fade-in" >
-    <strong>Alert!</strong> Only PDF files can be previewed in the website. Doc and PPT files are required to be downloaded to view them.
-    Videos can be played online only
-  </div>
 <!--mat-form-field class="form-group" appearance="outline" >
     <mat-label>Search by Author</mat-label>
     <input matInput (keyup)="filterByAuthor($event)" [formControl]="search_author"  placeholder="Enter an Author name" >
@@ -37,7 +33,7 @@
 
   <button style="margin-left: 15px;" (click) = "toggle_view()" *ngIf="bookView == 'LIST'" mat-mini-fab matTooltip="GRID VIEW" color="primary"><mat-icon>window</mat-icon></button>
   <button style="margin-left: 15px;" (click) = "toggle_view()" *ngIf="bookView == 'GRID'"  mat-mini-fab matTooltip="LIST VIEW" color="primary"><mat-icon>list</mat-icon></button>
-  <mat-form-field appearance="outline"  style="margin-left: 5%; margin-right: 5%; width : 70%">
+  <mat-form-field appearance="outline"  style="margin-left: 5%; margin-right: 5%; margin-top: 10px;width : 70%">
       <mat-label>Advance Search</mat-label>
       <input matInput [(ngModel)]="search" placeholder="Search by book id, name, author, category or publishers" (keyup)="advance_search($event)">
       <button  (click)=" advance_search_click(search,reset)" mat-mini-fab color="primary" matSuffix><mat-icon>manage_search</mat-icon></button>
@@ -65,14 +61,22 @@
                     <p *ngIf="book.type === 'ppt' || book.type === 'pptx'"><i class="avatar fas fa-file-powerpoint" style="color : orange"></i></p>
                     <p *ngIf="book.type === 'pdf'"><i class="avatar fas fa-file-pdf" style="color : red"></i></p>
                     <p *ngIf="book.type === 'mp4' || book.type ==='mp3' || book.type === 'avi'"><i class="avatar fas fa-file-video" style="color : lightseagreen"></i></p>
-                    <span [hidden]="isNew(book.date_of_published)" class="badge badge-pill badge-danger">New</span>
+                    <span [hidden]="isNew(book.date_of_published)" class="badge badge-pill badge-danger">New</span><br>
+                    <b style="font-size: 20px;">4.2</b>
+                    <mat-icon style="color: orange;">grade</mat-icon>
             </div>
             <mat-card-title >{{book.book_name}} <span *ngFor = 'let subscription of book.subscription' class="badge badge-pill badge-info">{{subscription}}</span><br>
               </mat-card-title>
            <mat-card-subtitle>{{book.author}} | {{book.language}}</mat-card-subtitle>
            
         </mat-card-header>
+        
         <img  mat-card-image src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
+        <div style="display: flex; text-align: center;">
+        <mat-icon style="color: slategrey; justify-content: flex-start;">thumb_up_alt</mat-icon><span style="margin-right: 10px;">12k</span>
+        <mat-icon style="color: slategrey; justify-content: center;">remove_red_eye</mat-icon><span style="margin-right: 10px;">30k</span>
+        <mat-icon style="color: slategrey; justify-content: flex-end;">reviews</mat-icon><span>200</span><br>
+        </div>
           <mat-card-footer>
               <button matTooltip="view" routerLink= "/e-library/book-explorer/view/{{book.book_id}}  " mat-mini-fab class="action-button" color="primary" ><i class="fas fa-eye"></i></button>
               <button matTooltip="edit" routerLink= "/e-library/book-explorer/edit/{{book.book_id}}  " mat-mini-fab class="action-button" color="accent" ><i class="fas fa-edit"></i></button>

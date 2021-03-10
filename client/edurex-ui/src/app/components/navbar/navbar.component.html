@@ -6,13 +6,15 @@
       <h4 routerLink="/"><i id="tagline">{{tagline.value}}</i></h4></span>
       <span class="example-spacer"></span>
                 <span  class="hamburger-menu"><button mat-mini-fab color="primary" style="opacity: 0;"></button></span>
+          <app-search-grid style="display:inline;margin-right:5px"></app-search-grid>
+
                 <span class="example-spacer"></span>
                 <span  class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
     
      
      <div class = "top-menu">
       <span>         
-        
+          <app-search-grid style="display:inline;margin-right:5px"></app-search-grid>
         <mat-slide-toggle [(ngModel)]="dark_mode" (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
         Dark Mode</mat-slide-toggle></span>
       <span><button matTooltip ="settings" mat-mini-fab color="basic" [matMenuTriggerFor]="settings"><mat-icon class="auto-flip">settings</mat-icon> </button></span>

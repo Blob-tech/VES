@@ -207,7 +207,7 @@ books.get('/list/:filter/:books_per_page/:page',(req,res,next)=>
                             {subcategory : new RegExp(searchkey,'i')},
                             {publisher : new RegExp(searchkey,'i')},
                             {book_id : new RegExp(searchkey,'i')},
-                            {language : new RegExp(searchkey,'i') }
+                            {language : new RegExp(searchkey,'i') },
                         ]}
             ]})
             .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))

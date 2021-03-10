@@ -18,7 +18,7 @@
   {
       max-height: 100%;
       width:25%;
-      padding-top: 185px;
+      padding-top: 150px;
   }
 
   
@@ -30,7 +30,7 @@
 
   .mat-mini-fab
   {
-      margin: 10px;
+      margin: 8px;
       text-align: center;
   }
 

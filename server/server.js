@@ -44,6 +44,7 @@ var Course = require('./routes/Course');
 var Module = require('./routes/Modules');
 var Organisation = require('./routes/Organisations');
 var RoleAccess = require('./routes/RoleAccess');
+var Search = require('./routes/Search');
 
 app.use('/thumbnail',express.static(path.join(__dirname, 'uploads/library/cover-photos/')));
 app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')));
@@ -58,7 +59,7 @@ app.use('/course',Course);
 app.use('/course/module',Module);
 app.use('/organisation',Organisation);
 app.use('/role',RoleAccess);
-
+app.use('/search',Search);
 
 
 app.get('/library/books/languages/list',(req,res,next)=>{

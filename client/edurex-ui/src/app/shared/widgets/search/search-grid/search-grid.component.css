@@ -1,0 +1,119 @@
+
+.search-box{
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:#fff;
+      height:50px;
+      border-radius:60px;
+      padding:10px;
+      z-index: 2;
+      
+     
+}
+.mobile-view
+{
+    display : none;
+}
+.search-box:hover
+{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.search-box:hover > .txt{
+      width:300px;
+      padding:0 0px;
+    transition: all 1s;
+ 
+}
+.search-box:hover > .fake-btn
+{ 
+    display : none;
+    transition: all 1s;
+}
+
+.fake-btn
+{
+    float:right;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+}
+.search-box:hover > .btn
+{
+    display : flex;
+    transition: all 1s;
+}
+
+mat-button-toggle
+{
+    width : 150px;
+}
+
+.btn{
+      color:#e84118;
+      float:right;
+      width:30px;
+      height:30px;
+      border-radius:50%;
+ 
+      display:none;
+      justify-content:center;
+      align-items:center;
+      transition:0.4s;
+      cursor:pointer;
+     
+     
+}
+.btn > i{
+      font-size:30px;
+      color:#000;
+     
+}
+ 
+.txt{
+      border:none;
+      background:none;
+      outline:none;
+      float:left;
+      padding:0;
+      color:#333;
+      font-size:16px;
+      transition:0.4s;
+      line-height:40px;
+      width:0px;
+      font-weight:bold;
+}
+form:hover .fa{
+    background: #07051a;
+    color: white;
+}
+
+button:focus{
+    outline : none;
+}
+
+@media screen and (max-width : 800px)
+{
+    .mobile-view
+    {
+        display : block;
+    }
+    .desktop-view
+    {
+        display : none;
+    }
+
+    mat-button-toggle
+{
+    width : 50px;
+}
+mat-spinner
+{
+
+    margin-left : 50%;
+    z-index: 100;
+}
+
+
+}
