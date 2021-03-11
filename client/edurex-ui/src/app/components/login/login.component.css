@@ -3,9 +3,13 @@
     top:0%;
     height: 100%;
     width:100%;
-    background-image: url("../../../assets/images/login.png");
     z-index: 0;
     
+}
+
+.mobile-view
+{
+    display : none;
 }
 
 
@@ -39,18 +43,21 @@ button:focus {
     left : 45%;
     z-index : 3;
 }
-
+.mat-fab
+{
+    margin-right : 5px;
+    background-color: white;
+}
 .login
 {
-    position: fixed;
+    position: absolute;
     z-index: 2;
-    width: 50%;
-    left: 25%;
-    top:150px;
+    width: 90%;
+    padding: 5%;
+    top:90px;
     bottom : 10px;
     margin-bottom: 10%;
     padding: 8% 2% 2% 2%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     text-align: center;
 }
 
@@ -80,33 +87,28 @@ mat-card-footer
     padding-left: 30%;
 }
 
-@media screen and (max-width : 1500px)
+
+
+@media screen and (max-width : 1080px)
 {
-    .login
+    .mobile-view
     {
-        width : 90%;
-        height: 90%;
-        left:5%;
-        padding: 0;
+        display: block;
     }
 
-    #logo
+    .desktop-view
+    {
+        display: none;
+    }
+
+    .login-form
 {
-    height: 100px;
-    width: 100px;
-    position: fixed;
-    border-radius: 50%;
-    border : 5px solid coral;
-    top : 100px;
-    left :7%;
-    z-index : 3;
+    max-width: 100%;
+    padding: 0;
 }
 
-.login-hdr
-{
-    
-    padding:5px;
-    padding-top : 50px;
-    text-align: center ;
-}
+    .login
+    {
+        top:10px;
+    }
 }

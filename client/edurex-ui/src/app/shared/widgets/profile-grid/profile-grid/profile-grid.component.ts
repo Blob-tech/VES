@@ -38,6 +38,7 @@ export class ProfileGridComponent implements OnInit {
   enabeledSocialLinks ?: boolean = true;
 
   imgUrl = config.host + "avatar/";
+  coverUrl = config.host + "cover/";
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,
     public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router,
     private formBuilder : FormBuilder) { }
@@ -52,22 +53,31 @@ export class ProfileGridComponent implements OnInit {
   configParams;
   thumbnailprogress = 0;
   url =  "assets/images/user.png" ;
+  coverurl = "assets/images/default-cover.jpg";
   
   open(content)
   {
     this.url = this.selectedUser.avatar ? this.imgUrl + this.selectedUser.avatar : this.url;
+    this.coverurl = this.selectedUser.cover ? this.coverUrl + this.selectedUser.cover : this.coverurl;
     const dialogRef = this.dialog.open(content);
   }
 
   updateLogoForm = this.formBuilder.group({
-    logo : ['']
+    logo : [''],
+    cover : ['']
   })
 
   get logo()
   {
     return this.updateLogoForm.get('logo');
   }
+
+  get cover()
+  {
+    return this.updateLogoForm.get('cover');
+  }
  
+  
   imageFile : any
   onSelectThumbnail(event)
   {
@@ -84,6 +94,23 @@ export class ProfileGridComponent implements OnInit {
 
   }
 
+  coverFile : any
+  onSelectCover(event)
+  {
+    this.thumbnailprogress = 0;
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      this.coverFile = event.target.files[0]
+      reader.onload = (event: any) => {
+        this.thumbnailprogress = Math.round(100 * event.loaded / event.total);
+        this.coverurl = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+  }
+
+
   getConfigParams()
   {
     this.libCategoryServices.getConfigParameters().subscribe(
@@ -92,6 +119,7 @@ export class ProfileGridComponent implements OnInit {
         {
           this.configParams = data[0];
           this.updateLogoForm.get('logo').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
+          this.updateLogoForm.get('cover').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
         }
         else
         {
@@ -152,6 +180,45 @@ export class ProfileGridComponent implements OnInit {
     )
   }
 
+  save_profile_cover()
+  {
+    let formData = new FormData()
+    formData.append('cover',this.coverFile);
+    this.subscriberService.update_profile_cover(formData,this.selectedUser.user_id.toString().trim()).subscribe(
+      data=>{
+        if(JSON.parse(JSON.stringify(data))['msg'])
+        {
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
+          this.subscriberService.get_subscriber_by_id(this.selectedUser.user_id).subscribe(
+            data=>{
+              if(!JSON.parse(JSON.stringify(data))['err'])
+              {
+                this.selectedUser = data as User;
+              }
+              else
+              {
+                this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+              }
+              
+            },
+            err=>
+            {
+              this._snackbar.open("Error in updating profile image : " + err,null,{duration:5000});
+            }
+          )
+        }
+        else
+        {
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});       
+        }
+      },
+      err => {
+        this._snackbar.open("Error in updating profile image : " + err,null,{duration:5000});
+      } 
+
+    )
+  }
+
   remove_profile_image()
   {
     var res = confirm("Are you sure you want to remove the profile image ?");
@@ -175,6 +242,42 @@ export class ProfileGridComponent implements OnInit {
                   },
                   err=>{
                     this._snackbar.open("Error in removing profile image : " + err,null,{duration:5000});
+                  })
+              }
+              else
+              {
+                this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+              }
+
+          }
+        )
+      }
+    }
+  }
+
+  remove_profile_cover()
+  {
+    var res = confirm("Are you sure you want to remove the profile cover ?");
+    {
+      if(res == true)
+      {
+        this.subscriberService.remove_profile_cover(this.selectedUser.user_id).subscribe(
+          data=>{
+            if(!JSON.parse(JSON.stringify(data))['err'])
+              {
+                this.subscriberService.get_subscriber_by_id(this.selectedUser.user_id).subscribe(
+                  data=>{
+                    if(!JSON.parse(JSON.stringify(data))['err'])
+                    {
+                      this.selectedUser = data as User;
+                    }
+                    else
+                    {
+                      this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+                    }
+                  },
+                  err=>{
+                    this._snackbar.open("Error in removing profile cover : " + err,null,{duration:5000});
                   })
               }
               else
