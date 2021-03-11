@@ -440,8 +440,12 @@ export class ProfileViewComponent implements OnInit {
 
     isRoleExpired(role) : boolean
     {
-      let currentDate = new Date()
-      if(currentDate > new Date(role.valid_upto.split('T')[0]))
+      let currentDate = new Date().toDateString();
+      if(role.valid_upto == '' || role.valid_upto == null)
+      {
+        return false;
+      }
+      if(new Date(currentDate.split('T')[0]) > new Date(role.valid_upto.split('T')[0]))
       {
         return true;
       }
