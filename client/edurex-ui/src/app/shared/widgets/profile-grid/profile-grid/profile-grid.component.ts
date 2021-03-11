@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'src/app/modules/library/modules/subscriber-management/models/subscriber';
 import { config } from 'src/conf';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormBuilder } from '@angular/forms';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
 import { FileValidator } from 'ngx-material-file-input';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -39,13 +39,16 @@ export class ProfileGridComponent implements OnInit {
 
   imgUrl = config.host + "avatar/";
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,
-    public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router) { }
+    public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router,
+    private formBuilder : FormBuilder) { }
 
   ngOnInit(): void {
 
+    this.getConfigParams();
+
   }
 
-  logo = new FormControl();
+  //logo = new FormControl();
   configParams;
   thumbnailprogress = 0;
   url =  "assets/images/user.png" ;
@@ -56,7 +59,14 @@ export class ProfileGridComponent implements OnInit {
     const dialogRef = this.dialog.open(content);
   }
 
-  
+  updateLogoForm = this.formBuilder.group({
+    logo : ['']
+  })
+
+  get logo()
+  {
+    return this.updateLogoForm.get('logo');
+  }
  
   imageFile : any
   onSelectThumbnail(event)
@@ -81,7 +91,7 @@ export class ProfileGridComponent implements OnInit {
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
-          this.logo.setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
+          this.updateLogoForm.get('logo').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
         }
         else
         {

@@ -148,7 +148,7 @@ Loading ..
                   </mat-expansion-panel-header>
                   <p *ngFor = "let role of isSysAdmin()">
                       <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b><h3>{{role.role|roleTranslate}}</h3></b></span>
-                      <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto.split('T')[0]}}</b></span>
+                      <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                       <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                       <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
                   </p>
@@ -161,7 +161,7 @@ Loading ..
                         <b>Role Access</b><br>
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role|roleTranslate}}</b></span>
-                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto.split('T')[0]}}</b></span>
+                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                         <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                         <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
                       </p>
@@ -407,7 +407,7 @@ Loading ..
                   </mat-expansion-panel-header>
                   <p *ngFor = "let role of isSysAdmin()">
                       <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b><h3>{{role.role|roleTranslate}}</h3></b></span>
-                      <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto.split('T')[0]}}</b></span>
+                      <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                       <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                       <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
                   </p>                  <mat-accordion multi>
@@ -420,7 +420,7 @@ Loading ..
                         <b>Role Access</b><br>
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role | roleTranslate}}</b></span>
-                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto.split('T')[0]}}</b></span>
+                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                         <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                         <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
                       </p>
