@@ -10,8 +10,11 @@
   <!--img mat-card-image *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
      src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
      height="350"  style="border-radius : 50%; padding-left : 5%; padding-right : 5%;"-->
-     <button *ngIf="mode == 'large'" mat-mini-fab style="margin: 5px;opacity: 0.8;"><mat-icon>camera_alt</mat-icon></button>
-     <img *ngIf="mode == 'large'" src="/assets/images/default-cover.jpg" style="width : 100%; height : 200px;z-index: 3;margin-top : -50px">
+     <button *ngIf="mode == 'large' && selectedUser.cover" mat-mini-fab style="margin: 5px;opacity: 0.8;"
+     (click)="open(editProfileCover)"><mat-icon>camera_alt</mat-icon></button>
+     <button *ngIf="mode == 'large' && !selectedUser.cover" mat-mini-fab style="margin: 5px;opacity: 0.8;"
+     (click)="open(editProfileCover)"><mat-icon>add_a_photo</mat-icon></button>
+     <img *ngIf="mode == 'large'" src="{{selectedUser.cover ? coverUrl + selectedUser.cover : '/assets/images/default-cover.jpg'}}" style="width : 100%; height : 200px;z-index: 3;margin-top : -50px">
      <img *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
      src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
      height="200" width="200"  style="border-radius : 50%; border : solid white;
@@ -64,6 +67,41 @@
       <div mat-dialog-actions>
         <button mat-raised-button color="primary" mat-dialog-close (click)="save_profile_image()" type="submit" [disabled]="logo.status === 'INVALID'">Save</button>
         <button *ngIf="selectedUser.avatar" mat-raised-button color="accent" mat-dialog-close (click)="remove_profile_image()" type="submit">
+          <mat-icon>person_remove</mat-icon>Remove Image</button>
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+      </div>
+      
+  </ng-template>
+
+  <ng-template #editProfileCover> 
+      <h1 mat-dialog-title>Edit Profile Cover</h1>
+      <div mat-dialog-content>
+        <form [formGroup]="updateLogoForm">
+                  <mat-form-field class="form-group" style=" width: 90%; display: inline-block; margin-right: 100px;"  appearance="outline">
+                          <mat-label>Profile Cover</mat-label>
+                          <ngx-mat-file-input #removableInput formControlName="cover" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                          (change)="onSelectCover($event)" required ></ngx-mat-file-input>
+                          <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+                            <mat-icon>clear</mat-icon>
+                          </button>
+                          <mat-hint>Images in .jpg, .jpeg  or .png only allowed </mat-hint>
+                          <mat-error *ngIf="logo.hasError('required')">
+                            Please select a file
+                          </mat-error>
+                          <mat-error *ngIf="logo.hasError('maxContentSize')">
+                            The total size must not exceed {{configParams.avatar_size}} MB).
+                          </mat-error>
+                        </mat-form-field>
+        </form>
+                  <img style="height: 200px; width: 150px; margin-left : 10px;"  mat-card-image src="{{coverurl}}" alt="Profile Image"><br>
+                                  <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                  <mat-progress-bar mode="determinate" value="{{thumbnailprogress}}"></mat-progress-bar>
+          
+      
+      </div>
+      <div mat-dialog-actions>
+        <button mat-raised-button color="primary" mat-dialog-close (click)="save_profile_cover()" type="submit" [disabled]="logo.status === 'INVALID'">Save</button>
+        <button *ngIf="selectedUser.cover" mat-raised-button color="accent" mat-dialog-close (click)="remove_profile_cover()" type="submit">
           <mat-icon>person_remove</mat-icon>Remove Image</button>
         <button mat-raised-button color="warn" mat-dialog-close>Close</button>
       </div>

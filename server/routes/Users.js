@@ -572,6 +572,61 @@ users.put('/edit/logo/:id',(req,res,next)=>{
                 )
 })
 
+//Edit User profile picture
+users.put('/edit/cover/:id',(req,res,next)=>{
+
+    var stored_name="";
+    let Cover = null;
+    if(req.files)
+    {
+        Cover = req.files['cover'];
+        
+    }
+    
+
+                    User.findOne({user_id : req.params.id}).then ( result => {
+                        if(result)
+                        {
+                            if(Cover)
+                            {
+                                var name = Cover.name.split(".");
+                                stored_name=result.name+"-"+Date.now()+"."+ name[name.length-1];
+                                    Cover.mv("./uploads/user/cover/"+stored_name, 
+                                    (err)=>{
+                                        if(err)
+                                        {
+                                            res.json({"err" : "Error in uploading user profile cover. Image size is exceeding the limit"})
+                                        }
+                                        })
+                                         if(result.cover != null)
+                                         {
+                                            fs.unlinkSync("./uploads/user/cover/"+result.cover);
+                                         }
+                                       
+                                    
+                                       User.findOneAndUpdate({user_id : req.params.id},
+                                            {$set : {cover : stored_name}})
+                                            .then(data=>{
+                                                res.json({"msg" : "Profile Picture Cover has been updated successfully!"});
+                                            }).catch(err=>{
+                                                res.json({"err" : "Error in setting the profile cover path"});
+                                            })
+                                        }                  
+
+                        }
+                        else
+                        {
+                            res.json({"err" : "No Such User Exists wit id : " + req.params.id});
+                        }
+
+                }).catch(
+                    err=>{
+                        res.json({"err" : "No Such User Exists wit id : " + req.params.id + err});
+                    }
+                )
+})
+
+
 //update basic info of users
 users.put('/update/:id', (req,res,next)=>{
     User.findOneAndUpdate({user_id : req.params.id},
@@ -617,6 +672,35 @@ users.delete('/remove/logo/:id',(req,res,next)=>{
                         res.json({"err" : "No Such User Exists wit id : " + req.params.id + err});
                     }
                 )
+})
+
+//Remove User profile picture
+users.delete('/remove/cover/:id',(req,res,next)=>{
+
+    User.findOne({user_id : req.params.id}).then ( result => {
+        if(result)
+        {
+            
+            if(result.cover != null)
+            {
+                fs.unlinkSync("./uploads/user/cover/"+result.cover);
+            } 
+            
+                    
+            User.findOneAndUpdate({user_id : req.params.id},
+            {$set : {cover : null}})
+            .then(data=>{
+            res.json({"msg" : "Profile Cover has been removed successfully!"});
+            }).catch(err=>{
+            res.json({"err" : "Error in removing the profile image path"});
+            })
+            }                  
+
+}).catch(
+    err=>{
+        res.json({"err" : "No Such User Exists wit id : " + req.params.id + err});
+    }
+)
 })
 
 
@@ -672,7 +756,7 @@ users.delete('/delete/:id', (req,res,next)=>
             if(data)
             {
               
-            //   fs.unlinkSync('./uploads/user/avatar/'+data.avatar)
+            //  fs.unlinkSync('./uploads/user/avatar/'+data.avatar)
                
 
                User.findOneAndUpdate({user_id : req.params.id},
@@ -705,9 +789,9 @@ users.put("/bulkactions/delete/:n",(req,res,next)=>
         user_id : { $in : id}
      }).then(
          data=>{
-             data.forEach(value =>
+            /* data.forEach(value =>
                 fs.unlinkSync('./uploads/user/avatar/'+value.avatar)
-                )
+                )*/
          }
      )
    

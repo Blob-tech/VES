@@ -101,6 +101,7 @@ export class SubscriberListComponent implements OnInit {
     address : '',
     password : '',
     avatar : '',
+    cover : '',
     date_of_registration : new Date(),
     active : true,
     isActivated : true,

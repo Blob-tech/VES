@@ -40,6 +40,10 @@ const userSchema = new schema(
        {
            type : String,
        },
+       cover : 
+       {
+           type : String,
+       },
        date_of_registration :
        {
            type : Date,

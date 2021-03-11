@@ -1,14 +1,95 @@
-<mat-grid-list cols="3" rowHeight="100px">
-        <mat-grid-tile style="background-color: honeydew;"
-        [colspan] = 2
+<div class="desktop-view">
+<mat-grid-list cols="7" rowHeight="110px">
+        <mat-grid-tile 
+        [colspan] = 4
         [rowspan] =6 >
-        <img src="./../login/login.jpg">
+        <img height=100%  width=100% style="margin-top: 100px;" src="/assets/images/login.jpg">
   
     </mat-grid-tile>
             
         <mat-grid-tile
-        [colspan] = 1
+        [colspan] = 3
         [rowspan] = 6
-        ></mat-grid-tile>
-      </mat-grid-list>
+        >
+        <div class="login">
+            <form class="login-form">
+              <mat-form-field class="form-group" appearance="outline">
+                <mat-label > Username</mat-label>
+                <mat-icon matPrefix style="color : grey">account_circle</mat-icon>
+                <input matInput placeholder="Please Enter your registered email or phone number">
+              </mat-form-field>
+              <mat-form-field class="form-group" appearance="outline">
+                  <mat-label > Password</mat-label>
+                  <mat-icon matPrefix style="color : grey">lock</mat-icon>
+                  <input type="password" matInput placeholder="Enter your Password here">
+                  <mat-hint><p><a href="#">Forgotten Password</a></p></mat-hint>
+                </mat-form-field>
+                <button mat-raised-button color="primary" style="width : 100%; font-size: 15px;">Login</button>
+            </form>
+            <p>Don't have an account ? <a href="#">Sign up</a></p>
+            <hr>
+            <h3 style="color : gray">Or continue with</h3>
+            <button matTooltip="GOOGLE" mat-fab style="background-color:#DB4437 ;">
+              <i class="fa fa-google" aria-hidden="true" style="font-size : 30px;color:white"></i></button>
+            <button matTooltip="LINKEDIN" style="background-color:#0e76a8 ;" mat-fab>
+                <i class="fa fa-linkedin" aria-hidden="true" style="font-size : 30px;color:white"></i>
+            </button>
+            <button matTooltip="APPLE" mat-fab style="background-color: black ;">
+                <i class="fa fa-apple" aria-hidden="true" style="font-size : 30px;color:white"></i>
+            </button>
+            
+
+        </div>
       
+      </mat-grid-tile>
+        
+      </mat-grid-list>
+</div>
+<div class="mobile-view">
+      <mat-grid-list cols="1" rowHeight="50px">
+          <mat-grid-tile 
+          [colspan] = 1
+          [rowspan] =5 >
+          <img height=200  width=200 style="margin-top: 100px;" src="/assets/images/login.jpg">
+    
+      </mat-grid-tile>
+              
+          <mat-grid-tile
+          [colspan] = 1
+          [rowspan] = 11
+          >
+          <div class="login">
+              <form class="login-form"> 
+                <mat-form-field class="form-group" appearance="outline">
+                  <mat-label > Username</mat-label>
+                  <mat-icon matPrefix style="color : grey">account_circle</mat-icon>
+                  <input matInput placeholder="Please Enter your registered email or phone number">
+                </mat-form-field>
+                <mat-form-field class="form-group" appearance="outline">
+                    <mat-label > Password</mat-label>
+                    <mat-icon matPrefix style="color : grey">lock</mat-icon>
+                    <input type="password" matInput placeholder="Enter your Password here">
+                    <mat-hint><p><a href="#">Forgotten Password</a></p></mat-hint>
+                  </mat-form-field>
+                  <button mat-raised-button color="primary" style="width : 100%; font-size: 15px;">Login</button>
+              </form>
+              <p>Don't have an account ? <a href="#">Sign up</a></p>
+              <hr>
+              <h3 style="color : gray">Or continue with</h3>
+              <button matTooltip="GOOGLE" mat-fab style="background-color:#DB4437 ;">
+                <i class="fa fa-google" aria-hidden="true" style="font-size : 30px;color:white"></i></button>
+              <button matTooltip="LINKEDIN" style="background-color:#0e76a8 ;" mat-fab>
+                  <i class="fa fa-linkedin" aria-hidden="true" style="font-size : 30px;color:white"></i>
+              </button>
+              <button matTooltip="APPLE" mat-fab style="background-color: black ;">
+                  <i class="fa fa-apple" aria-hidden="true" style="font-size : 30px;color:white"></i>
+              </button>
+              
+  
+          </div>
+        
+        </mat-grid-tile>
+          
+        </mat-grid-list>
+        
+   </div>   
