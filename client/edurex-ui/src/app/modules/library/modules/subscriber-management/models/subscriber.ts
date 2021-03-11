@@ -8,6 +8,7 @@ export class User
     address : string;
     password : string;
     avatar : string;
+    cover : string;
     date_of_registration : Date;
     active : boolean;
     isActivated : boolean;

@@ -51,6 +51,7 @@ app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')
 app.use('/system',express.static(path.join(__dirname,'uploads/system/')));
 app.use('/organisation_logo',express.static(path.join(__dirname,'uploads/organisation/logo/')));
 app.use('/avatar',express.static(path.join(__dirname,'uploads/user/avatar')));
+app.use('/cover',express.static(path.join(__dirname,'uploads/user/cover')));
 app.use('/counters',Counters)
 app.use('/library/category',LibraryCategory);
 app.use('/library/books',Book);
