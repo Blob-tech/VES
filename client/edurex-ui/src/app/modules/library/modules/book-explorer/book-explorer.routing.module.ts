@@ -5,16 +5,18 @@ import { CreateNewBooksComponent } from './components/create-new-books/create-ne
 import { DisplayBookComponent } from './components/display-book/display-book.component';
 import { ViewBookComponent } from './components/view-book/view-book.component';
 import { EditBookComponent } from './components/edit-book/edit-book.component';
+import { NotFoundComponent } from 'src/app/components/not-found/not-found.component';
+import { AuthGuradService } from 'src/app/shared/guard/auth-guard';
 
 
 const routes = [
-    {path : 'book-explorer', component : BookExplorerComponent ,
+    {path : '', component : BookExplorerComponent , canActivate : [AuthGuradService],
     children : [
-      {path : 'create-new',component : CreateNewBooksComponent},
-      {path : 'list/:category/:subcategory', component : DisplayBookComponent},
-      {path : 'view/:id', component : ViewBookComponent},
-      {path : 'edit/:id',component : EditBookComponent},
-   
+      {path : 'create-new',component : CreateNewBooksComponent, },
+      {path : 'list/:category/:subcategory', component : DisplayBookComponent, },
+      {path : 'view/:id', component : ViewBookComponent, },
+      {path : 'edit/:id',component : EditBookComponent, },
+      {path : '**', redirectTo : '/404'},
     ]}
 ]
 

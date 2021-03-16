@@ -56,6 +56,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
+import { ProfileGuradService } from './profile-guard';
 
 
 
@@ -92,6 +93,7 @@ import {CdkTreeModule} from '@angular/cdk/tree';
     MatDividerModule,
     MatDialogModule,
     MatGridListModule,
+    MatCheckboxModule,
     MatMenuModule,
     MatChipsModule,
     MatCheckboxModule,
@@ -123,7 +125,7 @@ import {CdkTreeModule} from '@angular/cdk/tree';
 
   ],
   exports : [MatSidenavModule],
-  providers : [BookExplorerComponent],
+  providers : [BookExplorerComponent,ProfileGuradService],
   bootstrap : [ProfileViewComponent]
 })
 export class ProfileModule { }

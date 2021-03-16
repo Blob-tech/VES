@@ -21,7 +21,9 @@ search.get('/advance-search/:keyword/:limit',(req,res,next)=>{
                 {subcategory : new RegExp(searchkey,'i')},
                 {publisher : new RegExp(searchkey,'i')},
                 {book_id : new RegExp(searchkey,'i')},
-                {language : new RegExp(searchkey,'i') }
+                {language : new RegExp(searchkey,'i') },
+                {institute_client_id : new RegExp(searchkey,'i')},
+                {institute_name : new RegExp(searchkey,'i')}
             ]}
     ] }).sort({book_name : 1}).limit(Number(req.params.limit)).then(
         data=> {
@@ -44,7 +46,8 @@ search.get('/advance-search/:keyword/:limit',(req,res,next)=>{
                         {$or : [{name : new RegExp(searchkey,'i')},
                             {email : new RegExp(searchkey,'i')},
                             {phone : new RegExp(searchkey,'i')},
-                            {user_id : new RegExp(searchkey,'i')}
+                            {user_id : new RegExp(searchkey,'i')},
+                            {address : new RegExp(searchkey,'i')},
                         ]}
                     ]}).sort({name : 1}).limit(Number(req.params.limit)).then(
                         data=> {

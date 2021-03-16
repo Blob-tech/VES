@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavbarService } from './navbar.service';
@@ -8,6 +8,10 @@ import { Route } from '@angular/compiler/src/core';
 import { Router } from '@angular/router';
 import { config } from "src/conf";
 import { threadId } from 'worker_threads';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
+import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
+import { RoleAccessService } from 'src/app/shared/services/role-access.service';
+import { duration } from 'moment';
 
 
 
@@ -17,11 +21,13 @@ import { threadId } from 'worker_threads';
   styleUrls: ['./navbar.component.css'],
   providers :[NgbModalConfig,NgbModal],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, DoCheck {
   
-  themeList :String[] = ["indigo-pink","pink-bluegrey","teal-cyan","yellow-brown","deeppurple-amber","lime-blue","light-green-grey"]
+  themeList :String[] = ["indigo-pink","pink-bluegrey","teal-cyan","yellow-brown","deeppurple-amber","lime-blue","light-green-grey","red-white"]
   constructor(config: NgbModalConfig, private modalService: NgbModal,private formBuilder : FormBuilder,
-    private navbarService : NavbarService, private _snackbar : MatSnackBar,private route : Router) {
+    private navbarService : NavbarService, private _snackbar : MatSnackBar,private route : Router,
+    private localStorageService : LocalStorageService ,private subscriberService : SubscriberService,
+    private roleAccessService : RoleAccessService) {
     config.backdrop = 'static';
     config.keyboard = false;
 
@@ -31,16 +37,46 @@ export class NavbarComponent implements OnInit {
    brand;
    dark_mode;
    imgUrl:String;
+   profileUrl : String;
    url = "assets/images/doc.png";
    thumbnailprogress:Number = 0;
+   loggedinUser=null;
+   loggedinUsername;
+   loggedinAvatar;
+   profileViewUrl='/';
+   roles;
   ngOnInit(): void {
 
     this.getCounterList();
     this.getSystemBranding();
-    this.dark_mode = localStorage.getItem("dark-mode") == "true" ? true : false;
+    this.dark_mode = this.localStorageService.getter("dark-mode") == "true" ? true : false;
     this.imgUrl = config.host + "system/icon.png";
+    this.profileUrl = config.host + "avatar/";
+    if(this.localStorageService.getter('user') != null)
+    {
+    this.subscriberService.get_subscriber_by_id(this.localStorageService.getter('user').user_id).subscribe(
+      data=>{
+        this.loggedinUser = data;
+        this.loggedinUsername = data['name'];
+        this.loggedinAvatar = data['avatar'];
+        this.localStorageService.setter('username',this.loggedinUsername);
+        this.localStorageService.setter('avatar',this.loggedinAvatar);
+        this.profileViewUrl = '/profile/self/' + this.loggedinUser.user_id;
+      }
+    )
+    }
+    
     
   }
+
+  ngDoCheck()
+  {
+    this.loggedinUser = this.localStorageService.getter('user');
+    this.loggedinUsername = this.localStorageService.getter('username');
+    this.loggedinAvatar = this.localStorageService.getter('avatar');
+  }
+
+ 
   counterForm = this.formBuilder.group( { 
  
     library : ['',Validators.required],
@@ -140,13 +176,49 @@ export class NavbarComponent implements OnInit {
 
   changeTheme(theme : String)
   {
-    this.setTheme.next(theme);
+    
+    this.subscriberService.set_theme(theme,this.dark_mode,this.loggedinUser.user_id).subscribe(
+      data=>{
+        if(!JSON.parse(JSON.stringify(data))['err'])
+        {
+          this.setTheme.next(theme);
+          this.localStorageService.setter('theme',theme);
+        }
+        else
+        {
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+        }
+
+      },
+      err=>{
+        this._snackbar.open("Error in setting theme !",null,{duration : 5000});
+      }
+    )
+    
   }
 
 
   toggleDarkMode()
   {
-      this.toggleDarkness.emit();
+      
+      this.subscriberService.set_theme(this.localStorageService.getter('theme'),!this.dark_mode,this.loggedinUser.user_id).subscribe(
+        data=>{
+          if(!JSON.parse(JSON.stringify(data))['err'])
+          {
+            this.toggleDarkness.emit();
+            this.localStorageService.setter('dark_mode',this.dark_mode);
+            this.dark_mode = this.localStorageService.getter("dark-mode") == "true" ? true : false;
+          }
+          else
+          {
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          }
+  
+        },
+        err=>{
+          this._snackbar.open("Error in setting theme !",null,{duration : 5000});
+        }
+      )
   }
 
   open(content)
@@ -174,6 +246,14 @@ export class NavbarComponent implements OnInit {
         this._snackbar.open("Error in loading counter", null, {duration : 5000});
       }
     )
+  }
+
+  logout()
+  {
+    localStorage.clear();
+    this.route.navigateByUrl('/login').then(()=>{
+      window.location.reload();
+    });
   }
 
   getSystemBranding()

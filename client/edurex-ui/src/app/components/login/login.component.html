@@ -12,21 +12,29 @@
         [rowspan] = 6
         >
         <div class="login">
-            <form class="login-form">
-              <mat-form-field class="form-group" appearance="outline">
+            <form [formGroup]="loginForm" class="login-form">
+                <div class="alert alert-danger alert-dismissible fade-in" style="width : 100%; text-align : center;"
+                [hidden]="inValidLoginMessage ? false : true">
+                   <strong>{{inValidLoginMessage}}</strong>
+                </div>
+              <mat-form-field   class="form-group"  appearance="outline">
                 <mat-label > Username</mat-label>
                 <mat-icon matPrefix style="color : grey">account_circle</mat-icon>
-                <input matInput placeholder="Please Enter your registered email or phone number">
+                <input matInput required formControlName="username" placeholder="Please Enter your registered email or phone number">
+                <mat-error *ngIf="username.hasError('required')"> Username is required</mat-error>
               </mat-form-field>
-              <mat-form-field class="form-group" appearance="outline">
+              <mat-form-field  class="form-group" appearance="outline">
                   <mat-label > Password</mat-label>
                   <mat-icon matPrefix style="color : grey">lock</mat-icon>
-                  <input type="password" matInput placeholder="Enter your Password here">
-                  <mat-hint><p><a href="#">Forgotten Password</a></p></mat-hint>
+                  <input formControlName="pass" type="password" required  matInput placeholder="Enter your Password here">
+                  <mat-icon style="color : gray" *ngIf="capslockOn" matSuffix matTooltip="CapsLock is on ! Password is case sensetive">keyboard_caps</mat-icon>
+                  <mat-hint><p><a href="#">Forgot Password ?</a></p></mat-hint>
+                  <mat-error *ngIf="pass.hasError('required')">Password is required</mat-error>
                 </mat-form-field>
-                <button mat-raised-button color="primary" style="width : 100%; font-size: 15px;">Login</button>
+                <button [disabled]="loginForm.status == 'INVALID'" (click)="login()" mat-raised-button color="primary" style="width : 100%; font-size: 15px; border-radius: 30px;">
+                  <mat-icon>login</mat-icon> Login</button>
             </form>
-            <p>Don't have an account ? <a href="#">Sign up</a></p>
+            <p>Don't have an account ? <a href="/register">Sign up</a></p>
             <hr>
             <h3 style="color : gray">Or continue with</h3>
             <button matTooltip="GOOGLE" mat-fab style="background-color:#DB4437 ;">
@@ -59,34 +67,42 @@
           [rowspan] = 11
           >
           <div class="login">
-              <form class="login-form"> 
-                <mat-form-field class="form-group" appearance="outline">
-                  <mat-label > Username</mat-label>
-                  <mat-icon matPrefix style="color : grey">account_circle</mat-icon>
-                  <input matInput placeholder="Please Enter your registered email or phone number">
+            <form [formGroup]="loginForm" class="login-form">
+                <div class="alert alert-danger alert-dismissible fade-in" style="width : 100%; text-align : center;"
+                [hidden]="inValidLoginMessage ? false : true">
+                   <strong>{{inValidLoginMessage}}</strong>
+                </div>
+              <mat-form-field   class="form-group"  appearance="outline">
+                <mat-label > Username</mat-label>
+                <mat-icon matPrefix style="color : grey">account_circle</mat-icon>
+                <input matInput required formControlName="username" placeholder="Please Enter your registered email or phone number">
+                <mat-error *ngIf="username.hasError('required')"> Username is required</mat-error>
+              </mat-form-field>
+              <mat-form-field  class="form-group" appearance="outline">
+                  <mat-label > Password</mat-label>
+                  <mat-icon matPrefix style="color : grey">lock</mat-icon>
+                  <input formControlName="pass" type="password" required  matInput placeholder="Enter your Password here">
+                  <mat-icon style="color :orange" *ngIf="capslockOn" matSuffix matTooltip="CapsLock is on ! Password is case sensetive">keyboard_caps</mat-icon>
+                  <mat-hint><p><a href="#">Forgot Password ?</a></p></mat-hint>
+                  <mat-error *ngIf="pass.hasError('required')">Password is required</mat-error>
                 </mat-form-field>
-                <mat-form-field class="form-group" appearance="outline">
-                    <mat-label > Password</mat-label>
-                    <mat-icon matPrefix style="color : grey">lock</mat-icon>
-                    <input type="password" matInput placeholder="Enter your Password here">
-                    <mat-hint><p><a href="#">Forgotten Password</a></p></mat-hint>
-                  </mat-form-field>
-                  <button mat-raised-button color="primary" style="width : 100%; font-size: 15px;">Login</button>
-              </form>
-              <p>Don't have an account ? <a href="#">Sign up</a></p>
-              <hr>
-              <h3 style="color : gray">Or continue with</h3>
-              <button matTooltip="GOOGLE" mat-fab style="background-color:#DB4437 ;">
-                <i class="fa fa-google" aria-hidden="true" style="font-size : 30px;color:white"></i></button>
-              <button matTooltip="LINKEDIN" style="background-color:#0e76a8 ;" mat-fab>
-                  <i class="fa fa-linkedin" aria-hidden="true" style="font-size : 30px;color:white"></i>
-              </button>
-              <button matTooltip="APPLE" mat-fab style="background-color: black ;">
-                  <i class="fa fa-apple" aria-hidden="true" style="font-size : 30px;color:white"></i>
-              </button>
-              
-  
-          </div>
+                <button [disabled]="loginForm.status == 'INVALID'" (click)="login()" mat-raised-button color="primary" style="width : 100%; font-size: 15px; border-radius: 30px;">
+                  <mat-icon>login</mat-icon> Login</button>
+            </form>
+            <p>Don't have an account ? <a href="/register">Sign up</a></p>
+            <hr>
+            <h3 style="color : gray">Or continue with</h3>
+            <button matTooltip="GOOGLE" mat-fab style="background-color:#DB4437 ;">
+              <i class="fa fa-google" aria-hidden="true" style="font-size : 30px;color:white"></i></button>
+            <button matTooltip="LINKEDIN" style="background-color:#0e76a8 ;" mat-fab>
+                <i class="fa fa-linkedin" aria-hidden="true" style="font-size : 30px;color:white"></i>
+            </button>
+            <button matTooltip="APPLE" mat-fab style="background-color: black ;">
+                <i class="fa fa-apple" aria-hidden="true" style="font-size : 30px;color:white"></i>
+            </button>
+            
+
+        </div>
         
         </mat-grid-tile>
           

@@ -2,7 +2,7 @@
     "development" : {
         "PORT" : 3000,
         "HOST" : "http://localhost:3000/",
-        "MONGODB_URI" : "mongodb+srv://admin:Blobtech@123@ves1.qq3kv.mongodb.net/edurexdb?retryWrites=true&w=majority"
+        "MONGODB_URI" : "mongodb+srv://admin:Blobtech123@ves1.qq3kv.mongodb.net/edurexdb?retryWrites=true&w=majority"
     },
     "production" : {
         "PORT" : 8080,

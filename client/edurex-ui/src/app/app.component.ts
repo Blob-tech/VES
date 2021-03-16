@@ -16,17 +16,21 @@ export class AppComponent {
   @HostBinding('class') activeThemeCssClass: string
   isThemeDark = false
   activeTheme: string
+  defaultTheme = 'teal-cyan';
   
   constructor(private overlayContainer: OverlayContainer,private localStorageService : LocalStorageService) {
     // Set default theme here:
-    
+    if(this.localStorageService.getter('theme') != null)
+    {
+      this.defaultTheme = this.localStorageService.getter('theme');
+    }
     if(this.localStorageService.getter('dark-mode') != null)
     {
-      this.setActiveTheme('light-green-grey', /* darkness: */ JSON.stringify(this.localStorageService.getter('dark-mode')) == "true" ? true : false);
+      this.setActiveTheme(this.defaultTheme, /* darkness: */ JSON.stringify(this.localStorageService.getter('dark-mode')) == "true" ? true : false);
     }
     else
     {
-      this.setActiveTheme('light-green-grey', /* darkness: */ false);
+      this.setActiveTheme(this.defaultTheme, /* darkness: */ false);
     }
   }
   

@@ -1,5 +1,10 @@
 
-<div>
-<img src = "./../../../../../assets/images/library.jpg" height=600  style="margin-top : 100px; width : 100%">
+<div style="text-align: center;">
+        <img  *ngIf="ins.client_id == 'Admin'"src="/assets/images/admin.jpg" style="margin-top : 150px" height=200 width=200> 
+<img  *ngIf="ins.client_id != 'Admin'"src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}" style="margin-top : 150px" height=200 width=200><br><br>
+         <span class="ins_name" style="color : grey ;">  {{ins.organisation_name ? ins.organisation_name : ''}} </span><br><br>
+         <button routerLink="/e-library/book-explorer/list/all/all" color="primary" mat-raised-button styel="font-size : 20px; height : 100px">
+             Go to Library <mat-icon>arrow_right_alt</mat-icon></button>
 </div>
+
   

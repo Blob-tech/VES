@@ -34,6 +34,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatVideoModule } from 'mat-video';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import {MatStepperModule} from '@angular/material/stepper';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -41,6 +42,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ProfileRoutingModule } from './modules/profile/profile-routing.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { SharedModule } from './shared/shared.module';
+import { RegisterComponent } from './components/register/register.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 @NgModule({
@@ -48,6 +51,8 @@ import { SharedModule } from './shared/shared.module';
     AppComponent,
     NavbarComponent,
     LoginComponent,
+    RegisterComponent,
+    NotFoundComponent,
     
     
   ],
@@ -74,6 +79,7 @@ import { SharedModule } from './shared/shared.module';
     MatGridListModule,
     MatCheckboxModule,
     MatInputModule,
+    MatStepperModule,
     MatFormFieldModule,
     MatTooltipModule,
     MatButtonModule,

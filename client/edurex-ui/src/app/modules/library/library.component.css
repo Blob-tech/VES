@@ -1,7 +1,18 @@
+mat-progress-spinner
+{
+    position:fixed;
+    top:50%;
+    left:50%;
+}
 mat-drawer-container
 {
     height: 100%;
 }
+
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
 
 mat-form-field mat-error
 {

@@ -79,6 +79,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatDividerModule,
     MatDialogModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
     MatMenuModule,
     MatCheckboxModule,
     MatPaginatorModule,

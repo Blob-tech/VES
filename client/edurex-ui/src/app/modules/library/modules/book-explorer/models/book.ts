@@ -4,6 +4,10 @@ export class Book
     book_id : string;
     book_name : string;
     author : string;
+    institute_id : string;
+    institute_client_id : string;
+    institute_name : string;
+    institute_avatar : string;
     description : string;
     category : string;
     subcategory: string;

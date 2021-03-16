@@ -30,6 +30,10 @@ const usermetaSchema = new schema(
        settings : {
            type : Object,
            default :  {}
+       },
+       default_institute : {
+           type : String,
+           default : ''
        }
 
 

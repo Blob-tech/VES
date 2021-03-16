@@ -19,6 +19,25 @@ const bookSchema = new schema(
            type : String,
            required : true,
        },
+       institute_id : 
+       {
+           type : String,
+           reuired : true
+       },
+       institute_client_id : 
+       {
+           type : String,
+           required : true
+       },
+       institute_name :
+       {
+           type : String,
+           required : true
+       },
+       institute_avatar : {
+           type : String,
+           required : true
+       },
        description :
        {
             type : String,

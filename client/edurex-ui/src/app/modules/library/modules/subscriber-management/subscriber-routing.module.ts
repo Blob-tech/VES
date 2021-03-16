@@ -12,8 +12,11 @@ const routes = [
     children : [
         {path : 'register',component : RegisterSubscriberComponent},
         {path : 'categories', component : SubscribersComponent},
-        {path : 'list/:cat', component : SubscriberListComponent}]
- }
+        {path : 'list/:cat', component : SubscriberListComponent},
+        {path : '**', redirectTo : '/404'}
+      ]
+ },
+ {path : '**', redirectTo : '/404'}
     
 ]
 

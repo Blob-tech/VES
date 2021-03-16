@@ -11,10 +11,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 
-@media screen and (max-width : 1100px)
-{
+
   mat-hint
   {
     font-size: 10px;
   }
-}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
