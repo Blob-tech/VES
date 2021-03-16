@@ -48,6 +48,9 @@ import { SocialLinksComponent } from './widgets/social-links/social-links.compon
 import { MatChipsModule } from '@angular/material/chips';
 import { RoleTranslatePipe } from './pipes/role-translate.pipe';
 import { SearchGridComponent } from './widgets/search/search-grid/search-grid.component';
+import { SecureStorageService } from './services/secure-storage.service';
+import { LocalService } from './services/local-storage';
+import { AuthGuradService } from './guard/auth-guard';
 
 
 
@@ -100,7 +103,7 @@ import { SearchGridComponent } from './widgets/search/search-grid/search-grid.co
   ],
   exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent,
     SearchGridComponent, RoleTranslatePipe],
-  providers : [MatDatepickerModule],
+  providers : [MatDatepickerModule,SecureStorageService,LocalService, AuthGuradService],
   bootstrap: [ProfileGridComponent,ManageAccessComponent]
 })
 

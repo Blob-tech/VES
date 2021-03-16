@@ -1,5 +1,4 @@
-<img src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
-
+<img class="thumbnail" src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
 <div class="container content">
       
     <mat-grid-list cols="2" rowHeight="100px">
@@ -17,6 +16,9 @@
                 <h4><p><strong>Author : </strong>{{book.author}}</p></h4>
                 <h5>
                     <p><strong>Book Id : </strong> {{book.book_id}}</p>
+                    <p><strong>Institute : </strong> {{book.institute_name}}
+                    <img  style="border-radius: 50; height: 40px; width : 40px"
+                    src="{{book.institute_avatar ? logoUrl + book.institute_avatar : '/assets/images/insimg.png'}}"></p>
                     <p><strong>Published : </strong>{{book.date_of_published.substring(0,10)}} | {{book.publisher}}</p>
                     <p><strong>Genre : </strong>{{book.category}} | {{ book.subcategory ? book.subcategory : ''}}</p>
                     <p *ngIf="book.language != null"><strong>Language : </strong>{{book.language}}</p>

@@ -13,6 +13,11 @@ $themes-map: (
     accent-base: $mat-amber,
   ),
 
+  red-white : (
+    primary-base : $mat-red,
+    accent-base :$mat-gray,
+  ),
+
   pink-bluegrey: (
     primary-base: $mat-pink,
     accent-base: $mat-blue-gray,
@@ -26,7 +31,7 @@ $themes-map: (
 
   teal-cyan: (
     primary-base: $mat-teal,
-    accent-base: $mat-orange,
+    accent-base: $mat-blue-gray,
   ),
 
   lime-blue : (

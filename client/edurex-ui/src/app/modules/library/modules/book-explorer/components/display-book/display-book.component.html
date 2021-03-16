@@ -53,7 +53,6 @@
 <div *ngIf="bookView == 'GRID'" class="container normal-display">
     <div class="row">
    <div class="col-sm-4 col-md-4 col-lg-4 book" *ngFor="let book of books;let i = index;">
-    
     <mat-card (click)="viewBook(book.book_id)">
         <mat-card-header style="margin : 1rem; border-radius : 2px">
             <div mat-card-avatar>
@@ -62,8 +61,9 @@
                     <p *ngIf="book.type === 'pdf'"><i class="avatar fas fa-file-pdf" style="color : red"></i></p>
                     <p *ngIf="book.type === 'mp4' || book.type ==='mp3' || book.type === 'avi'"><i class="avatar fas fa-file-video" style="color : lightseagreen"></i></p>
                     <span [hidden]="isNew(book.date_of_published)" class="badge badge-pill badge-danger">New</span><br>
-                    <b style="font-size: 20px;">4.2</b>
-                    <mat-icon style="color: orange;">grade</mat-icon>
+                    <b style="font-size: 15px;">4.2</b>
+                    <mat-icon style="color: orange; font-size: 18px;">grade</mat-icon>
+                    
             </div>
             <mat-card-title >{{book.book_name}} <span *ngFor = 'let subscription of book.subscription' class="badge badge-pill badge-info">{{subscription}}</span><br>
               </mat-card-title>
@@ -71,7 +71,7 @@
            
         </mat-card-header>
         
-        <img  mat-card-image src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
+        <img  class="book-thumbnail" mat-card-image src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
         <div style="display: flex; text-align: center;">
         <mat-icon style="color: slategrey; justify-content: flex-start;">thumb_up_alt</mat-icon><span style="margin-right: 10px;">12k</span>
         <mat-icon style="color: slategrey; justify-content: center;">remove_red_eye</mat-icon><span style="margin-right: 10px;">30k</span>
@@ -82,7 +82,10 @@
               <button matTooltip="edit" routerLink= "/e-library/book-explorer/edit/{{book.book_id}}  " mat-mini-fab class="action-button" color="accent" ><i class="fas fa-edit"></i></button>
               <button matTooltip="delete" mat-mini-fab class="action-button" color="warn" (click)="deleteBooks(book.book_id)"><i class="fas fa-trash"></i></button>
           </mat-card-footer>
+          <img  matTooltip="{{book.institute_name}}"
+          class="inst-logo" src="{{book.institute_avatar ? logoUrl + book.institute_avatar : '/assets/images/insimg.png'}}">
        </mat-card>
+      
     </div>
     </div>
     </div>

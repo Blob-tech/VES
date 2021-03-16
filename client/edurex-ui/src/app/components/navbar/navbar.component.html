@@ -3,29 +3,34 @@
       <span routerLink="/" style="margin-right: 1px;"><img src="{{imgUrl}}" height="50" width="{{icon_width.value}}">
       </span>
       <span  routerLink="/" id="brand-name"><h1><strong>{{name.value}}</strong> </h1>
-      <h4 routerLink="/"><i id="tagline">{{tagline.value}}</i></h4></span>
+      <h4 routerLink="/"><i id="tagline">{{tagline.value}}</i>
+      </h4></span>
       <span class="example-spacer"></span>
                 <span  class="hamburger-menu"><button mat-mini-fab color="primary" style="opacity: 0;"></button></span>
-          <app-search-grid style="display:inline;margin-right:5px"></app-search-grid>
+          <app-search-grid [visible]="loggedinUser ? true : false" style="display:inline;margin-right:5px"></app-search-grid>
 
                 <span class="example-spacer"></span>
                 <span  class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
     
      
      <div class = "top-menu">
-      <span>         
-          <app-search-grid style="display:inline;margin-right:5px"></app-search-grid>
+      <span *ngIf="loggedinUser">         
+          <app-search-grid [visible]="loggedinUser ? true : false" style="display:inline;margin-right:5px"></app-search-grid>
         <mat-slide-toggle [(ngModel)]="dark_mode" (click)="$event.stopPropagation();toggleDarkMode()" style="margin-right: 1rem; font-size: 11px;">
         Dark Mode</mat-slide-toggle></span>
-      <span><button matTooltip ="settings" mat-mini-fab color="basic" [matMenuTriggerFor]="settings"><mat-icon class="auto-flip">settings</mat-icon> </button></span>
+      <!--span><button matTooltip ="settings" mat-mini-fab color="basic" [matMenuTriggerFor]="settings"><mat-icon class="auto-flip">settings</mat-icon> </button></span-->
 
 
       <mat-menu #settings="matMenu">
+        <button [routerLink]="[profileViewUrl]"  mat-menu-item matTooltip="Profile">
+          <mat-icon class="auto-flip">account_circle</mat-icon>Profile</button>
         <button mat-menu-item [matMenuTriggerFor]="theme"
         matTooltip="Select a theme!" > <mat-icon class="auto-flip">format_color_fill</mat-icon> Theme</button>
         <button (click)="open(counter)" mat-menu-item matTooltip="Configure Counter"><mat-icon class="auto-flip">scatter_plot</mat-icon>Counter</button>
         <button mat-menu-item 
         matTooltip="System Configuration!" (click)="open(system)"> <mat-icon class="auto-flip">build</mat-icon> System Configuration</button>
+        <button mat-menu-item (click)="logout()"
+        matTooltip="Logout"> <mat-icon class="auto-flip">logout</mat-icon> Logout</button>
       </mat-menu>
 
       <mat-menu #settings2="matMenu">
@@ -41,6 +46,7 @@
         </mat-menu>
       
       <mat-menu #theme="matMenu">
+          <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[7])"><mat-icon class="auto-flip" style="color:red">invert_colors</mat-icon>Classic</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList['0'])"><mat-icon class="auto-flip" style="color:indigo">invert_colors</mat-icon>Candy</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[1])"><mat-icon class="auto-flip" style="color:deeppink">invert_colors</mat-icon>Romance</button>
         <button mat-menu-item (click)="$event.stopPropagation();changeTheme(themeList[2])"><mat-icon class="auto-flip" style="color:teal">invert_colors</mat-icon>Wave</button>
@@ -51,8 +57,14 @@
       </mat-menu>
       
       
-
-      <span class="btn"><button mat-raised-button class="login-button" routerLink="/login">
+      <img *ngIf="loggedinUser" src="{{loggedinAvatar ? profileUrl + loggedinAvatar :'/assets/images/user.png'}}"
+      height = 40; width =40 style="border-radius: 50%; margin-left: 5px; margin-right: 5px;">
+      <button mat-button [matMenuTriggerFor]="settings"
+       style="padding: 1px; width:fit-content;margin-left: 0;" *ngIf="loggedinUser">
+        Hi {{loggedinUsername.split(' ')[0].length <= 15 ? loggedinUsername.split(' ')[0] : loggedinUsername.split(' ')[0].substr(16) + '...'}}
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <span *ngIf="!loggedinUser" class="btn"><button mat-raised-button class="login-button" routerLink="/login">
         <mat-icon class="auto-flip">account_circle</mat-icon> Login</button></span>
       </div>
       

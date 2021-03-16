@@ -16,6 +16,7 @@ export class ViewBookComponent implements OnInit {
   language;
   imgUrl = config.host + "thumbnail/";
   docSrc = config.host + "article/";
+  logoUrl = config.host + "organisation_logo/"
   bookSrc = "";
 
   ngclass = "mat-video-responsive";

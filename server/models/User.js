@@ -48,6 +48,11 @@ const userSchema = new schema(
        {
            type : Date,
        },
+       default_institute : 
+       {
+           type : String,
+           default : ''
+       },
        active : 
        {
            type : Boolean,
@@ -70,7 +75,7 @@ const userSchema = new schema(
        {
            type : String,
            required : true,
-           default : "light-green-grey"
+           default : "teal-cyan"
        },
        logged_in_form_ip :
        {

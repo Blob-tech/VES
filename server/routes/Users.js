@@ -417,6 +417,57 @@ users.get('/view/:user_id', async(req,res,next)=> {
 })
 
 
+users.post('/login',async(req,res,next)=>{
+  
+    User.find({$or : [ { email : req.body.username},
+                {phone : req.body.username}]}).then(data=>{
+        if(data[0].active == false)
+        {
+            res.status(403).send({"err" : "Inactive User"})
+        }
+        if(data[0].isActivated == false)
+        {
+            res.status(403).send({"err" : "Your account has been deactivated !"})
+        }
+        if(data[0].is_locked_out == true)
+        {
+            res.status(423).send({"err" : "Your account has been Locked ! Please contact the System Administrator"});
+        }
+        if(data.length == 0)
+        {
+            res.status(401).send({"err" : "Invalid Credentials ! Either Username or Password is invalid"})
+        }
+        else
+        {
+           let bool = bcrypt.compareSync(req.body.password,data[0].password);
+           if(bool == false)
+           {
+            res.status(401).send({"err" : "Invalid Credentials ! Either Username or Password is invalid"});
+           }
+           else
+           {
+                res.json({
+                    user_id : data[0].user_id,
+                    email : data[0].email,
+                    phone : data[0].phone,
+                    name : data[0].name,
+                    address : data[0].address,
+                    avatar : data[0].avatar,
+                    cover : data[0].cover,
+                    date_of_registration : data[0].date_of_registration,
+                    drak_mode : data[0].dark_mode,
+                    theme : data[0].theme,
+                    isVerified : data[0].isVerified
+                });
+           }
+        }
+
+    }).catch(err=>{
+
+        res.status(401).send({"err" : "Invalid Credentials ! Either Username or Password is invalid"})
+    })
+})
+
 //add a new user
 users.post('/add',async (req,res,next)=>{
 
@@ -924,6 +975,19 @@ users.post('/visibility/:user_id',(req,res,next)=>{
             },
         ).catch(err => {
             res.json({"err" : "Server Error ! Error in setting visibility"});
+        })
+})
+
+users.post('/theme/:theme/:dark_mode/:user_id',(req,res,next)=>{
+    let theme = req.params.theme
+    let dark_mode = req.params.dark_mode == "true" ? true : false
+    User.update({user_id : req.params.user_id},
+        {$set : {theme : theme, dark_mode : dark_mode}}).then(
+            data=>{
+                res.json({"msg" : "Theme set"});
+            }
+        ).catch(err=>{
+            res.json({"err" : "Server Error ! Error in setting theme"});
         })
 })
 

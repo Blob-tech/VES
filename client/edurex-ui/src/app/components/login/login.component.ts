@@ -1,8 +1,12 @@
 import { Component, OnInit, Directive, Output, EventEmitter, HostListener } from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import {FormControl, Validators, FormBuilder} from '@angular/forms';
 import { NavbarService } from '../navbar/navbar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { config } from "src/conf";
+import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
+import { Router } from '@angular/router';
+import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +17,7 @@ export class LoginComponent implements OnInit {
 
 
   capslockOn : Boolean ;
+  inValidLoginMessage = null ;
 @HostListener('click', ['$event']) 
 onClick(event){
   if (event.getModifierState && event.getModifierState('CapsLock')) {
@@ -41,17 +46,80 @@ onClick(event){
  }
  
 
-  constructor(private navbarService : NavbarService,private snackbar : MatSnackBar) { }
+  constructor(private navbarService : NavbarService,private snackbar : MatSnackBar,
+    private formBuilder : FormBuilder, private subscriberService : SubscriberService,
+    private localStorageService : LocalStorageService,private router : Router, 
+    private roleAccessService : RoleAccessService ) { }
 
   hide = true;
   capsOn;
   brand ;
-  iconUrl = config.host + "system/icon.png"
+  roles;
+  current_role;
+  iconUrl = config.host + "system/icon.png";
   userid = new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]);
   passwd = new FormControl('',Validators.required);
   ngOnInit(): void {
 
     this.getBranding();
+    this.inValidLoginMessage = null;
+  }
+
+  loginForm = this.formBuilder.group(
+    {
+      username : ['', Validators.required],
+      pass : ['', Validators.required],
+    }
+  );
+
+  get username()
+  {
+    return this.loginForm.get('username');
+  }
+
+  get pass()
+  {
+    return this.loginForm.get('pass');
+  }
+
+  login()
+  {
+    let formData = new FormData();
+    formData.append("username",this.loginForm.get('username').value);
+    formData.append("password",this.loginForm.get('pass').value);
+    this.subscriberService.login(formData).subscribe(data=>{
+      if(!JSON.parse(JSON.stringify(data))['err']){
+      this.inValidLoginMessage=null;
+      this.localStorageService.setter("user",data);
+      this.localStorageService.setter("theme",data['theme']);
+      //this.localStorageService.setter("dark-mode",JSON.parse(JSON.stringify(data))['dark_mode']);
+      this.localStorageService.setter("username",data['name']);
+      this.localStorageService.setter("avatar",data['avatar']);
+      this.router.navigateByUrl('/e-library/home').then(()=>
+        window.location.reload()
+      );
+
+      }
+      else
+      {
+        this.inValidLoginMessage = JSON.parse(JSON.stringify(data))['err'];
+      }
+    },
+    err=>{
+      if(err.status == 403)
+      {
+        this.inValidLoginMessage = "Your account has been deactivated ! Please contact System Administrator";
+      }
+      else if(err.status == 423)
+      {
+        this.inValidLoginMessage="Your account has been Locked ! Please contact the System Administrator";
+      }
+      else if(err.status == 401)
+      {
+        this.inValidLoginMessage = "Invalid Credentials ! Either Username or Password is invalid";
+      }
+
+    })
   }
 
   getUserIdErrorMessage() {

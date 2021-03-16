@@ -51,6 +51,7 @@ export class DisplayBookComponent implements OnInit {
    dataSource: MatTableDataSource<Book>;
 
   imgUrl = config.host + "thumbnail/";
+  logoUrl = config.host + "organisation_logo/";
   constructor(private bookService : BookService, private route : ActivatedRoute,
     private _snackBar : MatSnackBar,private libCategoryServices : LibraryCategoryService,
     private localStorageService : LocalStorageService, private router : Router) { }
@@ -70,6 +71,10 @@ export class DisplayBookComponent implements OnInit {
   book_id : '',
   book_name : '',
   author : '',
+  institute_id : '',
+  institute_client_id : '',
+  institute_name : '',
+  institute_avatar : '',
   description : '',
   category : '',
   subcategory: '',

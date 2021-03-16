@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from 'src/app/modules/library/modules/subscriber-management/models/subscriber';
 import { Institute } from 'src/app/modules/library/modules/institute-management/models/institute';
 import { Book } from 'src/app/modules/library/modules/book-explorer/models/book';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { config } from 'src/conf';
+import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
+import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 
 @Component({
   selector: 'app-search-grid',
@@ -34,7 +36,11 @@ export class SearchGridComponent implements OnInit {
   profileImgUrl =  config.host + 'avatar/';
   bookThumbnailUrl =  config.host + 'thumbnail/';
 
-  constructor(private dialog : MatDialog,private searcService : SearchService) { }
+  @Input()
+  visible = true;
+
+  constructor(private dialog : MatDialog,private searcService : SearchService,
+    private roleAccessService : RoleAccessService) { }
 
   ngOnInit(): void {
   }
@@ -198,4 +204,30 @@ export class SearchGridComponent implements OnInit {
   )
 
   }
+
+  getInstitutes(user_id : string)
+    {
+      let instituteList = [];
+      this.roleAccessService.getRoleAccess(user_id).subscribe(
+        data=>{
+          if(!(JSON.parse(JSON.stringify(data))['err']))
+          {
+            instituteList = data['ins'];
+            return instituteList;
+          }
+          else
+          {
+            return instituteList;
+          }
+          
+        },
+        err=>{
+          return instituteList;
+        }
+       
+         
+        
+      )
+    }
+
 }

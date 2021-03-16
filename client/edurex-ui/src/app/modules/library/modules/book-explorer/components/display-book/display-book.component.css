@@ -4,6 +4,18 @@ mat-card-footer
     padding-bottom: 1rem;;
 }
 
+.inst-logo
+{
+    height: 40px;
+    width : 40px;
+    border-radius: 50%;
+    margin-top : -450%;
+    margin-left: 90%;
+    position: relative;
+    border: solid white 3px;
+   
+}
+
 #BookTable
 {
     margin-top : 10px;
@@ -22,7 +34,7 @@ button:focus {
     margin-left: 1rem;
 }
 
-.mat-card img
+.mat-card .book-thumbnail
 {
     border-radius:5px;
     height: 200px;
@@ -34,16 +46,13 @@ button:focus {
 .mat-card
 {
     align-content: center;
+    height: fit-content;
 }
 
 
 .book
 {
     margin-bottom: 1rem;
-}
-.mat-card
-{
-    height: fit-content;
 }
 
 .mat-card-title span
@@ -79,5 +88,11 @@ mat-form-field
     mat-form-field
 {
     width : 45%;
+}
+
+.inst-logo
+{
+    margin-top: -550%;
+    margin-left: 90%;
 }
 }

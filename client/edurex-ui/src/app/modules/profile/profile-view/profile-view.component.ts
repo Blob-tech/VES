@@ -12,6 +12,7 @@ import { SocialLinksComponent } from 'src/app/shared/widgets/social-links/social
 import { LibraryCategoryService } from '../../library/service/library-category.service';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 import { config } from 'src/conf';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 
 
 
@@ -64,13 +65,14 @@ export class ProfileViewComponent implements OnInit {
   roleList: any;
   constructor(private subscriberServices : SubscriberService, private snackBar : MatSnackBar,
     private route : ActivatedRoute,private formBuilder : FormBuilder, private router : Router,
-    private libCategoryService : LibraryCategoryService,private roleAccessService : RoleAccessService) { }
+    private libCategoryService : LibraryCategoryService,private roleAccessService : RoleAccessService,
+    private localStorageService : LocalStorageService) { }
 
   ngOnInit(): void {
 
     this.showLoader=true;
     this.maxDate = new Date();
-    this.dark_mode = localStorage.getItem("dark-mode") == "true" ? true : false;
+    this.dark_mode = this.localStorageService.getter("dark-mode") == "true" ? true : false;
     
     
     this.route.params.subscribe(routeParams => {
@@ -256,7 +258,8 @@ export class ProfileViewComponent implements OnInit {
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
-          this.showLoader = true
+          this.showLoader = true;
+          this.localStorageService.setter('username',this.name.value);
           this.route.params.subscribe(routeParams => {
             this.getCurrentUser(routeParams.user_id);
           })
@@ -321,7 +324,6 @@ export class ProfileViewComponent implements OnInit {
 
     getuserMetas(user_id : string)
     {
-      console.log(user_id);
       this.subscriberServices.get_user_metas(user_id).subscribe(
         data=>{
           this.userMetas = data;
@@ -351,7 +353,18 @@ export class ProfileViewComponent implements OnInit {
       )
     }
 
+    isDefaultInstitute(organisation_id) : Boolean
+    {
+      if(this.localStorageService.getter('default_institute') != null)
+      {
+        if(this.localStorageService.getter('default_institute').organisation_id == organisation_id)
+        {
+          return true;
+        }
+      }
+      return false;
 
+    }
     saveSocialProfile()
     {
       this.subscriberServices.update_social_profile(this.currentUser.user_id,this.socialLinks).subscribe(
