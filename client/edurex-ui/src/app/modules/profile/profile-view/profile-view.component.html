@@ -163,8 +163,12 @@ Loading ..
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role|roleTranslate}}</b></span>
                         <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                         <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span><br>
+                        
+                            <mat-checkbox [disabled]="isRoleExpired(role)"> Default Institute</mat-checkbox>
+                          
                       </p>
+                      
                       
                     </mat-expansion-panel>
                   </mat-accordion>
@@ -423,6 +427,10 @@ Loading ..
                         <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                         <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                         <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <br>
+                        
+                            <mat-checkbox [checked]=true
+                            [disabled]="isRoleExpired(role)"> Default Institute</mat-checkbox>
                       </p>
                       
                       </mat-expansion-panel>

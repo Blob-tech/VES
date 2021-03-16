@@ -6,6 +6,7 @@ import { BookService } from 'src/app/modules/library/service/book.service';
 import { FileValidator } from 'ngx-material-file-input';
 import { Router } from '@angular/router';
 import { NavbarService } from 'src/app/components/navbar/navbar.service';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
   url = "assets/images/doc.png";
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar,private bookService : BookService, private router : Router,
-    private navbar : NavbarService) { }
+    private navbar : NavbarService, private localStorageService : LocalStorageService) { }
 
     
   ngOnInit(): void {
@@ -294,6 +295,11 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
       const value = this.createBookForm.value[key];
       formData.append(key, value);
     }
+    let current_institute = this.localStorageService.getter('current_institute');
+    formData.append('institute_id',current_institute.organisation_id);
+    formData.append('institute_name', current_institute.organisation_name);
+    formData.append('institute_client_id', current_institute.client_id);
+    formData.append('institute_avatar',current_institute.avatar);
 
     this.bookService.addBook(formData).subscribe(
       data=>

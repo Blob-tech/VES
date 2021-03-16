@@ -3,7 +3,8 @@ const roles = express.Router();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dateFormat = require('dateformat');
-
+const User = require('../models/User');
+const UserMeta = require('../models/UserMeta');
 const Role = require('../models/RoleAccess');
 const Organisation = require('../models/Organisation');
 roles.use(cors());
@@ -16,6 +17,17 @@ roles.post('/access/add',(req,res,next)=>{
 
     users.forEach(user => {
         institutes.forEach(institute => {
+            UserMeta.findOne({user_id : user}).then(
+                data=>{
+                        if(data == null || data.default_institute == null || data.default_institute == '')
+                        {
+                            UserMeta.updateOne({user_id : user},
+                                {$set : {
+                                    default_institute : institute
+                                 }},{upsert : true}).then(data=>{}).catch(err=>{});
+                        }
+                    }
+            )
             Role.updateMany({$and : [
                 {user_id : user},
                 {institute_id : institute}

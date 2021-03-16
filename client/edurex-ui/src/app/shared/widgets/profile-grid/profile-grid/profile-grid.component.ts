@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
 import { Router } from '@angular/router';
+import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 
 @Component({
   selector: 'app-profile-grid',
@@ -41,7 +42,7 @@ export class ProfileGridComponent implements OnInit {
   coverUrl = config.host + "cover/";
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,
     public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router,
-    private formBuilder : FormBuilder) { }
+    private formBuilder : FormBuilder,private locaStorageService : LocalStorageService) { }
 
   ngOnInit(): void {
 
@@ -155,6 +156,7 @@ export class ProfileGridComponent implements OnInit {
               if(!JSON.parse(JSON.stringify(data))['err'])
               {
                 this.selectedUser = data as User;
+                this.locaStorageService.setter('avatar',data['avatar']);
               }
               else
               {
@@ -234,6 +236,7 @@ export class ProfileGridComponent implements OnInit {
                     if(!JSON.parse(JSON.stringify(data))['err'])
                     {
                       this.selectedUser = data as User;
+                      this.locaStorageService.setter('avatar',data['avatar']);
                     }
                     else
                     {

@@ -32,6 +32,19 @@ button:focus {
     margin-bottom: 2rem;
 }
 
+.ins_name
+{
+    font-size : 40px
+}
+
+@media screen and (max-width : 1100px)
+{
+    .ins_name
+    {
+        font-size: 20px;
+    }
+}
+
 @media screen and (max-width : 380px)
 {
     .action-button

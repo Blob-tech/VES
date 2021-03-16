@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { config } from "src/conf";
 import { User } from '../modules/subscriber-management/models/subscriber';
@@ -10,6 +10,8 @@ import { SocialProfile } from '../../profile/profile-view/profile-view.component
 export class SubscriberService {
 
   URL = config.host + "user/";
+  static loginEventEmitter: EventEmitter<any> = new EventEmitter<any>();
+  
   constructor(private httpClient : HttpClient) { }
 
   register(formData : FormData)
@@ -17,6 +19,21 @@ export class SubscriberService {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
     return this.httpClient.post(this.URL+"add",formData,{headers : headers});
+  }
+
+  login(formData : FormData)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.post(this.URL+"login",formData,{headers : headers});
+  }
+
+  set_theme(theme,dark_mode,user_id)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    //console.log(dark_mode);
+    return this.httpClient.post(this.URL+"theme/"+theme+"/"+dark_mode +"/" + user_id,{headers : headers});
   }
 
   getUserCount(institute : String, filter ?: String)
