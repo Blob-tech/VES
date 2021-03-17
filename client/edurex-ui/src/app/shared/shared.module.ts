@@ -51,6 +51,7 @@ import { SearchGridComponent } from './widgets/search/search-grid/search-grid.co
 import { SecureStorageService } from './services/secure-storage.service';
 import { LocalService } from './services/local-storage';
 import { AuthGuradService } from './guard/auth-guard';
+import { SessionStorageService } from './services/session-storage.service';
 
 
 
@@ -103,7 +104,8 @@ import { AuthGuradService } from './guard/auth-guard';
   ],
   exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent,
     SearchGridComponent, RoleTranslatePipe],
-  providers : [MatDatepickerModule,SecureStorageService,LocalService, AuthGuradService],
+  providers : [MatDatepickerModule,SecureStorageService,LocalService, AuthGuradService,
+  SessionStorageService],
   bootstrap: [ProfileGridComponent,ManageAccessComponent]
 })
 

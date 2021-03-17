@@ -78,5 +78,8 @@
         <router-outlet></router-outlet>
 </mat-drawer-container>
 
-<mat-progress-spinner></mat-progress-spinner>
+<div *ngIf="showLoader" class="loader">
+        <mat-spinner color="primary"></mat-spinner><br>
+        <span style="color: white; position: fixed; top:400px">Loading ...</span>
+        </div>
 

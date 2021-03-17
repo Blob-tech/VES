@@ -2,7 +2,7 @@
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
             <div  *ngIf="visible" class="search-box">
                   <input type ="text" [(ngModel)]="keyword" class ="txt" placeholder ="Search Here..." (change)="search(searchWindow)">
-                  <button [disabled]="keyword == ''" (click)="search(searchWindow)" mat-mini-fab color="primary" class ="btn"><mat-icon>search</mat-icon></button>
+                  <button [disabled]="keyword == ''" (click)="search(searchWindow)" mat-fab color="primary" class ="btn"><mat-icon>search</mat-icon></button>
                   <button  mat-mini-fab color="primary" class ="fake-btn"><mat-icon>search</mat-icon></button>
              
             </div>
@@ -22,7 +22,7 @@
                                 </div>
                                 <span *ngFor="let book of bookList">
                                 <img height=60 width=60 style="border-radius : 50%; margin-right: 10px;" src= "{{book.thumbnail_source ? bookThumbnailUrl + book.thumbnail_source : '/assets/images/img.png'}}">
-                                <img height=20 width=20 style="border-radius : 50%; border: solid whitesmoke 2px; margin-left:-30px; margin-top:40px; margin-right: 10px;" 
+                                <img height=25 width=25 style="border-radius : 50%; border: solid whitesmoke 2px; margin-left:-30px; margin-top:40px; margin-right: 10px; background: white;" 
                                 src= "{{book.institute_avatar ? logoUrl + book.institute_avatar : '/assets/images/insimg.png'}}">
 
                                                 <a href="/e-library/book-explorer/view/{{book.book_id}}">{{book.book_name}}</a>
@@ -61,7 +61,7 @@
                                 <mat-spinner *ngIf="showLoader" style="margin-left : 40%; font-size:100px;" ></mat-spinner>
                                 
                     <div mat-dialog-actions>
-                    <button mat-raised-button color="warn" mat-dialog-close><mat-icon>highlight_off</mat-icon>Close</button>
+                    <button mat-raised-button color="warn" (click)="close()" mat-dialog-close><mat-icon>highlight_off</mat-icon>Close</button>
                     </div>
                     
                 </ng-template>

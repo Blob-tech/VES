@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { BookService } from 'src/app/modules/library/service/book.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -9,7 +9,7 @@ import { config } from "src/conf";
   templateUrl: './view-book.component.html',
   styleUrls: ['./view-book.component.css']
 })
-export class ViewBookComponent implements OnInit {
+export class ViewBookComponent implements OnInit,AfterContentInit {
 
   book;
   msg = null;
@@ -18,6 +18,7 @@ export class ViewBookComponent implements OnInit {
   docSrc = config.host + "article/";
   logoUrl = config.host + "organisation_logo/"
   bookSrc = "";
+  showLoader=true;
 
   ngclass = "mat-video-responsive";
 
@@ -30,6 +31,11 @@ export class ViewBookComponent implements OnInit {
     this.getBookById(this.route.snapshot.paramMap.get('id'));
     this.bookSrc = this.docSrc + this.book.book_source;
     
+  }
+
+  ngAfterContentInit()
+  {
+    this.showLoader = false;
   }
 
   openPDF(url)

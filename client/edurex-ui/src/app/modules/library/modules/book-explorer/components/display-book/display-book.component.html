@@ -82,8 +82,8 @@
               <button matTooltip="edit" routerLink= "/e-library/book-explorer/edit/{{book.book_id}}  " mat-mini-fab class="action-button" color="accent" ><i class="fas fa-edit"></i></button>
               <button matTooltip="delete" mat-mini-fab class="action-button" color="warn" (click)="deleteBooks(book.book_id)"><i class="fas fa-trash"></i></button>
           </mat-card-footer>
-          <img  matTooltip="{{book.institute_name}}"
-          class="inst-logo" src="{{book.institute_avatar ? logoUrl + book.institute_avatar : '/assets/images/insimg.png'}}">
+          <!--img  matTooltip="{{book.institute_name}}"
+          class="inst-logo" src="{{book.institute_avatar ? logoUrl + book.institute_avatar : '/assets/images/insimg.png'}}"-->
        </mat-card>
       
     </div>
@@ -177,4 +177,9 @@
     [pageSizeOptions]="pageSizeOptions">
 </mat-paginator>
 <br>
+
+<div *ngIf="showLoader" class="loader">
+    <mat-spinner color="primary"></mat-spinner><br>
+    <span style="color: white; position: fixed; top:400px">Loading ...</span>
+    </div>
     

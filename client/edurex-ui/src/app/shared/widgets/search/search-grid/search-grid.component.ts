@@ -230,4 +230,9 @@ export class SearchGridComponent implements OnInit {
       )
     }
 
+    close()
+    {
+      this.keyword = '';
+    }
+
 }

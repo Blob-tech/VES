@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, AfterContentInit } from '@angular/core';
 import { BookService } from 'src/app/modules/library/service/book.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,7 +17,7 @@ import { LocalStorageService } from 'src/app/shared/services/local-storage.servi
   templateUrl: './display-book.component.html',
   styleUrls: ['./display-book.component.css']
 })
-export class DisplayBookComponent implements OnInit {
+export class DisplayBookComponent implements OnInit,AfterContentInit {
   header_color = ["#bbf2c9","#f4b5f5","#b6e4f0","#f08873","#f0e54f","#79912a","#4a6a87","#ab653f"];
 
   books=[];
@@ -41,6 +41,7 @@ export class DisplayBookComponent implements OnInit {
    bookView;
    bulkaction='';
    reset=true;
+   showLoader = true;
 
    displayedColumns: string[] = ['select','book_id', 'book_name', 'author', 'language', 'book-type', 'actions'];
    
@@ -62,8 +63,12 @@ export class DisplayBookComponent implements OnInit {
     this.route.params.subscribe(routeParams => {
       this.getBookCount(routeParams.category,routeParams.subcategory);
       this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
-     
     });
+  }
+
+  ngAfterContentInit()
+  {
+    this.showLoader = false;
   }
 
   selectedBook : Book =
@@ -221,6 +226,7 @@ export class DisplayBookComponent implements OnInit {
 
   getBooks(category,subcategory,books_per_page,page,filter,cond)
   {
+    this.showLoader = true;
     if(filter != null && cond != null)
     {
       this.bookService.getFilteredBooks(filter,cond,books_per_page,page).subscribe(
@@ -239,10 +245,13 @@ export class DisplayBookComponent implements OnInit {
           {
             this.noBook = null;
           }
+          this.showLoader = false;
         },
         err=>{
             this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+            this.showLoader = false;
         }
+
   
       )
 
@@ -265,9 +274,11 @@ export class DisplayBookComponent implements OnInit {
         {
           this.noBook = null;
         }
+        this.showLoader = false;
       },
       err=>{
           this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+          this.showLoader = false;
       }
 
     )

@@ -1,8 +1,5 @@
 <app-library></app-library>
-<div *ngIf="showLoader" class="loader">
-<mat-spinner></mat-spinner><br>
-Loading ..
-</div>
+
 <mat-sidenav-container class="profile-sidenav">
     <mat-sidenav opened mode="side" class="sidenav" >
         <app-profile-grid [selectedUser] = "currentUser" 
@@ -539,5 +536,10 @@ Loading ..
               </mat-accordion>
             </div>
 </mat-sidenav-container>
+<div *ngIf="showLoader" class="loader">
+    <mat-spinner color="primary"></mat-spinner><br>
+    <span style="color: white; position: fixed; top:400px">Loading ...</span>
+    </div>
+
 
 
