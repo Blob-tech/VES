@@ -107,7 +107,6 @@ import { ProfileGuradService } from './profile-guard';
     NgxMatSelectSearchModule,
     NgBreadcrumbModule,
     MatGridListModule,
-    MatProgressSpinnerModule,
     MatFormFieldModule,
     FormsModule,
     MatExpansionModule,

@@ -52,6 +52,7 @@ onClick(event){
     private roleAccessService : RoleAccessService ) { }
 
   hide = true;
+  showLoader = false;
   capsOn;
   brand ;
   roles;
@@ -84,6 +85,7 @@ onClick(event){
 
   login()
   {
+    this.showLoader = true;
     let formData = new FormData();
     formData.append("username",this.loginForm.get('username').value);
     formData.append("password",this.loginForm.get('pass').value);
@@ -98,12 +100,15 @@ onClick(event){
       this.router.navigateByUrl('/e-library/home').then(()=>
         window.location.reload()
       );
+      this.showLoader=false;
 
       }
       else
       {
         this.inValidLoginMessage = JSON.parse(JSON.stringify(data))['err'];
+        
       }
+      this.showLoader = false;
     },
     err=>{
       if(err.status == 403)
@@ -118,8 +123,10 @@ onClick(event){
       {
         this.inValidLoginMessage = "Invalid Credentials ! Either Username or Password is invalid";
       }
+      this.showLoader = false;
 
     })
+    
   }
 
   getUserIdErrorMessage() {

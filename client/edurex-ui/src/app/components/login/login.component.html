@@ -1,3 +1,4 @@
+
 <div class="desktop-view">
 <mat-grid-list cols="7" rowHeight="110px">
         <mat-grid-tile 
@@ -109,3 +110,7 @@
         </mat-grid-list>
         
    </div>   
+   <div *ngIf="showLoader" class="loader">
+   <mat-spinner color="primary"></mat-spinner><br>
+   <span style="color: white; position: fixed; top:400px">Loading ...</span>
+   </div>

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { config } from 'src/conf';
 import { SubscriberService } from './service/subscriber.service';
 import { filter } from 'minimatch';
 import { Router } from '@angular/router';
+import { Session } from 'inspector';
+import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 
 @Component({
   selector: 'app-library',
@@ -20,9 +22,10 @@ export class LibraryComponent implements OnInit {
   default_ins;
   current_ins;
   current_role;
+  showLoader = true;
 
   constructor(private roleAccessService :RoleAccessService, private localStorageService : LocalStorageService,
-    private subscriberService : SubscriberService, private router : Router) { }
+    private subscriberService : SubscriberService, private router : Router,private sessionStorageService : SessionStorageService) { }
 
   ngOnInit(): void {
 
@@ -34,6 +37,9 @@ export class LibraryComponent implements OnInit {
     }
     
   }
+
+  
+  
 
   isSysAdmin()
     {
@@ -104,7 +110,11 @@ export class LibraryComponent implements OnInit {
           {
             this.localStorageService.setter('current_institute', this.default_ins);
           }
-          this.current_ins = this.localStorageService.getter('current_institute');
+          if(this.sessionStorageService.getter('current_institute') == null)
+          {
+            this.sessionStorageService.setter('current_institute', this.localStorageService.getter('current_institute'));
+          }
+          this.current_ins = this.sessionStorageService.getter('current_institute');
           this.current_role = this.roles.role.filter(value => {
             return value.institute_id == this.current_ins.organisation_id
           })[0];
@@ -126,9 +136,16 @@ export class LibraryComponent implements OnInit {
           }
           
           this.localStorageService.setter('current_role',this.current_role);
+          if(this.sessionStorageService.getter('current_role') == null)
+          {
+            this.sessionStorageService.setter('current_role', this.localStorageService.getter('current_role'));
+          }
+          this.showLoader = false;
+
         },
         err=>
         {
+          this.showLoader = false;
             
         }
       )
@@ -143,11 +160,11 @@ export class LibraryComponent implements OnInit {
           "client_id" : "Admin",
           "organisation_name" : "System Admin"
         };
-        this.localStorageService.setter('current_institute',this.current_ins);
+        this.sessionStorageService.setter('current_institute',this.current_ins);
         this.current_role = this.roles.role.filter(value => {
           return value.role == 'SADMIN'
         })[0];
-        this.localStorageService.setter('current_role',this.current_role);
+        this.sessionStorageService.setter('current_role',this.current_role);
         this.router.navigateByUrl('/e-library/home');
       }
       else
@@ -158,10 +175,11 @@ export class LibraryComponent implements OnInit {
       this.current_role = this.roles.role.filter(value => {
         return value.institute_id == ins_id
       })[0];
-      this.localStorageService.setter('current_institute',this.current_ins);
-      this.localStorageService.setter('current_role',this.current_role);
+      this.sessionStorageService.setter('current_institute',this.current_ins);
+      this.sessionStorageService.setter('current_role',this.current_role);
       this.router.navigateByUrl('/e-library/home');
     }
+    
     }
 
 
