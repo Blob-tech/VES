@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, AfterViewInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { config } from 'src/conf';
@@ -13,11 +13,10 @@ import { SessionStorageService } from 'src/app/shared/services/session-storage.s
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.css']
 })
-export class LibraryComponent implements OnInit,AfterViewInit {
+export class LibraryComponent implements OnInit {
 
   roles;
   loggedinUser;
-  sysAdmin;
   insUrl;
   userMetas;
   default_ins;
@@ -26,37 +25,24 @@ export class LibraryComponent implements OnInit,AfterViewInit {
   showLoader = true;
 
   constructor(private roleAccessService :RoleAccessService, private localStorageService : LocalStorageService,
-    private subscriberService : SubscriberService, private router : Router,private sessionStorageService : SessionStorageService) { 
+    private subscriberService : SubscriberService, private router : Router,private sessionStorageService : SessionStorageService) { }
 
-    this.loggedinUser = this.localStorageService.getter('user');  
+  ngOnInit(): void {
+
+    this.loggedinUser = this.localStorageService.getter('user');
+    this.insUrl = config.host + 'organisation_logo/';
     if(this.loggedinUser)
     {
       this.getAccessRoles(this.loggedinUser.user_id);
     }
     
-    }
-
-  ngOnInit(): void {
-
-    this.insUrl = config.host + 'organisation_logo/';
-    this.isValidInstituteAdmin();
-   
-  }
-
-  ngAfterViewInit()
-  {
-    this.showLoader=false;
   }
 
   
-  isValidInstituteAdmin()
-  {
-    console.log(this.roleAccessService.isValidRole(this.current_role,this.loggedinUser.user_id,'IADMIN'));
-  }
+  
 
   isSysAdmin()
     {
-      
       let sysadmin = this.roles['role'].filter(value => {
        return  value.role == 'SADMIN' && value.user_id == this.loggedinUser.user_id
        
@@ -70,7 +56,6 @@ export class LibraryComponent implements OnInit,AfterViewInit {
   
     isSystemAdmin()
     {
-     
       let current_role = this.sessionStorageService.getter('current_role')['role'];
       if(current_role == "SADMIN" || this.current_ins.client_id == 'Admin')
       {
@@ -92,8 +77,7 @@ export class LibraryComponent implements OnInit,AfterViewInit {
 
   getAccessRoles(user_id)
   {
-    
-    this.roleAccessService.getActiveRoleAccess(user_id).subscribe(
+    this.roleAccessService.getRoleAccess(user_id).subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
@@ -177,12 +161,12 @@ export class LibraryComponent implements OnInit,AfterViewInit {
           {
             this.sessionStorageService.setter('current_role', this.localStorageService.getter('current_role'));
           }
-          
-          //this.showLoader=false;
+          this.showLoader = false;
+
         },
         err=>
         {
-          
+          this.showLoader = false;
             
         }
       )
@@ -202,9 +186,7 @@ export class LibraryComponent implements OnInit,AfterViewInit {
           return value.role == 'SADMIN'
         })[0];
         this.sessionStorageService.setter('current_role',this.current_role);
-        this.router.navigateByUrl('/e-library/home').then(
-          ()=> {window.location.reload();}
-        );
+        this.router.navigateByUrl('/e-library/home');
       }
       else
       {
@@ -216,9 +198,7 @@ export class LibraryComponent implements OnInit,AfterViewInit {
       })[0];
       this.sessionStorageService.setter('current_institute',this.current_ins);
       this.sessionStorageService.setter('current_role',this.current_role);
-      this.router.navigateByUrl('/e-library/home').then(
-        ()=> {window.location.reload();}
-      );
+      this.router.navigateByUrl('/e-library/home');
     }
     
     }
