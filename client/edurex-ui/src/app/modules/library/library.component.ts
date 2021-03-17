@@ -17,7 +17,6 @@ export class LibraryComponent implements OnInit {
 
   roles;
   loggedinUser;
-  sysAdmin;
   insUrl;
   userMetas;
   default_ins;
@@ -32,7 +31,6 @@ export class LibraryComponent implements OnInit {
 
     this.loggedinUser = this.localStorageService.getter('user');
     this.insUrl = config.host + 'organisation_logo/';
-    this.isValidInstituteAdmin();
     if(this.loggedinUser)
     {
       this.getAccessRoles(this.loggedinUser.user_id);
@@ -40,20 +38,11 @@ export class LibraryComponent implements OnInit {
     
   }
 
-  ngAfterContentInit()
-  {
-    this.showLoader = false;
-  }
-
   
-  isValidInstituteAdmin()
-  {
-    console.log(this.roleAccessService.isValidRole(this.current_role,this.loggedinUser.user_id,'IADMIN'));
-  }
+  
 
   isSysAdmin()
     {
-      
       let sysadmin = this.roles['role'].filter(value => {
        return  value.role == 'SADMIN' && value.user_id == this.loggedinUser.user_id
        
@@ -172,12 +161,12 @@ export class LibraryComponent implements OnInit {
           {
             this.sessionStorageService.setter('current_role', this.localStorageService.getter('current_role'));
           }
-          
+          this.showLoader = false;
 
         },
         err=>
         {
-          
+          this.showLoader = false;
             
         }
       )
@@ -197,9 +186,7 @@ export class LibraryComponent implements OnInit {
           return value.role == 'SADMIN'
         })[0];
         this.sessionStorageService.setter('current_role',this.current_role);
-        this.router.navigateByUrl('/e-library/home').then(
-          ()=> {window.location.reload();}
-        );
+        this.router.navigateByUrl('/e-library/home');
       }
       else
       {
@@ -211,9 +198,7 @@ export class LibraryComponent implements OnInit {
       })[0];
       this.sessionStorageService.setter('current_institute',this.current_ins);
       this.sessionStorageService.setter('current_role',this.current_role);
-      this.router.navigateByUrl('/e-library/home').then(
-        ()=> {window.location.reload();}
-      );
+      this.router.navigateByUrl('/e-library/home');
     }
     
     }

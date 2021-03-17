@@ -9,7 +9,7 @@ import { InstituteManagementService } from '../../service/institute-management.s
   templateUrl: './library-home.component.html',
   styleUrls: ['./library-home.component.css']
 })
-export class LibraryHomeComponent implements OnInit {
+export class LibraryHomeComponent implements OnInit,DoCheck {
 
   ins;
   insUrl = config.host + 'organisation_logo/';
