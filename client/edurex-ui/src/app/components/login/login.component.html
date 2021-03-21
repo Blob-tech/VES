@@ -29,7 +29,7 @@
                   <mat-icon matPrefix style="color : grey">lock</mat-icon>
                   <input formControlName="pass" type="password" required  matInput placeholder="Enter your Password here">
                   <mat-icon style="color : gray" *ngIf="capslockOn" matSuffix matTooltip="CapsLock is on ! Password is case sensetive">keyboard_caps</mat-icon>
-                  <mat-hint><p><a href="#">Forgot Password ?</a></p></mat-hint>
+                  <mat-hint><p><a href="/forgot-password">Forgot Password ?</a></p></mat-hint>
                   <mat-error *ngIf="pass.hasError('required')">Password is required</mat-error>
                 </mat-form-field>
                 <button [disabled]="loginForm.status == 'INVALID'" (click)="login()" mat-raised-button color="primary" style="width : 100%; font-size: 15px; border-radius: 30px;">
@@ -84,7 +84,7 @@
                   <mat-icon matPrefix style="color : grey">lock</mat-icon>
                   <input formControlName="pass" type="password" required  matInput placeholder="Enter your Password here">
                   <mat-icon style="color :orange" *ngIf="capslockOn" matSuffix matTooltip="CapsLock is on ! Password is case sensetive">keyboard_caps</mat-icon>
-                  <mat-hint><p><a href="#">Forgot Password ?</a></p></mat-hint>
+                  <mat-hint><p><a href="/forgot-password">Forgot Password ?</a></p></mat-hint>
                   <mat-error *ngIf="pass.hasError('required')">Password is required</mat-error>
                 </mat-form-field>
                 <button [disabled]="loginForm.status == 'INVALID'" (click)="login()" mat-raised-button color="primary" style="width : 100%; font-size: 15px; border-radius: 30px;">

@@ -10,7 +10,7 @@
           <app-search-grid [visible]="loggedinUser ? true : false" style="display:inline;margin-right:5px"></app-search-grid>
 
                 <span class="example-spacer"></span>
-                <span  class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
+                <span *ngIf="loggedinUser" class="hamburger-menu"><button style="margin-right: 1rem;" matTooltip ="Menu" mat-mini-fab color="basic" [matMenuTriggerFor]="settings2"><mat-icon class="auto-flip">menu</mat-icon> </button></span>
     
      
      <div class = "top-menu">

@@ -6,6 +6,7 @@ import { Institute } from 'src/app/modules/library/modules/institute-management/
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';import { now } from 'moment';
 import { RoleAccessService } from '../../services/role-access.service';
+import { SessionStorageService } from '../../services/session-storage.service';
 
 
 
@@ -30,7 +31,8 @@ export class ManageAccessComponent implements OnInit {
   accessList = []
   constructor(private formBuilder : FormBuilder, private subscriberServices : SubscriberService,
     private instituteService : InstituteManagementService, private _snacbar : MatSnackBar,
-    public dialog: MatDialog, private roleAccessService : RoleAccessService)
+    public dialog: MatDialog, private roleAccessService : RoleAccessService,
+    private sessionStorageService : SessionStorageService)
      {
        this.minDate  = new Date() ;
 
@@ -62,6 +64,8 @@ export class ManageAccessComponent implements OnInit {
           this._snacbar.open("Error in loading institutes from edurex database! "+ err,null, {duration : 5000});
             
         })
+      // this.accessList = []
+      // this.accessList.push(this.sessionStorageService.getter('current_institute'));
       }
 
     resetAccessList(event)

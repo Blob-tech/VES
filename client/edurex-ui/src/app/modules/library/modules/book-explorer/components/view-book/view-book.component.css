@@ -22,6 +22,16 @@ mat-spinner
     justify-content: center;
 }
 
+.oops
+{
+    margin-top: 15px;
+    margin-bottom : 20px;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    margin-left : 35%;
+}
+
 .container
 {
     margin: 5%;
@@ -130,5 +140,8 @@ h5{
     h1 
     {
         font-size : 15px;
+    }
+    .oops{
+        margin-left : 25%;
     }
 }
