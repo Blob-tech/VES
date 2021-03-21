@@ -42,6 +42,7 @@ export class ProfileViewComponent implements OnInit {
   instituteList = [];
   imgUrl = config.host + "organisation_logo/";
   dark_mode;
+  viewMode;
 
 
   visibilitySettings = {
@@ -76,11 +77,17 @@ export class ProfileViewComponent implements OnInit {
     
     
     this.route.params.subscribe(routeParams => {
+      this.viewMode = routeParams.view;
       this.getCurrentUser(routeParams.user_id);
       this.getuserMetas(routeParams.user_id);
       this.getInstituteAndRole(routeParams.user_id);
     })
     
+  }
+
+  isLoggedinUser() : boolean
+  {
+    return this.roleAccessService.isLoggedinUser(this.currentUser.user_id);
   }
 
   toggleVisibility(param:string)

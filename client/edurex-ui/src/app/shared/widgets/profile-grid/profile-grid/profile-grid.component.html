@@ -1,7 +1,7 @@
 <mat-card (click)="viewProfile(selectedUser.user_id)" style="border-radius : 10px; max-width: 400px;">
     <mat-card-header>
-      <mat-card-title [style.color]="!selectedUser.isActivated ? 'grey' : ''"> <img
-         matTooltip="{{selectedUser.name}}" *ngIf="mode == 'small'" [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
+      <mat-card-title *ngIf="mode == 'small'" [style.color]="!selectedUser.isActivated ? 'grey' : ''"> <img
+         matTooltip="{{selectedUser.name}}"  [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
        src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" height=80 width = 80
         style="border-radius : 50%;" ><a  href="/profile/public/{{selectedUser.user_id}}">
           {{selectedUser.name.length < 40 ? selectedUser.name : selectedUser.name.substr(0,40) + '...'}}</a></mat-card-title>
@@ -10,9 +10,9 @@
   <!--img mat-card-image *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
      src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" 
      height="350"  style="border-radius : 50%; padding-left : 5%; padding-right : 5%;"-->
-     <button *ngIf="mode == 'large' && selectedUser.cover" mat-mini-fab style="margin: 5px;opacity: 0.8;"
+     <button *ngIf="mode == 'large' && selectedUser.cover && isLoggedinUser()" mat-mini-fab style="margin: 5px;opacity: 0.8;"
      (click)="open(editProfileCover)"><mat-icon>camera_alt</mat-icon></button>
-     <button *ngIf="mode == 'large' && !selectedUser.cover" mat-mini-fab style="margin: 5px;opacity: 0.8;"
+     <button *ngIf="mode == 'large' && !selectedUser.cover && isLoggedinUser()" mat-mini-fab style="margin: 5px;opacity: 0.8;"
      (click)="open(editProfileCover)"><mat-icon>add_a_photo</mat-icon></button>
      <img *ngIf="mode == 'large'" src="{{selectedUser.cover ? coverUrl + selectedUser.cover : '/assets/images/default-cover.jpg'}}" style="width : 100%; height : 200px;z-index: 3;margin-top : -50px">
      <img *ngIf="mode == 'large'" matTooltip="{{selectedUser.name}}"
@@ -22,15 +22,16 @@
      margin-left: 20%;margin-top: -150px; z-index: 5; ">
      
      <button style="border : 5px solid white; margin-left : 55%; margin-top:-200px "
-      *ngIf="selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>camera_alt</mat-icon></button>
+      *ngIf="selectedUser.avatar && mode == 'large' && isLoggedinUser()" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>camera_alt</mat-icon></button>
      <button style="border : 5px solid white; margin-left : 55%; margin-top:-80% " 
-     *ngIf="!selectedUser.avatar && mode == 'large'" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>add_a_photo</mat-icon></button>
-    <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem; text-align: center;"><br>
-      <span style="color: cornflowerblue; font-size: 15px; text-align: center;padding: 5px;">{{bio}}</span><br>
-        <app-social-links [userID]="selectedUser.user_id"></app-social-links>
-      <p><mat-icon color="green">call</mat-icon> <b> : {{selectedUser.phone}}</b>
-      </p><p><mat-icon color="green">mail_outline</mat-icon><b> : {{selectedUser.email}}</b></p>
-    <p><mat-icon color="green">location_city</mat-icon> : {{selectedUser.address}}</p>
+     *ngIf="!selectedUser.avatar && mode == 'large' && isLoggedinUser()" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>add_a_photo</mat-icon></button>
+    <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem; text-align: center;">
+      <a style="font-size : 20px"href="/profile/public/{{selectedUser.user_id}}">{{selectedUser.name}}</a><br>
+      <span *ngIf="viewMode == 'self' || enabeledBio" style="color: grey; font-size: 15px; text-align: center;padding: 5px;">{{bio}}</span><br>
+        <app-social-links *ngIf="viewMode == 'self' || enabeledSocialLinks" [userID]="selectedUser.user_id"></app-social-links>
+      <p *ngIf="viewMode == 'self' || enabeledDetails"><mat-icon color="green">call</mat-icon> <b> : {{selectedUser.phone}}</b>
+      </p><p *ngIf="viewMode == 'self' || enabeledDetails"><mat-icon color="green">mail_outline</mat-icon><b> : {{selectedUser.email}}</b></p>
+    <p *ngIf="viewMode == 'self' || enabeledDetails"><mat-icon color="green">location_city</mat-icon> : {{selectedUser.address}}</p>
     </mat-card-content>
     <!--mat-card-actions>
       <button mat-button>LIKE</button>

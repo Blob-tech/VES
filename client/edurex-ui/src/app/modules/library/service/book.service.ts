@@ -2,13 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {config} from 'src/conf';
 import { Book } from '../modules/book-explorer/models/book';
+import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
 
   URL = config.host + "library/books/";
-  constructor(private httpClient : HttpClient) { }
+  constructor(private httpClient : HttpClient, private sessionStorageService : SessionStorageService) { }
+
+  getCurrentInstituteId()
+  {
+    return (this.sessionStorageService.getter('current_institute').organisation_id);
+  }
 
   getLanguages()
   {
@@ -37,7 +43,8 @@ export class BookService {
     
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"list/latest/"+latest_number,{headers:headers})
+    let current_institute_id = this.getCurrentInstituteId();
+    return this.httpClient.get(this.URL+"list/latest/"+current_institute_id+"/"+latest_number,{headers:headers})
   }
 
   deleteBookById(id : String)
@@ -50,14 +57,16 @@ export class BookService {
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"count/"+category + "/" + subcategory,{headers : headers})
+    let current_institute_id = this.getCurrentInstituteId();
+    return this.httpClient.get(this.URL+"count/"+current_institute_id+"/"+ category + "/" + subcategory,{headers : headers})
   }
 
   getFilterBookCount(searchkey : String)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"count/"+ searchkey,{headers : headers})
+    let current_institute_id = this.getCurrentInstituteId();
+    return this.httpClient.get(this.URL+"count/"+ current_institute_id+"/"+searchkey,{headers : headers})
   }
 
 
@@ -66,7 +75,8 @@ export class BookService {
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"list/"+category+"/" + subcategory + "/" + books_per_page + 
+    let current_institute_id = this.getCurrentInstituteId();
+    return this.httpClient.get(this.URL+"list/"+current_institute_id+"/"+category+"/" + subcategory + "/" + books_per_page + 
     "/" + page,{headers:headers})
   }
 
@@ -74,7 +84,8 @@ export class BookService {
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"list/"+searchkey + "/" + books_per_page + 
+    let current_institute_id = this.getCurrentInstituteId();
+    return this.httpClient.get(this.URL+"list/"+current_institute_id+"/"+searchkey + "/" + books_per_page + 
     "/" + page,{headers:headers})
   }
 

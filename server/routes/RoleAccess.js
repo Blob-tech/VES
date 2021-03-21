@@ -62,7 +62,7 @@ roles.get('/institute/access/:user_id',(req,res,next)=>{
             data = data.map(value =>{
                return  value.institute_id
             });
-            Organisation.find({$and : [{active : true},{organisation_id : {$in : data }}]})
+            Organisation.find({$and : [{active : true},{isActivated : true},{organisation_id : {$in : data }}]})
             .sort({organisation_name : 1})
             .then(
                 result=>{

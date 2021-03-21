@@ -98,7 +98,7 @@ mat-spinner
   }
   .profile-mobile-view h1
   {
-    color: cornflowerblue;
+    color: grey;
     font-size: 20px;
     margin-left : 2%;
     margin-right: 2%;
@@ -116,7 +116,7 @@ mat-spinner
   
   .profile-desktop-view h1
   {
-      color: cornflowerblue;
+      color: grey;
       font-size: 40px;
       margin-left : 2%;
       margin-right: 2%;
