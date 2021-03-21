@@ -17,6 +17,7 @@ export class LibraryComponent implements OnInit {
 
   roles;
   loggedinUser;
+  sysAdmin;
   insUrl;
   userMetas;
   default_ins;
@@ -31,6 +32,7 @@ export class LibraryComponent implements OnInit {
 
     this.loggedinUser = this.localStorageService.getter('user');
     this.insUrl = config.host + 'organisation_logo/';
+    this.isValidInstituteAdmin();
     if(this.loggedinUser)
     {
       this.getAccessRoles(this.loggedinUser.user_id);
@@ -39,7 +41,10 @@ export class LibraryComponent implements OnInit {
   }
 
   
-  
+  isValidInstituteAdmin()
+  {
+    console.log(this.roleAccessService.isValidRole(this.current_role,this.loggedinUser.user_id,'IADMIN'));
+  }
 
   isSysAdmin()
     {
@@ -165,7 +170,9 @@ export class LibraryComponent implements OnInit {
           return value.role == 'SADMIN'
         })[0];
         this.sessionStorageService.setter('current_role',this.current_role);
-        this.router.navigateByUrl('/e-library/home');
+        this.router.navigateByUrl('/e-library/home').then(
+          ()=> {window.location.reload();}
+        );
       }
       else
       {
@@ -177,7 +184,9 @@ export class LibraryComponent implements OnInit {
       })[0];
       this.sessionStorageService.setter('current_institute',this.current_ins);
       this.sessionStorageService.setter('current_role',this.current_role);
-      this.router.navigateByUrl('/e-library/home');
+      this.router.navigateByUrl('/e-library/home').then(
+        ()=> {window.location.reload();}
+      );
     }
     
     }
