@@ -107,7 +107,22 @@ organisations.post('/add',async (req,res,next)=>{
                     await mongooseclient.connect(process.env.MONGODB_URI, {useNewUrlParser:true});
                     let connection = mongooseclient.connection;
                     let countercol =  connection.db.collection("counters");
+                    let libraryconfig = connection.db.collection("library_config");
                     await countercol.updateOne({},{$inc : {organisation : 1}});
+                    await libraryconfig.updateOne({institute_id : req.body.organisation_id},
+                        {set :{
+                            release: 2592000000,
+                            img_size:2,
+                            doc_size:20,
+                            avatar_size:1,
+                            books_per_page : 10,
+                            logo_size :2,
+                            default_book_view : "GRID",
+                            default_user_view : "GRID",
+                            institute_id : req.body.organisation_id,
+                        }
+                    },{upsert : true}
+                    )
                     await session.commitTransaction();
                     session.endSession();
                     res.json({"msg" : "Organisation with Id "+ newOrganisation.organisation_id + " has been successfully created."});

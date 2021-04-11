@@ -117,14 +117,14 @@ app.put('/system/update/icon',(req,res,next)=>{
 })
 
 
-app.get('/library/config/list',(req,res,next)=>{
+app.get('/library/config/list/:institute_id',(req,res,next)=>{
 
     connection.db.collection("library_config", function(err, collection){
         if(err)
         {
             res.json({"err":"Error in Loading library Config Parameters"})
         }
-        collection.find({}).toArray(function(err, data){
+        collection.find({institute_id : req.params.institute_id}).toArray(function(err, data){
             if(err)
             {
                 res.json({"err":"Error in Loading library Config Parameters"})
@@ -237,14 +237,14 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
 
 })
 
-app.put('/library/config/set',(req,res,next)=>{
+app.put('/library/config/set/:institute_id',(req,res,next)=>{
 
     connection.db.collection("library_config", function(err, collection){
         if(err)
         {
             res.json({"err":"Error in setting Config Parameters"})
         }
-        collection.findOneAndUpdate({_id : {$ne :null}},
+        collection.findOneAndUpdate({institute_id : req.params.institute_id},
             {$set : {
                 books_per_page : req.body.books_per_page,
                 release : req.body.release,
