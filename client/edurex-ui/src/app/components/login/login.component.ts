@@ -94,7 +94,7 @@ onClick(event){
       this.inValidLoginMessage=null;
       this.localStorageService.setter("user",data);
       this.localStorageService.setter("theme",data['theme']);
-      //this.localStorageService.setter("dark-mode",JSON.parse(JSON.stringify(data))['dark_mode']);
+      this.localStorageService.setter("dark-mode",data['dark_mode'] ? "true" : "false");
       this.localStorageService.setter("username",data['name']);
       this.localStorageService.setter("avatar",data['avatar']);
       this.router.navigateByUrl('/e-library/home').then(()=>

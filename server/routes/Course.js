@@ -24,11 +24,11 @@ courses.put('/tags/delete/:id',(req,res,next)=>
 })
 
 //get entire list of course tag Name wise
-courses.get('/tags/list/:A', (req,res,next)=>
+courses.get('/tags/list/:institute_id/:A', (req,res,next)=>
 {
     if(req.params.A == 'All')
     {
-        CourseTag.find({active : {$eq : true}}).sort({course_tag:1})
+        CourseTag.find({$and : [{active : {$eq : true}},{institute_id : req.params.institute_id}]}).sort({course_tag:1})
     .then(
         data => 
         {
@@ -42,7 +42,8 @@ courses.get('/tags/list/:A', (req,res,next)=>
     }
     else
     {
-    CourseTag.find({$and : [{active  : {$eq : true}},{course_tag : {$regex : '^M'}}]}).sort({course_tag:1})
+    CourseTag.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
+        {course_tag : {$regex : '^M'}}]}).sort({course_tag:1})
     .then(
         data => 
         {
@@ -62,6 +63,7 @@ courses.post('/tags/add', (req, res, next)=>
     let newCourseTag = new CourseTag(
         {
             course_tag : req.body.course_tag,
+            institute_id : req.body.institute_id,
             active : true,
         }
     );
