@@ -279,7 +279,7 @@
                                 Visibility
                               </mat-panel-description>
                               </mat-expansion-panel-header>
-                              
+                              <div class="alert alert-info">Visibility will not be hidden to Institute Admins of your registered Institute</div>
                               <button mat-raised-button style="width : 200px; margin-right: 10px;">Basic Info </button> 
                               <mat-icon (click)="toggleVisibility('basic_info')" matTooltip="Visible" *ngIf="visibilitySettings.viewBasicInfo">visibility</mat-icon>
                               <mat-icon (click)="toggleVisibility('basic_info')" matTooltip="Not Visible" *ngIf="!visibilitySettings.viewBasicInfo">visibility_off</mat-icon><br>
@@ -418,7 +418,7 @@
                             <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true>
                             {{interest.interest}}
                             </mat-chip>
-                        </mat-chip-list>
+                        </mat-chip-list></span>
                         <mat-form-field *ngIf="viewMode == 'self'" class="form-group"appearance="outline">
                            <mat-label>Interests</mat-label>
                            <mat-chip-list  #interestList >
@@ -583,7 +583,7 @@
                               Visibility
                             </mat-panel-description>
                             </mat-expansion-panel-header>
-                            
+                            <div class="alert alert-info">Visibility will not be hidden to Institute Admins of your registered Institute</div>
                             <button mat-raised-button style="width : 200px; margin-right: 10px;">Basic Info </button> 
                             <mat-icon (click)="toggleVisibility('basic_info')" matTooltip="Visible" *ngIf="visibilitySettings.viewBasicInfo">visibility</mat-icon>
                             <mat-icon (click)="toggleVisibility('basic_info')" matTooltip="Not Visible" *ngIf="!visibilitySettings.viewBasicInfo">visibility_off</mat-icon><br>
