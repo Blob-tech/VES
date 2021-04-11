@@ -40,6 +40,11 @@ export class LibraryComponent implements OnInit {
     
   }
 
+  ngAfterContentInit()
+  {
+    this.showLoader = false;
+  }
+
   
   isValidInstituteAdmin()
   {
@@ -48,6 +53,7 @@ export class LibraryComponent implements OnInit {
 
   isSysAdmin()
     {
+      
       let sysadmin = this.roles['role'].filter(value => {
        return  value.role == 'SADMIN' && value.user_id == this.loggedinUser.user_id
        
@@ -166,12 +172,12 @@ export class LibraryComponent implements OnInit {
           {
             this.sessionStorageService.setter('current_role', this.localStorageService.getter('current_role'));
           }
-          this.showLoader = false;
+          
 
         },
         err=>
         {
-          this.showLoader = false;
+          
             
         }
       )
