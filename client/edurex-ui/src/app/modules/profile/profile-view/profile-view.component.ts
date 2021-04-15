@@ -338,6 +338,7 @@ export class ProfileViewComponent implements OnInit {
       this.subscriberServices.get_user_metas(user_id).subscribe(
         data=>{
           this.userMetas = data;
+          console.log(data);
           if(this.userMetas != null && this.userMetas.social_profiles != undefined)
           {
             this.socialLinks = this.userMetas.social_profiles as SocialProfile[];
