@@ -79,7 +79,7 @@
                                 <button *ngIf="viewMode == 'self'" type="reset" mat-raised-button>Reset</button> 
                         </form>            
                   </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewPersonalDetails">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)&& userMetas.personal_info">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
@@ -107,7 +107,7 @@
                             <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>                           
                       </mat-form-field>
-                      <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate'}}</strong></span><br>
+                      <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "" }}</strong></span><br>
                         <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
                        <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let int of personalInterests" [selectable]= true>
@@ -181,7 +181,7 @@
                     </mat-expansion-panel>
                   </mat-accordion>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewSubscriptions">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSubscriptions)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Subscriptions</b>
@@ -194,7 +194,7 @@
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewSocialProfile">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile) && userMetas.social_profiles">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       
@@ -390,7 +390,7 @@
                            <mat-datepicker-toggle  matSuffix [for]="dbpicker"></mat-datepicker-toggle>
                            <mat-datepicker #dbpicker></mat-datepicker>   
                         </mat-form-field>
-                        <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate'}}</strong></span><br>
+                        <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : ""}}</strong></span><br>
                         <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
                         <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true>
