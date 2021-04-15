@@ -251,6 +251,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   logout()
   {
     localStorage.clear();
+    sessionStorage.clear();
     this.route.navigateByUrl('/login').then(()=>{
       window.location.reload();
     });

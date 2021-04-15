@@ -44,6 +44,8 @@ import { ProfileModule } from './modules/profile/profile.module';
 import { SharedModule } from './shared/shared.module';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { AccessForbiddenComponent } from './components/access-forbidden/access-forbidden.component';
 
 
 @NgModule({
@@ -53,6 +55,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     LoginComponent,
     RegisterComponent,
     NotFoundComponent,
+    ForgotPasswordComponent,
+    AccessForbiddenComponent,
     
     
   ],

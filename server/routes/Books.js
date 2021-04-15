@@ -10,11 +10,11 @@ const Books = require('../models/Books');
 const mongoose = require('mongoose');
 
 //Get total books count
-books.get('/count/:category/:subcategory',(req,res,next)=>
+books.get('/count/:institute_id/:category/:subcategory',(req,res,next)=>
 {
     if(req.params.category == "all")
     {
-        Books.find({active  : {$eq : true}},).countDocuments((err,count)=>{
+        Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id}]}).countDocuments((err,count)=>{
             if(err)
             {
                 res.json({"err": "Error in loading the list of Books from Edurex Database."})
@@ -30,7 +30,7 @@ books.get('/count/:category/:subcategory',(req,res,next)=>
     else{
         if(req.params.subcategory == "all")
         {
-            Books.find({$and : [{active  : {$eq : true}},
+            Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
             {category : req.params.category}] })
             .count((err,count)=>{
                 if(err)
@@ -45,7 +45,7 @@ books.get('/count/:category/:subcategory',(req,res,next)=>
         }
         else
         {
-            Books.find({$and : [{active  : {$eq : true}},
+            Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
             {category : req.params.category},
             {subcategory : req.params.subcategory}]})
             .count((err,count)=>{
@@ -65,10 +65,10 @@ books.get('/count/:category/:subcategory',(req,res,next)=>
 
 
 //Get total books count
-books.get('/count/:filter',(req,res,next)=>
+books.get('/count/:institute_id/:filter',(req,res,next)=>
 {
             const searchkey = req.params.filter
-            Books.find({$and : [{active  : {$eq : true}},
+            Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
                 {$or : [{book_name : new RegExp(searchkey,'i')},
                 {author : new RegExp(searchkey,'i')},
                 {category : new RegExp(searchkey,'i')},
@@ -110,9 +110,9 @@ books.get('/view/:id',(req,res,next)=>
 })
 
 //get list of latest release
-books.get('/list/latest/:latest_number',(req,res,next)=>
+books.get('/list/latest/:institute_id/:latest_number',(req,res,next)=>
 {
-    Books.find({active : true}).sort({date_of_published : -1}).limit(Number(req.params.latest_number)).then(
+    Books.find({$and : [{active : true},{institute_id : req.params.institute_id}]}).sort({date_of_published : -1}).limit(Number(req.params.latest_number)).then(
         data=>{
             res.json(data);
         }
@@ -139,11 +139,11 @@ books.get('/filter-list/:filter/:cond/:books_per_page/:page',(req,res,next)=>
 })
 
 // Get List of All Books;
-books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
+books.get('/list/:institute_id/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
 {
     if(req.params.category == "all")
     {
-        Books.find({active  : {$eq : true}},)
+        Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id}]})
         .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
             .then(
                 data => 
@@ -159,7 +159,7 @@ books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
     else{
         if(req.params.subcategory == "all")
         {
-            Books.find({$and : [{active  : {$eq : true}},
+            Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
             {category : req.params.category}] })
             .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
                 .then(
@@ -175,7 +175,7 @@ books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
         }
         else
         {
-            Books.find({$and : [{active  : {$eq : true}},
+            Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
             {category : req.params.category},
             {subcategory : req.params.subcategory}]})
             .sort({book_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.books_per_page))).limit(Number(req.params.books_per_page))
@@ -197,10 +197,10 @@ books.get('/list/:category/:subcategory/:books_per_page/:page',(req,res,next)=>
 
 
 // Get List of All Books based on advance filter;
-books.get('/list/:filter/:books_per_page/:page',(req,res,next)=>
+books.get('/list/:institute_id/:filter/:books_per_page/:page',(req,res,next)=>
 {  
             searchkey = req.params.filter;
-            Books.find({$and : [{active  : {$eq : true}},
+            Books.find({$and : [{active  : {$eq : true}},{institute_id : req.params.institute_id},
                 {$or : [{book_name : new RegExp(searchkey,'i')},
                             {author : new RegExp(searchkey,'i')},
                             {category : new RegExp(searchkey,'i')},

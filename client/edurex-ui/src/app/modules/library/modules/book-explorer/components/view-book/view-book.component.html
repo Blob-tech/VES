@@ -1,5 +1,9 @@
-<img class="thumbnail" src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
-<div class="container content">
+<img *ngIf="!book.active" class="oops" src="/assets/images/oops.jpg">
+<span *ngIf="!book.active" style="color : grey; font-size : 20px; align-content: center; display:flex;
+justify-content: center; text-align: center;" > This content has been deleted !</span>
+<img *ngIf="book.active" class="thumbnail" src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
+<div *ngIf="book.active" class="container content">
+
       
     <mat-grid-list cols="2" rowHeight="100px">
         <!--mat-grid-tile
@@ -84,3 +88,8 @@
       
     
 </div>
+
+<div *ngIf="showLoader" class="loader">
+        <mat-spinner color="primary"></mat-spinner><br>
+        <span style="color: white; position: fixed; top:400px">Loading ...</span>
+        </div>

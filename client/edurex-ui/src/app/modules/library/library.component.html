@@ -18,7 +18,7 @@
                             <button routerLink="/e-library/home" class="action-button"  mat-raised-button color="primary">
                                 <mat-icon class="auto-flip">home </mat-icon> Home</button>
                       </span>
-                  <span class="module-button">
+                  <span  class="module-button">
                         <button routerLink="/e-library/book-explorer/list/all/all" class="action-button"  mat-raised-button color="primary">
                             <mat-icon class="auto-flip">book </mat-icon> Books</button>
                   </span>
@@ -35,16 +35,16 @@
                                         <mat-icon class="auto-flip">category</mat-icon> Configuration Settings</button>
                             </span>
                             <span class="example-spacer module-button"></span>
-                            <span *ngIf="loggedinUser && current_ins.client_id != ''" class="module-button">
+                            <span *ngIf="loggedinUser" class="module-button">
                                 <button mat-button [matMenuTriggerFor]="institutes" > 
                                     <mat-icon *ngIf="current_ins.client_id == 'Admin'" style="color:white; font-size:30px">admin_panel_settings</mat-icon>
                                         <img *ngIf="current_ins.client_id != 'Admin'" src="{{current_ins.avatar ? insUrl + current_ins.avatar : '/assets/images/insimg.png'}}" height=50 width=50>
-                                  {{current_ins ? current_ins.organisation_name : 'Select Institute'}}<mat-icon>keyboard_arrow_down</mat-icon></button>
+                                  {{current_ins.organisation_name ? current_ins.organisation_name : 'Select Institute'}}<mat-icon>keyboard_arrow_down</mat-icon></button>
                             </span>
-                            <span *ngIf="loggedinUser && current_ins.client_id != ''" class="mobile-module-button">
+                            <span *ngIf="loggedinUser" class="mobile-module-button">
                                     <button [matMenuTriggerFor]="institutes"
                                       class="action-button"  mat-button matTooltip = "Select Institute">
-                                     {{current_ins ? current_ins.client_id : 'Select Institute'}}
+                                     {{current_ins.organisation_name ? current_ins.client_id : 'Select Institute'}}
                                      <img *ngIf="current_ins.client_id != 'Admin'" src="{{current_ins.avatar ? insUrl + current_ins.avatar : '/assets/images/insimg.png'}}" style="border-radius: 50%;" height=50 width=50> 
                                      <mat-icon *ngIf="current_ins.client_id == 'Admin'" style="color:white; font-size:30px">admin_panel_settings</mat-icon>
                                     <mat-icon>keyboard_arrow_down</mat-icon> </button>
@@ -78,5 +78,8 @@
         <router-outlet></router-outlet>
 </mat-drawer-container>
 
-<mat-progress-spinner></mat-progress-spinner>
+<div *ngIf="showLoader" class="loader">
+        <mat-spinner color="primary"></mat-spinner><br>
+        <span style="color: white; position: fixed; top:400px">Loading ...</span>
+        </div>
 

@@ -12,7 +12,7 @@ export class LocalStorageService {
   {
     var ls = new SecureLS({encodingType : 'des' , isCompression : false, encryptionSecret : SECRET_KEY});
     //console.log(ls.get(key));
-    if(ls.getDataFromLocalStorage(key) != null)
+    if(localStorage.getItem(key) != null)
     {
       
       

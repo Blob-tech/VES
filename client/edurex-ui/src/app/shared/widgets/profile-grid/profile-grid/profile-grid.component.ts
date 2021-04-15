@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
+import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 
 @Component({
   selector: 'app-profile-grid',
@@ -36,13 +37,20 @@ export class ProfileGridComponent implements OnInit {
   enabeledDetails ?: boolean = true;
 
   @Input()
+  enabeledBio ?: boolean =true;
+
+  @Input()
   enabeledSocialLinks ?: boolean = true;
+
+  @Input()
+  viewMode ?:  string = 'self';
 
   imgUrl = config.host + "avatar/";
   coverUrl = config.host + "cover/";
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,
     public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router,
-    private formBuilder : FormBuilder,private locaStorageService : LocalStorageService) { }
+    private formBuilder : FormBuilder,private locaStorageService : LocalStorageService,
+    private roleAccessService : RoleAccessService) { }
 
   ngOnInit(): void {
 
@@ -56,6 +64,11 @@ export class ProfileGridComponent implements OnInit {
   url =  "assets/images/user.png" ;
   coverurl = "assets/images/default-cover.jpg";
   
+  isLoggedinUser()
+  {
+    return this.roleAccessService.isLoggedinUser(this.selectedUser.user_id);
+  }
+
   open(content)
   {
     this.url = this.selectedUser.avatar ? this.imgUrl + this.selectedUser.avatar : this.url;

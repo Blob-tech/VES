@@ -42,6 +42,7 @@ export class ProfileViewComponent implements OnInit {
   instituteList = [];
   imgUrl = config.host + "organisation_logo/";
   dark_mode;
+  viewMode;
 
 
   visibilitySettings = {
@@ -76,11 +77,17 @@ export class ProfileViewComponent implements OnInit {
     
     
     this.route.params.subscribe(routeParams => {
+      this.viewMode = routeParams.view;
       this.getCurrentUser(routeParams.user_id);
       this.getuserMetas(routeParams.user_id);
       this.getInstituteAndRole(routeParams.user_id);
     })
     
+  }
+
+  isLoggedinUser() : boolean
+  {
+    return this.roleAccessService.isLoggedinUser(this.currentUser.user_id);
   }
 
   toggleVisibility(param:string)
@@ -161,11 +168,12 @@ export class ProfileViewComponent implements OnInit {
             address : this.currentUser.address,
           },{emitEvent : true});
         }
+        this.showLoader = false;
        
       },
       err => {
         this.snackBar.open("Error in getting user details" + err , null, {duration : 5000});
-        
+        this.showLoader=false
       }
       
     )
@@ -248,7 +256,7 @@ export class ProfileViewComponent implements OnInit {
   {
     let formData = new FormData()
     
-    
+    this.showLoader = true;
     for ( const key of Object.keys(this.basicInfoForm.value) ) {
       const value = this.basicInfoForm.value[key];
       formData.append(key, value);
@@ -270,9 +278,11 @@ export class ProfileViewComponent implements OnInit {
         {
           this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
         }
+        this.showLoader = false;
       },
       err=>{
         this.snackBar.open("Error in updating the basic info of " + this.currentUser.name,null,{duration : 5000})
+        this.showLoader = false;
       }
     )
   }
@@ -324,9 +334,11 @@ export class ProfileViewComponent implements OnInit {
 
     getuserMetas(user_id : string)
     {
+      this.showLoader=true;
       this.subscriberServices.get_user_metas(user_id).subscribe(
         data=>{
           this.userMetas = data;
+          console.log(data);
           if(this.userMetas != null && this.userMetas.social_profiles != undefined)
           {
             this.socialLinks = this.userMetas.social_profiles as SocialProfile[];
@@ -345,10 +357,11 @@ export class ProfileViewComponent implements OnInit {
           {
             this.visibilitySettings = this.userMetas.settings.visibility;
           }
+          this.showLoader = false;
         },
         err=>
         {
-            
+            this.showLoader = false;
         }
       )
     }
@@ -367,6 +380,7 @@ export class ProfileViewComponent implements OnInit {
     }
     saveSocialProfile()
     {
+      this.showLoader = true;
       this.subscriberServices.update_social_profile(this.currentUser.user_id,this.socialLinks).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -379,9 +393,11 @@ export class ProfileViewComponent implements OnInit {
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
           }
+          this.showLoader = false;
         },
         err=>{
           this.snackBar.open("Error in updating Social Profiles",null,{duration : 5000});
+          this.showLoader = false;
         }
       )
     }
@@ -430,11 +446,11 @@ export class ProfileViewComponent implements OnInit {
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
           }
-          this.showLoader=false;
+          //this.showLoader=false;
         },
         err=>{
           this.snackBar.open("Error in Loading Institutes" + err,null,{duration : 5000});
-          this.showLoader=false;
+          //this.showLoader=false;
         }
        
          

@@ -44,7 +44,7 @@
                         <div style="margin:1%;padding: 1%;">
                         <p *ngFor="let book of books">
                                 <img class="avatar"  src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
-                            <a href="/e-library/book-explorer/view/{{book.book_id}}"><strong>{{book.book_name}}</strong>-{{book.author}}</a></p>
+                            <a href="/e-library/book-explorer/view/{{book.book_id}}"><strong>{{book.book_name}}</strong></a></p>
                         </div>
                     </mat-card>
             <mat-card>
@@ -74,7 +74,7 @@
                 <div style="margin:1%;padding: 1%;">
                 <p *ngFor="let book of books">
                         <img class="avatar"  src= "{{book.thumbnail_source ? imgUrl + book.thumbnail_source : '/assets/images/img.png'}}">
-                    <a href="/e-library/book-explorer/view/{{book.book_id}}"><strong>{{book.book_name}}</strong>-{{book.author}}</a></p>
+                    <a href="/e-library/book-explorer/view/{{book.book_id}}"><strong>{{book.book_name}}</strong></a></p>
                 </div>
             </mat-card>
     <mat-card class="mobile-right-sidebar">

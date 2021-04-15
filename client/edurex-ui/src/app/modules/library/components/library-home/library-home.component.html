@@ -3,8 +3,12 @@
         <img  *ngIf="ins.client_id == 'Admin'"src="/assets/images/admin.jpg" style="margin-top : 150px" height=200 width=200> 
 <img  *ngIf="ins.client_id != 'Admin'"src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}" style="margin-top : 150px" height=200 width=200><br><br>
          <span class="ins_name" style="color : grey ;">  {{ins.organisation_name ? ins.organisation_name : ''}} </span><br><br>
-         <button routerLink="/e-library/book-explorer/list/all/all" color="primary" mat-raised-button styel="font-size : 20px; height : 100px">
+         <button  routerLink="/e-library/book-explorer/list/all/all" color="primary" mat-raised-button styel="font-size : 20px; height : 100px">
              Go to Library <mat-icon>arrow_right_alt</mat-icon></button>
-</div>
+       
 
-  
+<div *ngIf="showLoader" class="loader">
+                <mat-spinner color="primary"></mat-spinner><br>
+                <span style="color: white; position: fixed; top:400px">Loading ...</span>
+                </div>
+        

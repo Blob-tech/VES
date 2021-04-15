@@ -10,9 +10,10 @@ libraryCategories.use(cors());
 
 // get the list of entire articel category
 
-libraryCategories.get('/articles/list', (req,res,next)=>
+libraryCategories.get('/articles/list/:institute_id', (req,res,next)=>
 {
-    BookCategory.find({active  : {$eq : true}}).sort({book_category:1})
+    BookCategory.find({$and : [{active  : {$eq : true}},
+    {institute_id : req.params.institute_id}]}).sort({book_category:1})
     .then(
         data => 
         {
@@ -26,9 +27,14 @@ libraryCategories.get('/articles/list', (req,res,next)=>
 });
 
 //get entire list of subscription category 
-libraryCategories.get('/subscriptions/list', (req,res,next)=>
+libraryCategories.get('/subscriptions/list/:institute_id', (req,res,next)=>
 {
-    SubscriptionCategory.find({active  : {$eq : true}}).sort({subscription_category:1})
+    SubscriptionCategory.find(
+        {$and : 
+            [
+                {active  : {$eq : true}},
+                {institute_id : req.params.institute_id}
+            ]}).sort({subscription_category:1})
     .then(
         data => 
         {
@@ -48,6 +54,7 @@ libraryCategories.post('/articles/add', (req, res, next)=>
     let newCategory = new BookCategory(
         {
             book_category : req.body.book_category,
+            institute_id : req.body.institute_id,
             book_subCategory : [],
             active : true,
         }
@@ -77,6 +84,7 @@ libraryCategories.post('/subscriptions/add', (req, res, next)=>
     let newCategory = new SubscriptionCategory(
         {
             subscription_category : req.body.subscription_category,
+            institute_id : req.body.institute_id,
             active : true,
         }
     );
