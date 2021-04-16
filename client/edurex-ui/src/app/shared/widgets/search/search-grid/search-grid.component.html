@@ -20,30 +20,29 @@
                                 <div class="alert alert-danger alert-dismissible fade-in" *ngIf = "noBook">
                                                 {{noBook}}
                                 </div>
-                                <span *ngFor="let book of bookList">
+                                <span *ngFor="let book of bookList" (click)="goToBook(book.book_id)">
                                 <img height=60 width=60 style="border-radius : 50%; margin-right: 10px;" src= "{{book.thumbnail_source ? bookThumbnailUrl + book.thumbnail_source : '/assets/images/img.png'}}">
                                 <img height=25 width=25 style="border-radius : 50%; border: solid whitesmoke 2px; margin-left:-30px; margin-top:40px; margin-right: 10px; background: white;" 
                                 src= "{{book.institute_avatar ? logoUrl + book.institute_avatar : '/assets/images/insimg.png'}}">
 
-                                                <a href="/e-library/book-explorer/view/{{book.book_id}}">{{book.book_name}}</a>
+                                                <a style="color : cornflowerblue">{{book.book_name}}</a>
                                                 <mat-divider></mat-divider>
                                         </span><br>
-                                        <button *ngIf = "!noBook && bookLoadMore" style="display : flex; justify-content: flex-center; width:100%;" (click)="loadMore('book')"mat-raised-button><mat-icon>keyboard_arrow_down</mat-icon> Load more </button>
+                               <button *ngIf = "!noBook && bookLoadMore" style="display : flex; justify-content: flex-center; width:100%;" (click)="loadMore('book')"mat-raised-button><mat-icon>keyboard_arrow_down</mat-icon> Load more </button>
                                 </span>
                                 <span *ngIf="toggle == 'people'">
                                <div class="alert alert-danger alert-dismissible fade-in" *ngIf = "noUser">
                                                         {{noUser}}
                                 </div>
                                 
-                                
-                                <span *ngFor="let user of userList">
+                                <span *ngFor="let user of userList" (click)="goToUser(user.user_id)">
                                                 <img height=60 width=60 style="border-radius : 50%; margin-right: 10px;" src= "{{user.avatar ? profileImgUrl + user.avatar : '/assets/images/user.png'}}">
-                                                <a href="/profile/public/{{user.user_id}}">{{user.name}}</a>
+                                                <a style="color : cornflowerblue">{{user.name}}</a>
                                                 <mat-divider></mat-divider>
                                         </span><br>
                                         <button *ngIf = "!noUser && userLoadMore" style="display : flex; justify-content: flex-center; width:100%;" (click)="loadMore('user')" mat-raised-button><mat-icon>keyboard_arrow_down</mat-icon> Load more </button>
                                 
-                        </span>
+                                   </span>
                                 <span *ngIf="toggle == 'institutes'">
                                 <div class="alert alert-danger alert-dismissible fade-in" *ngIf = "noInstitute">
                                                               {{noInstitute}}
@@ -51,7 +50,7 @@
                                 <span *ngFor="let ins of instituteList">
                                                 <img height=60 width=60 style="border-radius : 50%; margin-right: 10px;" src= "{{ins.avatar ? logoUrl + ins.avatar : '/assets/images/insimg.png'}}">
                             
-                                                <a>{{ins.organisation_name}}</a>
+                                                <a style="color : cornflowerblue">{{ins.organisation_name}}</a>
                                                 <mat-divider></mat-divider>
                                         </span><br>
                                         <button *ngIf = "!noInstitute && insLoadMore" style="display : flex; justify-content: flex-center; width:100%;" (click)="loadMore('institute')" mat-raised-button><mat-icon>keyboard_arrow_down</mat-icon> Load more </button>

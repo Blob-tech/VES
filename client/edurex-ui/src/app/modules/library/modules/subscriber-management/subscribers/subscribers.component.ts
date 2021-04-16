@@ -13,6 +13,7 @@ export class SubscribersComponent implements OnInit {
 
   subscriptions=[];
   institutes = [];
+  showLoader = true;
   imgUrl = config.host + "organisation_logo/";
   constructor(private libCategoryServices : LibraryCategoryService, private instituteServices : InstituteManagementService,
     private _snackbar : MatSnackBar) { }
@@ -37,13 +38,16 @@ export class SubscribersComponent implements OnInit {
 
   getActiveInstituteList()
   {
+    this.showLoader = true;
     this.instituteServices.get_institutes().subscribe(
       data=>{
         this.institutes = data as Array<any>;
         this.institutes = this.institutes.filter(value => { return value.isActivated == true});
+        this.showLoader = false
       },
       err => {
         this._snackbar.open("Error in Loading the Institute List. Please try after few minutes!",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }

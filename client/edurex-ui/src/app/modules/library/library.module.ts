@@ -43,6 +43,7 @@ import { LibraryHomeComponent } from './components/library-home/library-home.com
 import { BookExplorerModule } from './modules/book-explorer/book-explorer.module';
 import { BookExplorerRoutingModule } from './modules/book-explorer/book-explorer.routing.module';
 import { MatChipsModule } from '@angular/material/chips';
+import { ProfileModule } from './modules/profile/profile.module';
 
 
 
@@ -97,6 +98,7 @@ import { MatChipsModule } from '@angular/material/chips';
     NgBreadcrumbModule,
     LibraryRoutingModule,
     BookExplorerModule,
+    ProfileModule
     
 
   ],

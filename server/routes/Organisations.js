@@ -8,6 +8,21 @@ const fs = require('fs');
 const Organisation = require('../models/Organisation');
 organisations.use(cors());
 
+//get List of Organisation by page 
+organisations.get('/list/all/:org_per_page/:page',(req,res,next)=>{
+
+    Organisation.find()
+    Organisation.find({active : true})
+        .sort({organisation_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.org_per_page))).limit(Number(req.params.org_per_page))
+        .then(
+            data=>{
+                res.json(data);
+            }
+        ).catch(err=>{
+            res.json({"err":"Server Error ! Error in loading Organisations" + JSON.stringify(err)});
+        })
+});
+
 //get list of all organisation
 organisations.get('/list/all',(req,res,next)=>{
 

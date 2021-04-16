@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
-import { SocialProfile } from 'src/app/modules/profile/profile-view/profile-view.component';
+import { SocialProfile } from 'src/app/modules/library/modules/profile/profile-view/profile-view.component';
+
 
 
 @Component({

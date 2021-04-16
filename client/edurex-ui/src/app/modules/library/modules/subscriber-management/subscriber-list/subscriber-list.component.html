@@ -89,7 +89,7 @@
       <img [style.opacity]="!user.isActivated ? 0.2 : 1"
       src= "{{user.avatar ? imgUrl + user.avatar : '/assets/images/user.png'}}" height=60 width = 60
       style="border-radius : 50%;" >
-    <a href="/profile/public/{{user.user_id}}">{{user.name}}</a> </td>
+    <a routerLink="/e-library/profile/public/{{user.user_id}}">{{user.name}}</a> </td>
   </ng-container>
 
   <ng-container matColumnDef="email">

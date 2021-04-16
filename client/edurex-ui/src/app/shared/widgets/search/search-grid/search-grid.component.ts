@@ -7,6 +7,7 @@ import { SearchService } from 'src/app/shared/services/search.service';
 import { config } from 'src/conf';
 import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-grid',
@@ -40,7 +41,7 @@ export class SearchGridComponent implements OnInit {
   visible = true;
 
   constructor(private dialog : MatDialog,private searcService : SearchService,
-    private roleAccessService : RoleAccessService) { }
+    private roleAccessService : RoleAccessService, private router : Router) { }
 
   ngOnInit(): void {
   }
@@ -203,6 +204,18 @@ export class SearchGridComponent implements OnInit {
  
   )
 
+  }
+
+  goToUser(user_id : string)
+  {
+    window.open("/e-library/profile/public/"+user_id);
+    
+  }
+
+  goToBook(book_id : string)
+  {
+    window.open("/e-library/book-explorer/view/"+book_id);
+    
   }
 
   getInstitutes(user_id : string)

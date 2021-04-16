@@ -1,5 +1,3 @@
-<app-library></app-library>
-
 <mat-sidenav-container class="profile-sidenav">
     <mat-sidenav opened mode="side" class="sidenav" >
         <app-profile-grid [selectedUser] = "currentUser" [viewMode]="viewMode" [enabeledSocialLinks]="visibilitySettings.viewSocialProfile"
@@ -79,7 +77,7 @@
                                 <button *ngIf="viewMode == 'self'" type="reset" mat-raised-button>Reset</button> 
                         </form>            
                   </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)&& userMetas.personal_info">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
@@ -99,7 +97,7 @@
                                     <mat-hint align="end">{{bio.value?.length || 0}}/500</mat-hint>
                                     <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
                    </mat-form-field>
-                   <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{bio.value}}</strong></span><br>
+                   <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{bio.value ? bio.value : "N/A"}}</strong></span><br>
                         <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
                         <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                             <mat-label>DOB</mat-label>
@@ -107,7 +105,7 @@
                             <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>                           
                       </mat-form-field>
-                      <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "" }}</strong></span><br>
+                      <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{userMetas.personal_info ? (userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "N/A") : "N/A" }}</strong></span><br>
                         <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
                        <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let int of personalInterests" [selectable]= true>
@@ -194,7 +192,7 @@
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile) && userMetas.social_profiles">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       
@@ -360,7 +358,7 @@
                                 <button *ngIf="viewMode == 'self'" type="reset" mat-raised-button>Reset</button> 
                         </form>            
                   </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewPersonalDetails">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
@@ -374,7 +372,7 @@
                   
                     <form [formGroup]="personalDetailsForm">
                         <button mat-raised-button color="accent" class="label-button">Bio</button>
-                        <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{bio.value}}</strong></span><br>
+                        <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{bio.value ? bio.value : "N/A"}}</strong></span><br>
                         <br>
                    <mat-form-field *ngIf="viewMode == 'self'" class="form-group"appearance="outline" style="width:90%">
                       <mat-label>Bio</mat-label>
@@ -390,7 +388,7 @@
                            <mat-datepicker-toggle  matSuffix [for]="dbpicker"></mat-datepicker-toggle>
                            <mat-datepicker #dbpicker></mat-datepicker>   
                         </mat-form-field>
-                        <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : ""}}</strong></span><br>
+                        <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{userMetas.personal_info ? ( userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "N/A") : "N/A"}}</strong></span><br>
                         <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
                         <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true>
@@ -478,7 +476,7 @@
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewSocialProfile">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Social Profiles</b>
@@ -579,6 +577,3 @@
     <mat-spinner color="primary"></mat-spinner><br>
     <span style="color: white; position: fixed; top:400px">Loading ...</span>
     </div>
-
-
-

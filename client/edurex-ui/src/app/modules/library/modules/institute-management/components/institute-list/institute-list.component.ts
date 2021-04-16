@@ -28,6 +28,7 @@ import { sync } from 'glob';
     imgUrl = config.host + "organisation_logo/";
     bulkaction ='';
     only_active = false;
+    showLoader = true;
 
     displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions', 'status'];
    
@@ -100,6 +101,7 @@ import { sync } from 'glob';
   
     getActiveInstituteList()
     {
+      this.showLoader = true;
       this.instituteService.get_institutes().subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -114,10 +116,12 @@ import { sync } from 'glob';
             this.dataSource = new MatTableDataSource<Institute>(this.institutes);
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
+            this.showLoader = false;
           }
           else
           {
             this._snackbar.open("Error in loading institutes ! "+ data,null, {duration : 5000});
+            this.showLoader =false
             
           }
         },
@@ -129,6 +133,7 @@ import { sync } from 'glob';
 
     getInstituteList()
     {
+      this.showLoader=true;
       this.instituteService.get_institutes().subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -141,16 +146,17 @@ import { sync } from 'glob';
             this.dataSource = new MatTableDataSource<Institute>(this.institutes);
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
+            this.showLoader=false;
           }
           else
           {
             this._snackbar.open("Error in loading institutes ! "+ data,null, {duration : 5000});
-            
+            this.showLoader=false;
           }
         },
         err => {
           this._snackbar.open("Error in loading institutes from edurex database! "+ err,null, {duration : 5000});
-            
+          this.showLoader = false;  
         })
       }
 

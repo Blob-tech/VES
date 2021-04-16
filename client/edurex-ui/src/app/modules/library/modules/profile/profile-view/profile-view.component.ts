@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import { User } from '../../library/modules/subscriber-management/models/subscriber';
-import { SubscriberService } from '../../library/service/subscriber.service';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
@@ -9,10 +8,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { SocialLinksComponent } from 'src/app/shared/widgets/social-links/social-links.component';
-import { LibraryCategoryService } from '../../library/service/library-category.service';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 import { config } from 'src/conf';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
+import { SubscriberService } from '../../../service/subscriber.service';
+import { LibraryCategoryService } from '../../../service/library-category.service';
+import { User } from '../../subscriber-management/models/subscriber';
 
 
 

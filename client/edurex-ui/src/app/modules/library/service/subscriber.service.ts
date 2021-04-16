@@ -2,7 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { config } from "src/conf";
 import { User } from '../modules/subscriber-management/models/subscriber';
-import { SocialProfile } from '../../profile/profile-view/profile-view.component';
+import { SocialProfile } from '../modules/profile/profile-view/profile-view.component';
+
 
 @Injectable({
   providedIn: 'root'
