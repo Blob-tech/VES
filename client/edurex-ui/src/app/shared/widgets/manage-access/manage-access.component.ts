@@ -8,7 +8,6 @@ import { MatDialog } from '@angular/material/dialog';import { now } from 'moment
 import { RoleAccessService } from '../../services/role-access.service';
 import { SessionStorageService } from '../../services/session-storage.service';
 import {config} from 'src/conf';
-import { ServerTimeService } from '../../services/server-time.service';
 
 
 
@@ -45,12 +44,10 @@ export class ManageAccessComponent implements OnInit {
   currentInstitute=null;
   badgeValue='';
   imgUrl = config.host + "organisation_logo/";
-  currentDate=null;
-  approveAccessRole = 'STUDENT';
   constructor(private formBuilder : FormBuilder, private subscriberServices : SubscriberService,
     private instituteService : InstituteManagementService, private _snacbar : MatSnackBar,
     public dialog: MatDialog, private roleAccessService : RoleAccessService,
-    private sessionStorageService : SessionStorageService,private serverTimeService : ServerTimeService)
+    private sessionStorageService : SessionStorageService)
      {
        this.minDate  = new Date() ;
 
@@ -59,85 +56,20 @@ export class ManageAccessComponent implements OnInit {
   ngOnInit(): void {
     if(this.mode == 'institute')
     {
-    
-      this.getInstituteById(this.institute);
+      this.getActiveInstituteList(this.institute);
       this.getCurrentRoleAccess(this.access_id,this.institute);
     }
-    this.serverTimeService.getServerTime().subscribe(
-      data=>{
-        this.currentDate=data;
-      }
-    );
   }
 
-  initializeBadgeValue()
-  {
-    if(this.currentRole)
-    {
-      if(this.isRoleExpired(this.currentRole))
-      {
-        this.badgeValue = 'E';
-      }
-    }
-    else
-    {
-      this.badgeValue = 'N';
-    }
-  }
-
-  changeApproveRole(role : string)
-  {
-    this.approveAccessRole=role;
-  }
-
-  removeAccess()
-  {
-    var res = confirm("Are you sure to remove this user permanently from our organisation ?");
-    if(res)
-    {
-      this.roleAccessService.removeRoleAccess(this.institute,this.access_id).subscribe(
-        data=>{
-          if(!(JSON.parse(JSON.stringify(data))['err']))
-          {
-            this._snacbar.open(JSON.stringify(data['msg']),null, {duration : 5000});
-            this.getCurrentRoleAccess(this.access_id,this.institute);
-          }
-          else
-          {
-            this._snacbar.open("Error in removing access : " + JSON.stringify(data['err']),null, {duration : 5000});
-            
-          }
-        },
-        err => {
-          this._snacbar.open("Error in removing access :"+ JSON.stringify(err),null, {duration : 5000});
-            
-        }
-      )
-    }
-  }
-  getInstituteById(id : string)
-  {
-    this.instituteService.view_institute(id).subscribe(
-      data=>{
-        this.currentInstitute = data[0];
-      },
-      err=>{
-        this._snacbar.open("Error in getting Institute" + err);
-      }
-    )
-  }
   isRoleExpired(role) : boolean
     {
-      
-      let currentDate = this.currentDate;
+      let currentDate = new Date().toDateString();
       if(role.valid_upto == '' || role.valid_upto == null)
       {
-        
         return false;
       }
       if(new Date(currentDate.split('T')[0]) > new Date(role.valid_upto.split('T')[0]))
       {
-        
         return true;
       }
       return false;
@@ -148,7 +80,6 @@ export class ManageAccessComponent implements OnInit {
       var res=confirm("Are you sure you want to revoke this user access ?");
       if(res)
       {
-        if(!this.system_admin){
         this.roleAccessService.toggleAccess(this.access_id,this.institute,"revoke").subscribe(
           data=>{
             if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -166,28 +97,7 @@ export class ManageAccessComponent implements OnInit {
             this._snacbar.open("Error in revoking access :"+ err,null, {duration : 5000});
               
           }
-        )}
-        else
-        {
-          this.roleAccessService.toggleSystemAccess(this.access_id,"revoke").subscribe(
-            data=>{
-              if(!(JSON.parse(JSON.stringify(data))['err']))
-              {
-                this._snacbar.open(JSON.stringify(data['msg']),null, {duration : 5000});
-                this.getCurrentRoleAccess(this.access_id,this.institute);
-              }
-              else
-              {
-                this._snacbar.open("Error in revoking access : " + JSON.stringify(data['err']),null, {duration : 5000});
-                
-              }
-            },
-            err => {
-              this._snacbar.open("Error in revoking access :"+ err,null, {duration : 5000});
-                
-            }
-          )
-        }
+        )
       }
     }
 
@@ -196,7 +106,6 @@ export class ManageAccessComponent implements OnInit {
       var res=confirm("Are you sure you want to renew this user access ?");
       if(res)
       {
-        if(!this.system_admin){
         this.roleAccessService.toggleAccess(this.access_id,this.institute,"renew").subscribe(
           data=>{
             if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -214,76 +123,30 @@ export class ManageAccessComponent implements OnInit {
             this._snacbar.open("Error in renewing access :"+ err,null, {duration : 5000});
               
           }
-        )}
-        else
-        {
-          this.roleAccessService.toggleSystemAccess(this.access_id,"renew").subscribe(
-            data=>{
-              if(!(JSON.parse(JSON.stringify(data))['err']))
-              {
-                this._snacbar.open(JSON.stringify(data['msg']),null, {duration : 5000});
-                this.getCurrentRoleAccess(this.access_id,this.institute);
-              }
-              else
-              {
-                this._snacbar.open("Error in renewing access : " + JSON.stringify(data['err']),null, {duration : 5000});
-                
-              }
-            },
-            err => {
-              this._snacbar.open("Error in renewing access :"+ err,null, {duration : 5000});
-                
-            }
-          )
-        }
+        )
       }
     }
 
 
   getCurrentRoleAccess(user_id,institute_id)
   {
-    if(!this.system_admin){
     this.roleAccessService.getIndividualRoleAccess(user_id,institute_id).subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
          this.currentRole = data;
-         this.initializeBadgeValue();
         }
         else
         {
-          this.currentRole=null;
           this._snacbar.open(JSON.stringify(data),null, {duration : 5000});
           
         }
       },
       err => {
-        this.currentRole = null;
         this._snacbar.open("Error in retrieving user access "+ err,null, {duration : 5000});
           
       }
-    )}
-    else
-    {
-      this.roleAccessService.getSystemAdminAccess(user_id).subscribe(
-        data=>{
-          if(!(JSON.parse(JSON.stringify(data))['err']))
-          {
-           this.currentRole = data;
-           console.log(this.currentRole);
-          }
-          else
-          {
-            this._snacbar.open(JSON.stringify(data),null, {duration : 5000});
-            
-          }
-        },
-        err => {
-          this._snacbar.open("Error in retrieving user access "+ err,null, {duration : 5000});
-            
-        }
-      )
-    }
+    )
   }
 
   getActiveInstituteList(institute_id)
@@ -326,23 +189,6 @@ export class ManageAccessComponent implements OnInit {
       valid_upto : [''],
     })
 
-    regRequestForm = this.formBuilder.group(
-      {
-        reg_role:[''],
-        reg_valid_upto :['']
-      }
-    )
-
-  get reg_role()
-  {
-    return this.regRequestForm.get('reg_role');
-  }
-
-  get reg_valid_upto()
-  {
-    return this.regRequestForm.get('reg_valid_upto');
-  }
-
   get role()
   {
     return this.accessManagerForm.get('role');
@@ -376,26 +222,7 @@ export class ManageAccessComponent implements OnInit {
 
   approveAccess()
   {
-    var res=true;
-    if(this.reg_valid_upto.value == '' || this.reg_valid_upto.value == undefined)
-    {
-      res = confirm("You have not entered any value for access time limit. This will give a lifetime access to the user");
-    }
-    let formData = new FormData();
-    let validupto : Date;
-      if(this.reg_valid_upto.value)
-      {
-        validupto = new Date(this.reg_valid_upto.value);
-        validupto.setDate(validupto.getDate()+1);
-      }  
-    formData.append("user_id",this.access_id);
-    formData.append("institute_id",this.institute);
-    formData.append("approver",'admin');
-    formData.append("role",this.approveAccessRole);
-    formData.append("valid_upto",this.reg_valid_upto.value ? validupto.toDateString() : '');
-    if(res){
-      console.log(formData);
-    this.roleAccessService.approveAccess(formData).subscribe(
+    this.roleAccessService.approveAccess(this.access_id,this.institute,'admin').subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
@@ -413,7 +240,7 @@ export class ManageAccessComponent implements OnInit {
         this._snacbar.open("Error in approving access" + JSON.stringify(err),null,{duration : 5000});
         
       }
-    )}
+    )
     
   }
 
