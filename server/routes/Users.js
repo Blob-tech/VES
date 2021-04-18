@@ -324,7 +324,7 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
 
     if(req.params.institute == 'unassigned')
     {
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -377,8 +377,7 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
     }
     else {
         RoleAccess.find({$and :
-             [{active : true},
-              {institute_id : req.params.institute},
+             [{institute_id : req.params.institute},
               {role : {$ne : "SADMIN"}}
             ]})
         .then(
@@ -975,6 +974,24 @@ users.post('/visibility/:user_id',(req,res,next)=>{
             },
         ).catch(err => {
             res.json({"err" : "Server Error ! Error in setting visibility"});
+        })
+})
+
+users.put('/default_institute/:user_id',(req,res,next)=>{
+    UserMeta.updateOne({user_id : req.params.user_id},
+        {
+            $set : {
+                default_institute : req.body.institute
+            }
+        },
+        {
+            upsert : true
+        }).then(
+            data=>{
+                res.json({"msg" : "Your Default Institute has been changed"});
+            },
+        ).catch(err => {
+            res.json({"err" : "Server Error ! Error in setting default Institute" + err});
         })
 })
 

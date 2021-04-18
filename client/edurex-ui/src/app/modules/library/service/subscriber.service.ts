@@ -161,6 +161,14 @@ export class SubscriberService {
     return this.httpClient.post(this.URL + 'personal_info/add/'+user_id,formData,{headers : headers});
   }
 
+  default_institute(user_id : string, institute : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL + "default_institute/" + user_id ,{"institute" : institute},{headers : headers});
+
+  }
+
   set_visibility(user_id : string,body:any)
   {
     let headers = new HttpHeaders();

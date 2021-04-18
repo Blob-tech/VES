@@ -34,6 +34,20 @@ export class RoleAccessService implements OnInit{
     return this.httpClient.get(this.URL+"institute/access/"+user_id,{headers:headers})
   }
 
+  toggleAccess(user_id,institute_id,access)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"toggle_access/"+user_id+"/"+institute_id+"/"+access,{headers:headers});
+
+  }
+  getIndividualRoleAccess(user_id : string, institute_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"individual_access/"+user_id+"/"+institute_id,{headers:headers});
+  }
+
   isRoleExpired(role) : boolean
     {
       let currentDate = new Date().toDateString();

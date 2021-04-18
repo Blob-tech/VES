@@ -24,11 +24,21 @@ export class ManageAccessComponent implements OnInit {
   access_id = '';
 
   @Input()
+  user_id ? : string = "";
+
+  @Input()
   mode ?: string= 'institute';
+
+  @Input()
+  system_admin ?: boolean = false;
+
+  @Input()
+  institute ? : string = "";
 
   minDate : Date;
 
   accessList = []
+  currentRole=null;
   constructor(private formBuilder : FormBuilder, private subscriberServices : SubscriberService,
     private instituteService : InstituteManagementService, private _snacbar : MatSnackBar,
     public dialog: MatDialog, private roleAccessService : RoleAccessService,
@@ -41,18 +51,107 @@ export class ManageAccessComponent implements OnInit {
   ngOnInit(): void {
     if(this.mode == 'institute')
     {
-      this.getActiveInstituteList();
+      this.getActiveInstituteList(this.institute);
+      this.getCurrentRoleAccess(this.access_id,this.institute);
     }
   }
 
-  getActiveInstituteList()
+  isRoleExpired(role) : boolean
+    {
+      let currentDate = new Date().toDateString();
+      if(role.valid_upto == '' || role.valid_upto == null)
+      {
+        return false;
+      }
+      if(new Date(currentDate.split('T')[0]) > new Date(role.valid_upto.split('T')[0]))
+      {
+        return true;
+      }
+      return false;
+    }
+  
+    revokeAccess()
+    {
+      var res=confirm("Are you sure you want to revoke this user access ?");
+      if(res)
+      {
+        this.roleAccessService.toggleAccess(this.access_id,this.institute,"revoke").subscribe(
+          data=>{
+            if(!(JSON.parse(JSON.stringify(data))['err']))
+            {
+              this._snacbar.open(JSON.stringify(data['msg']),null, {duration : 5000});
+              this.getCurrentRoleAccess(this.access_id,this.institute);
+            }
+            else
+            {
+              this._snacbar.open("Error in revoking access : " + JSON.stringify(data['err']),null, {duration : 5000});
+              
+            }
+          },
+          err => {
+            this._snacbar.open("Error in revoking access :"+ err,null, {duration : 5000});
+              
+          }
+        )
+      }
+    }
+
+    renewAccess()
+    {
+      var res=confirm("Are you sure you want to renew this user access ?");
+      if(res)
+      {
+        this.roleAccessService.toggleAccess(this.access_id,this.institute,"renew").subscribe(
+          data=>{
+            if(!(JSON.parse(JSON.stringify(data))['err']))
+            {
+              this._snacbar.open(JSON.stringify(data['msg']),null, {duration : 5000});
+              this.getCurrentRoleAccess(this.access_id,this.institute);
+            }
+            else
+            {
+              this._snacbar.open("Error in renewing access : " + JSON.stringify(data['err']),null, {duration : 5000});
+              
+            }
+          },
+          err => {
+            this._snacbar.open("Error in renewing access :"+ err,null, {duration : 5000});
+              
+          }
+        )
+      }
+    }
+
+
+  getCurrentRoleAccess(user_id,institute_id)
+  {
+    this.roleAccessService.getIndividualRoleAccess(user_id,institute_id).subscribe(
+      data=>{
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+         this.currentRole = data;
+        }
+        else
+        {
+          this._snacbar.open(JSON.stringify(data),null, {duration : 5000});
+          
+        }
+      },
+      err => {
+        this._snacbar.open("Error in retrieving user access "+ err,null, {duration : 5000});
+          
+      }
+    )
+  }
+
+  getActiveInstituteList(institute_id)
     {
       this.instituteService.get_institutes().subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
           {
             this.accessList = data as Institute[];
-            this.accessList = this.accessList.filter(value => { return value.isActivated == true});
+            this.accessList = this.accessList.filter(value => { return value.isActivated == true && value.organisation_id == institute_id});
           }
           else
           {

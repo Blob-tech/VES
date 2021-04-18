@@ -18,6 +18,12 @@ export class InstituteManagementService {
     return this.httpClient.post(this.URL+"add",formData,{headers : headers});
   }
 
+  get_all_institute_count()
+  {
+    let headers = new HttpHeaders();
+  headers.append("Content-Type","application/json");
+  return this.httpClient.get(this.URL + "/count");
+  }
 
  get_all_institutes(org_per_page,page)
  {
@@ -33,6 +39,7 @@ export class InstituteManagementService {
     return this.httpClient.get(this.URL + "list/all" ,{headers : headers});
   }
 
+ 
   delete_institutes(id : String)
   {
     let headers = new HttpHeaders();

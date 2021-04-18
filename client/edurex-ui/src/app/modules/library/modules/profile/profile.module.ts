@@ -106,6 +106,7 @@ import { BookExplorerComponent } from '../book-explorer/book-explorer.component'
     MaterialFileInputModule,
     MatProgressBarModule,
     NgxMatSelectSearchModule,
+    MatSlideToggleModule,
     NgBreadcrumbModule,
     MatGridListModule,
     MatFormFieldModule,

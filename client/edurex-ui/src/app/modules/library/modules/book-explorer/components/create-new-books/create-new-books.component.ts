@@ -17,6 +17,7 @@ import { SessionStorageService } from 'src/app/shared/services/session-storage.s
 })
 export class CreateNewBooksComponent implements OnInit,OnChanges {
 
+  showLoader = true;
   message = null;
   error = null;
   ishidden = true;
@@ -164,19 +165,23 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
   }
   getCategories()
   {
+    this.showLoader = true;
       this.libCategoryServices.getArticleCategories().subscribe(
         data => {
           this.categories =data as Array<any>;
+          this.showLoader = false;
         },
         err=>
         {
-          this._snackbar.open('Error in loading article categories',null,{duration:5000})
+          this._snackbar.open('Error in loading article categories',null,{duration:5000});
+          this.showLoader = false;
         }
       )
   }
 
   getConfigParams()
   {
+    this.showLoader = true;
     this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -184,55 +189,67 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
           this.configParams = data[0];
           this.createBookForm.get('book').setValidators([Validators.required, FileValidator.maxContentSize(this.configParams.doc_size*1024*1024)]);
           this.createBookForm.get('cover').setValidators([Validators.required, FileValidator.maxContentSize(this.configParams.img_size*1024*1024)]);
+          this.showLoader = false;
         }
         else
         {
-          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader = false;
         }
       },
       err=>{
-        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
 
   getCounter()
   {
+    this.showLoader = true;
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
         const  currentDate = new Date();
         const currentDateYear = currentDate.getFullYear().toString();
         this.createBookForm.patchValue({book_id : this.counter[0].library_prefix+ currentDateYear+this.counter[0].library},{emitEvent : true});
+        this.showLoader = false;
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
 
   getLanguages()
   {
+    this.showLoader = true;
     this.bookService.getLanguages().subscribe(
       data=>{
         this.languages = data ;
+        this.showLoader = false;
       }
       ,
       err=>{
         this._snackbar.open("Error in Loading Languages",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
 
   getSubscriptionCategories()
   {
+    this.showLoader = true;
     this.libCategoryServices.getSubscriptionCategories().subscribe(
       data => {
         this.subscriptions = data as Array<any>;
+        this.showLoader = false;
       },
       err=>
       {
-        this._snackbar.open('Error in loading subscription categories',null,{duration:5000})
+        this._snackbar.open('Error in loading subscription categories',null,{duration:5000});
+        this.showLoader = false;
       }
     )
   }
@@ -290,6 +307,7 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
 
   addArticle()
   {
+    this.showLoader = true;
     let formData = new FormData()
     formData.append('thumbnail_image',this.ThumbnailFile);
     formData.append('book',this.BookFile)
@@ -312,18 +330,21 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
           this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/book-explorer/list/all/all');
+          this.router.navigateByUrl('e-library/book-explorer/list/all/all').then(
+            ()=>{this.showLoader = false});
         }
         else
         {
           this.message = null;
           this.error =  JSON.parse(JSON.stringify(data))['err'];
+          this.showLoader = false;
         }
       },
       err =>
       {
         this.message = null;
-        this.error = "Error in adding Book/Article to Edurex Database. Please try after few minutes."
+        this.error = "Error in adding Book/Article to Edurex Database. Please try after few minutes.";
+        this.showLoader = false;
       }
     )
   }

@@ -14,6 +14,8 @@ import { LocalStorageService } from 'src/app/shared/services/local-storage.servi
 import { SubscriberService } from '../../../service/subscriber.service';
 import { LibraryCategoryService } from '../../../service/library-category.service';
 import { User } from '../../subscriber-management/models/subscriber';
+import { InstituteManagementService } from '../../../service/institute-management.service';
+import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 
 
 
@@ -41,9 +43,11 @@ export class ProfileViewComponent implements OnInit {
   newSocialLink = '';
   maxDate : Date;
   instituteList = [];
+  defaultInstitute = "";
   imgUrl = config.host + "organisation_logo/";
   dark_mode;
   viewMode;
+  currentInstitute;
 
 
   visibilitySettings = {
@@ -68,12 +72,12 @@ export class ProfileViewComponent implements OnInit {
   constructor(private subscriberServices : SubscriberService, private snackBar : MatSnackBar,
     private route : ActivatedRoute,private formBuilder : FormBuilder, private router : Router,
     private libCategoryService : LibraryCategoryService,private roleAccessService : RoleAccessService,
-    private localStorageService : LocalStorageService) { }
+    private localStorageService : LocalStorageService, private sessionStorageService : SessionStorageService,) { }
 
   ngOnInit(): void {
 
-    this.showLoader=true;
     this.maxDate = new Date();
+    this.currentInstitute = this.sessionStorageService.getter('current_institute');
     this.dark_mode = this.localStorageService.getter("dark-mode") == "true" ? true : false;
     
     
@@ -156,6 +160,7 @@ export class ProfileViewComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   getCurrentUser(user_id : string)
   {
+   
     this.subscriberServices.get_subscriber_by_id(user_id).subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -168,13 +173,14 @@ export class ProfileViewComponent implements OnInit {
             phone : this.currentUser.phone,
             address : this.currentUser.address,
           },{emitEvent : true});
+          
         }
-        this.showLoader = false;
+        
        
       },
       err => {
         this.snackBar.open("Error in getting user details" + err , null, {duration : 5000});
-        this.showLoader=false
+        
       }
       
     )
@@ -255,9 +261,9 @@ export class ProfileViewComponent implements OnInit {
 
   updateBasicInfo()
   {
-    let formData = new FormData()
-    
     this.showLoader = true;
+    let formData = new FormData()
+  
     for ( const key of Object.keys(this.basicInfoForm.value) ) {
       const value = this.basicInfoForm.value[key];
       formData.append(key, value);
@@ -267,7 +273,6 @@ export class ProfileViewComponent implements OnInit {
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
-          this.showLoader = true;
           this.localStorageService.setter('username',this.name.value);
           this.route.params.subscribe(routeParams => {
             this.getCurrentUser(routeParams.user_id);
@@ -278,8 +283,9 @@ export class ProfileViewComponent implements OnInit {
         else
         {
           this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader = false;
         }
-        this.showLoader = false;
+        
       },
       err=>{
         this.snackBar.open("Error in updating the basic info of " + this.currentUser.name,null,{duration : 5000})
@@ -333,13 +339,17 @@ export class ProfileViewComponent implements OnInit {
       moveItemInArray(this.socialLinks, event.previousIndex, event.currentIndex);
     }
 
+
     getuserMetas(user_id : string)
     {
-      this.showLoader=true;
       this.subscriberServices.get_user_metas(user_id).subscribe(
         data=>{
           this.userMetas = data;
-          console.log(data);
+          if(this.userMetas != null && this.userMetas.default_institute != undefined &&
+            this.userMetas.default_institute != "")
+            {
+              this.defaultInstitute = this.userMetas.default_institute;
+            }
           if(this.userMetas != null && this.userMetas.social_profiles != undefined)
           {
             this.socialLinks = this.userMetas.social_profiles as SocialProfile[];
@@ -362,7 +372,7 @@ export class ProfileViewComponent implements OnInit {
         },
         err=>
         {
-            this.showLoader = false;
+           this.showLoader = false; 
         }
       )
     }
@@ -405,6 +415,7 @@ export class ProfileViewComponent implements OnInit {
 
     savePersonalInfo()
     {
+      this.showLoader = true;
       let formData = new FormData();
       let dateofbirth;
       if(this.dob.value)
@@ -426,9 +437,11 @@ export class ProfileViewComponent implements OnInit {
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
           }
+          this.showLoader = false;
         },
         err=>{
           this.snackBar.open("Error in updating Personal Info : " + err,null,{duration : 5000});
+          this.showLoader = false;
         }
       )
     }
@@ -436,22 +449,26 @@ export class ProfileViewComponent implements OnInit {
 
     getInstituteAndRole(user_id : string)
     {
+      console.log("Agni");
+      this.showLoader = true;
       this.roleAccessService.getRoleAccess(user_id).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
           {
             this.instituteList = data['ins'];
             this.roleList = data['role'];
+            this.showLoader=false;
           }
           else
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+            this.showLoader=false;
           }
-          //this.showLoader=false;
+          
         },
         err=>{
           this.snackBar.open("Error in Loading Institutes" + err,null,{duration : 5000});
-          //this.showLoader=false;
+          this.showLoader=false;
         }
        
          
@@ -459,10 +476,45 @@ export class ProfileViewComponent implements OnInit {
       )
     }
 
+    setDefaultInstitute(institute_id : string)
+    {
+      this.subscriberServices.default_institute(this.currentUser.user_id, institute_id).subscribe(
+        data=>{
+          if(!(JSON.parse(JSON.stringify(data))['err']))
+          {
+            this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+            this.getuserMetas(this.currentUser.user_id);
+            let currentInstitute = this.sessionStorageService.getter('current_institute');
+            if(currentInstitute.client_id == "")
+            {
+              var res = confirm("Change in Default Institute will only be reflected when you login again. Do you want to logout ?")
+              if(res)
+              {
+                localStorage.clear();
+                sessionStorage.clear();
+                this.router.navigateByUrl('/login').then(()=>{
+                window.location.reload();
+    });
+              }
+            }
+          }
+          else
+          {
+            this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+          }
+        },
+        err=>{
+          this.snackBar.open("Error in setting Default Institute : " + err,null,{duration : 5000});
+        }
+      )  
+    }
+
     getRoles(institute_id : string) 
     {
+
       let instRole = this.roleList.filter(value => {
         return value.institute_id == institute_id &&  value.user_id == this.currentUser.user_id;
+        
       })
 
       return instRole;
@@ -489,6 +541,26 @@ export class ProfileViewComponent implements OnInit {
        
      })
      return sysadmin;
+    }
+
+    isSystemAdmin()
+    {
+      let currentRole = this.sessionStorageService.getter('current_role')['role'];
+      if(currentRole == 'SADMIN')
+      {
+        return true;
+      }
+      return false;
+    }
+    
+    isInstituteAdmin()
+    {
+      let currentRole = this.sessionStorageService.getter('current_role')['role'];
+      if(currentRole == 'IADMIN')
+      {
+        return true;
+      }
+      return false;
     }
    
 

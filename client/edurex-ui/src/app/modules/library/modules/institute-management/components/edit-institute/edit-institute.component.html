@@ -63,10 +63,9 @@
             <mat-error *ngIf="address.hasError('maxlength')">Character Limit Exceeded</mat-error>
         </mat-form-field>
         <br>
-                    <button type="submit"  mat-raised-button style="margin-right: 1rem;" color="accent"
+                    <button type="submit"  mat-raised-button style="margin-right: 1rem;" color="primary"
                     [disabled]="submitDisabled()">Update</button>
                     <button type="reset" mat-raised-button>Reset</button>
-
 </form>
 <br>
 <div class="alert alert-danger alert-dismissible fade-in" [hidden] = " error ? false : true">
@@ -145,5 +144,10 @@
       </div>
       
   </ng-template>
+
+  <div *ngIf="showLoader" class="loader">
+    <mat-spinner color="primary"></mat-spinner><br>
+    <span style="color: white; position: fixed; top:400px">Loading ...</span>
+    </div>
  
 

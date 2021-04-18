@@ -5,7 +5,7 @@
          <mat-icon style="color : blue;font-size: 40px;">admin_panel_settings</mat-icon> System Admin
      </button>
         <button (click)="changeCurrentInstitute(ins.organisation_id)"
-         matTooltip="ins.organisation_name" *ngFor="let ins of roles['ins']" mat-menu-item>
+         matTooltip="{{ins.organisation_name}}" *ngFor="let ins of roles['ins']" mat-menu-item>
             <img src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}" height=40 width=40>
             {{ins.organisation_name}}
         </button>
@@ -22,15 +22,19 @@
                         <button routerLink="/e-library/book-explorer/list/all/all" class="action-button"  mat-raised-button color="primary">
                             <mat-icon class="auto-flip">book </mat-icon> Books</button>
                   </span>
-                    <span *ngIf="loggedinUser && current_ins.client_id" class="module-button">
+                    <span *ngIf="loggedinUser && current_ins.client_id && isSystemAdmin()" class="module-button">
                             <button routerLink="/e-library/subscriber/subscriber-management/categories"  class="action-button"  mat-raised-button color="primary">
                                 <mat-icon class="auto-flip">local_library</mat-icon> People</button>
                             </span>
+                            <span *ngIf="loggedinUser && current_ins.client_id && !isSystemAdmin()" class="module-button">
+                                <button routerLink="/e-library/subscriber/subscriber-management/list/{{current_ins.organisation_id}}"  class="action-button"  mat-raised-button color="primary">
+                                    <mat-icon class="auto-flip">local_library</mat-icon> People</button>
+                                </span>
                     <span *ngIf="loggedinUser && current_ins.client_id" class="module-button">
                             <button routerLink="/e-library/institute/institute-management/list/all"  class="action-button"  mat-raised-button color="primary">
                                 <mat-icon class="auto-flip">account_balance</mat-icon> Institutes</button>
                             </span>
-                            <span  *ngIf="loggedinUser && current_ins.client_id" class="module-button">
+                            <span  *ngIf="loggedinUser && current_ins.client_id && isInstituteAdmin()" class="module-button">
                                     <button routerLink="/e-library/category/all"  class="action-button" mat-raised-button color="primary">
                                         <mat-icon class="auto-flip">category</mat-icon> Configuration Settings</button>
                             </span>
@@ -67,7 +71,7 @@
                                         <button routerLink="/e-library/institute/institute-management/list/all"  class="action-button"  mat-mini-fab color="primary" matTooltip = "Institutes">
                                             <mat-icon class="auto-flip">account_balance</mat-icon></button>
                                         </span>
-                                        <span *ngIf="loggedinUser && current_ins.client_id" class="mobile-module-button">
+                                        <span *ngIf="loggedinUser && current_ins.client_id && isInstituteAdmin()" class="mobile-module-button">
                                                 <button routerLink="/e-library/category/all"  class="action-button" mat-mini-fab color="primary" matTooltip = " Configuration Settings">
                                                     <mat-icon class="auto-flip">category</mat-icon></button>
                                         </span>

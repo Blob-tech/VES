@@ -11,7 +11,11 @@
         <div class="profile-desktop-view">
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1>
             <b>User Id : <span style="color : red; margin-right: 15px;">{{currentUser.user_id}}</span></b>
-            <span *ngIf="viewMode != 'self'">MANAGE ACCESS  <app-manage-access [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"></app-manage-access></span>
+            <span *ngIf="viewMode != 'self' && (isInstituteAdmin()|| isSystemAdmin())">MANAGE ACCESS  <app-manage-access 
+              [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"
+              [institute]="currentInstitute.organisation_id" 
+              [system_admin]="isSystemAdmin()"
+              ></app-manage-access></span>
             <div class="expansion-button">
                 <button mat-raised-button color="primary" (click)="accordion.openAll()">
                     <mat-icon>zoom_in</mat-icon>
@@ -157,6 +161,8 @@
                       <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                       <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                       <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                      <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                      
                   </p>
                   <mat-accordion multi>
                     <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
@@ -167,12 +173,15 @@
                         <b>Role Access</b><br>
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role|roleTranslate}}</b></span>
-                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                        <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span><br>
+                        <span  *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+                        <span *ngIf="!isRoleExpired(role) && viewMode == 'self'" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                        <span *ngIf="isRoleExpired(role) && viewMode == 'self'" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span><br>
+                        <span *ngIf="!role.active" style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
                         
-                            <mat-checkbox *ngIf="viewMode == 'self'" [disabled]="isRoleExpired(role)"> Default Institute</mat-checkbox>
-                          
+                            <mat-slide-toggle *ngIf="viewMode == 'self'" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                             (click)="setDefaultInstitute(ins.organisation_id)"
+                            [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
+                          <span *ngIf="viewMode == 'self'"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       
@@ -296,7 +305,11 @@
 
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1><br>
             <b style="margin-left : 2%">User Id : <span style="color : red">{{currentUser.user_id}}</span></b><br>
-            <span *ngIf="viewMode != 'self'">MANAGE ACCESS  <app-manage-access [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"></app-manage-access></span>
+            <span *ngIf="viewMode != 'self' && (isInstituteAdmin() || isSystemAdmin())">MANAGE ACCESS  <app-manage-access 
+              [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"
+              [institute]="currentInstitute.organisation_id"
+              [system_admin]="isSystemAdmin()" 
+              ></app-manage-access></span>
            <br><br>
             <mat-accordion multi>
                 <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewBasicInfo">
@@ -441,6 +454,7 @@
                       <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
                       <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                       <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                      <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
                   </p>                  <mat-accordion multi>
                       <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
                         <mat-expansion-panel-header>
@@ -451,13 +465,17 @@
                         <b>Role Access</b><br>
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role | roleTranslate}}</b></span>
-                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                        <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+                        <span *ngIf="!isRoleExpired(role) && viewMode == 'self'" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                        <span *ngIf="isRoleExpired(role) && viewMode == 'self'" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
                         <br>
-                        
-                            <mat-checkbox  *ngIf="viewMode == 'self'"
-                            [disabled]="isRoleExpired(role)"> Default Institute</mat-checkbox>
+                           
+                            
+                        <mat-slide-toggle *ngIf="viewMode == 'self'" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                        (click)="setDefaultInstitute(ins.organisation_id)"
+                       [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
+                     <span *ngIf="viewMode == 'self'"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       </mat-expansion-panel>
@@ -574,6 +592,6 @@
             </div>
 </mat-sidenav-container>
 <div *ngIf="showLoader" class="loader">
-    <mat-spinner color="primary"></mat-spinner><br>
-    <span style="color: white; position: fixed; top:400px">Loading ...</span>
-    </div>
+  <mat-spinner color="primary"></mat-spinner><br>
+  <span style="color: white; position: fixed; top:400px">Loading ...</span>
+  </div>

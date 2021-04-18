@@ -44,6 +44,7 @@ import { BookExplorerModule } from './modules/book-explorer/book-explorer.module
 import { BookExplorerRoutingModule } from './modules/book-explorer/book-explorer.routing.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { ProfileModule } from './modules/profile/profile.module';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -91,6 +92,7 @@ import { ProfileModule } from './modules/profile/profile.module';
     MatProgressBarModule,
     NgxMatSelectSearchModule,
     MatGridListModule,
+    MatTooltipModule,
     MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,

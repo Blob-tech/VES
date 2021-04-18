@@ -54,6 +54,44 @@ roles.post('/access/add',(req,res,next)=>{
     });
 })
 
+roles.put('/toggle_access/:user_id/:institute_id/:access',(req,res,next)=>{
+    if(req.params.access == 'revoke')
+    {
+        Role.updateOne({$and : [{active : true},{user_id : req.params.user_id},{institute_id : req.params.institute_id}]},
+            {$set : {
+                active : false
+            }}).then(data=>{
+                res.json({"msg" : "Access Revoked"})}
+            ).catch(err=>{
+                res.json({"err" : err})
+            })
+
+    }
+    else if(req.params.access == 'renew')
+    {
+        Role.updateOne({$and : [{active : false},{user_id : req.params.user_id},{institute_id : req.params.institute_id}]},
+            {$set : {
+                active : true
+            }}).then(data=>{
+                res.json({"msg" : "Access Renewed"})}
+            ).catch(err=>{
+                res.json({"err" : err})
+            })
+    }
+})
+
+roles.get('/individual_access/:user_id/:institute_id',(req,res,next)=>{
+    Role.findOne({$and : [{user_id : req.params.user_id},{institute_id : req.params.institute_id}]})
+    .then(
+        data=>{
+            res.json(data);
+        },
+        err=>{
+            res.json({"err" : "Server Error Occured ! Role Access cannot be retrieved"});
+        }
+    )
+})
+
 roles.get('/institute/access/:user_id',(req,res,next)=>{
     let role;
     Role.find({$and : [{active : true},{user_id : req.params.user_id}]}).then(

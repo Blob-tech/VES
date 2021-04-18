@@ -37,6 +37,7 @@ const resetPassValidator: ValidatorFn = (fg: FormGroup) => {
 })
 export class RegisterSubscriberComponent implements OnInit,OnChanges {
 
+  showLoader = true;
   message = null;
   error = null;
   ishidden = true;
@@ -157,26 +158,31 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
 
   getConfigParams()
   {
+    this.showLoader = true;
     this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
           this.subscriberForm.get('avatar').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
+          this.showLoader = false;
         }
         else
         {
-          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader = false;
         }
       },
       err=>{
-        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
 
   getActiveInstituteList()
   {
+    this.showLoader = true;
     this.instituteService.get_institutes().subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -184,31 +190,35 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
           this.institutes = data as Array<any>;
           this.institutes = this.institutes.filter(value => {return value.isActivated == true});
           this.institutes.sort((a,b) => a.organisation_name.localeCompare(b.organisation_name));
+          this.showLoader = false;
         }
         else
         {
           this._snackbar.open("Error in loading institutes ! "+ data,null, {duration : 5000});
-          
+          this.showLoader = false;
         }
       },
       err => {
         this._snackbar.open("Error in loading institutes from edurex database! "+ err,null, {duration : 5000});
-          
+        this.showLoader = false;
       })
   }
   
 
   getCounter()
   {
+    this.showLoader = true;
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
         const currentDate = new Date();
         const currentDateYear = currentDate.getFullYear().toString()
         this.subscriberForm.patchValue({user_id : this.counter[0].user_prefix+currentDateYear+this.counter[0].user},{emitEvent : true});
+        this.showLoader = false;
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
@@ -216,14 +226,17 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
  
   getSubscriptionCategories()
   {
+    this.showLoader = true;
     this.libCategoryServices.getSubscriptionCategories().subscribe(
       data => {
         this.subscriptions = data as Array<any>;
         this.subscriptions.sort((a,b) => a.subscription_category.localeCompare(b.subscription_category));
+        this.showLoader = false;
       },
       err=>
       {
-        this._snackbar.open('Error in loading subscription categories',null,{duration:5000})
+        this._snackbar.open('Error in loading subscription categories',null,{duration:5000});
+        this.showLoader =false;
       }
     )
   }
@@ -248,6 +261,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
 
   register()
   {
+    this.showLoader = true;
     //console.log(this.subscriberForm);
     let formData = new FormData()
     formData.append('avatar',this.imageFile);
@@ -266,18 +280,22 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
           this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/subscriber/subscriber-management/categories');
+          this.router.navigateByUrl('e-library/subscriber/subscriber-management/categories').then(
+            ()=>{this.showLoader =false;}
+          );
         }
         else
         {
           this.message = null;
           this.error =  JSON.parse(JSON.stringify(data))['err'];
+          this.showLoader = false;
         }
       },
       err =>
       {
         this.message = null;
-        this.error = "Error in adding new subscriber to Edurex Database. Please try after few minutes."
+        this.error = "Error in adding new subscriber to Edurex Database. Please try after few minutes.";
+        this.showLoader = false;
       }
     )
     

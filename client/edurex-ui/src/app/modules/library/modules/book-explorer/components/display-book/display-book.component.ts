@@ -17,7 +17,7 @@ import { LocalStorageService } from 'src/app/shared/services/local-storage.servi
   templateUrl: './display-book.component.html',
   styleUrls: ['./display-book.component.css']
 })
-export class DisplayBookComponent implements OnInit,AfterContentInit {
+export class DisplayBookComponent implements OnInit {
   header_color = ["#bbf2c9","#f4b5f5","#b6e4f0","#f08873","#f0e54f","#79912a","#4a6a87","#ab653f"];
 
   books=[];
@@ -66,10 +66,7 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
     });
   }
 
-  ngAfterContentInit()
-  {
-    this.showLoader = false;
-  }
+ 
 
   selectedBook : Book =
 {
@@ -160,24 +157,30 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
 
   getBookCount(category,subcategory)
   {
+    this.showLoader = true;
       this.bookService.getBookCount(category,subcategory).subscribe(
         data=>{
           this.length = Number(data);
+          this.showLoader = false;
         },
         err=>{
           this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+          this.showLoader = false;
       }
       )
   }
 
   getFilterBookCount(searchkey)
   {
+      this.showLoader = true;
       this.bookService.getFilterBookCount(searchkey).subscribe(
         data=>{
           this.length = Number(data);
+          this.showLoader = false;
         },
         err=>{
           this._snackBar.open("Error in loading the list of books",null,{duration:5000});
+          this.showLoader = false;
       }
       )
   }
@@ -286,6 +289,7 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
 
   deleteBooks(id:String)
   {
+    this.showLoader = true;
     var res = confirm("Are you sure you want to delete this item permanently ?");
     if(res)
     {
@@ -298,15 +302,19 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
             this.route.params.subscribe(routeParams => {
             this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
             });
+            location.reload();
+            this.showLoader = false;
           }
           else
           {
             this._snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+            this.showLoader = false;
           }
         },
         err=>
         {
           this._snackBar.open("Server Error : Error in Deleting Books",null,{duration:5000});
+          this.showLoader = false;
         }
       )
     }
@@ -344,6 +352,7 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
 
   getBooksBySearch(searchkey,books_per_page, page)
   {
+    this.showLoader = true;
     this.bookService.getBooksByAdvanceSearch(searchkey,books_per_page,page).subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -361,14 +370,17 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
           {
             this.noBook = null;
           }
+          this.showLoader = false;
         }
         else
         {
           this._snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader = false;
         }
       },
       err=>{
         this._snackBar.open("Error in loading the Books");
+        this.showLoader = false;
       }
     )
   }
@@ -417,6 +429,7 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
 
   bulk_action(op : String)
       {
+        this.showLoader = true;
         if(op == "DELETE")
         {
           var res = confirm("Are you sure want to delete " + this.selection.selected.length  + " books ?");
@@ -430,10 +443,12 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
               this.getBooks(routeParams.category,routeParams.subcategory,this.pageSize,this.pageIndex+1,null,null);
              
             });
+            this.showLoader = false;
           },
           err=>
           {
             this._snackBar.open("Error in deleting Books. Please try after few minutes"+JSON.stringify(err),null, {duration : 50000});
+            this.showLoader = false;
           }
 
         )
@@ -444,11 +459,16 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
 
       viewBook(id:String)
       {
-        this.router.navigateByUrl("/e-library/book-explorer/view/"+id);
+        this.router.navigateByUrl("/e-library/book-explorer/view/"+id).then(
+          ()=>{
+            this.showLoader = false;
+          }
+        );
       }
 
   getConfigParams()
   {
+    this.showLoader = true;
     this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -462,14 +482,17 @@ export class DisplayBookComponent implements OnInit,AfterContentInit {
           {
             this.bookView = this.localStorageService.getter('default-book-view');
           }
+          this.showLoader = false;
         }
         else
         {
           this._snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
+          this.showLoader =false;
         }
       },
       err=>{
         this._snackBar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this.showLoader = false;
       }
     )
   }
