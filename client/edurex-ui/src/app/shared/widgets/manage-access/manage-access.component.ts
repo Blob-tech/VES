@@ -37,12 +37,10 @@ export class ManageAccessComponent implements OnInit {
   institute ? : string = "";
 
   minDate : Date;
-  
 
   accessList = [];
   currentRole=null;
   currentInstitute=null;
-  badgeValue='';
   imgUrl = config.host + "organisation_logo/";
   constructor(private formBuilder : FormBuilder, private subscriberServices : SubscriberService,
     private instituteService : InstituteManagementService, private _snacbar : MatSnackBar,
@@ -56,11 +54,22 @@ export class ManageAccessComponent implements OnInit {
   ngOnInit(): void {
     if(this.mode == 'institute')
     {
-      this.getActiveInstituteList(this.institute);
+      this.getInstituteById(this.institute);
       this.getCurrentRoleAccess(this.access_id,this.institute);
     }
   }
 
+  getInstituteById(id : string)
+  {
+    this.instituteService.view_institute(id).subscribe(
+      data=>{
+        this.currentInstitute = data[0];
+      },
+      err=>{
+        this._snacbar.open("Error in getting Institute" + err);
+      }
+    )
+  }
   isRoleExpired(role) : boolean
     {
       let currentDate = new Date().toDateString();
@@ -287,30 +296,6 @@ export class ManageAccessComponent implements OnInit {
     return false;
   }
 
-  approveAccess()
-  {
-    this.roleAccessService.approveAccess(this.access_id,this.institute,'admin').subscribe(
-      data=>{
-        if(!(JSON.parse(JSON.stringify(data))['err']))
-        {
-          this._snacbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
-          this.getCurrentRoleAccess(this.access_id,this.institute);
-        }
-        else
-        {
-          this._snacbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
-        
-        }
-        
-      },
-      err=>{
-        this._snacbar.open("Error in approving access" + JSON.stringify(err),null,{duration : 5000});
-        
-      }
-    )
-    
-  }
-
   giveAccess()
   {
     var res = true;
@@ -333,13 +318,11 @@ export class ManageAccessComponent implements OnInit {
       formData.append('institutes',this.access_list.value);
       formData.append('role',this.role.value);
       formData.append('valid_upto',this.valid_upto.value ? validupto.toDateString() : '');
-      formData.append('approval','user');
       this.roleAccessService.giveRoleAccess(formData).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
           {
             this._snacbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
-            this.getCurrentRoleAccess(this.access_id,this.institute);
           }
           else
           {
