@@ -14,7 +14,7 @@ export class LibraryHomeComponent implements OnInit {
   ins;
   insUrl = config.host + 'organisation_logo/';
   showLoader = true;
-  initialInstituteLoad = 12;
+  initialInstituteLoad = 20;
   initial_page= 1;
   institutes=[];
   total_ins;

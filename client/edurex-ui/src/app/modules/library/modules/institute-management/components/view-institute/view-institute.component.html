@@ -1,0 +1,14 @@
+<div class="header">
+    <img class="logo" src="{{current_institute.avatar ? imgUrl + current_institute.avatar : '/assets/images/insimg.png'}}">
+    <span class="heading" >{{current_institute.organisation_name}}
+        
+    </span>
+    <span class="sub-heading" >Client Id : {{current_institute.client_id}}</span>
+
+</div>
+
+
+<div *ngIf="showLoader" class="loader">
+    <mat-spinner color="primary"></mat-spinner><br>
+    <span style="color: white; position: fixed; top:400px">Loading ...</span>
+    </div>

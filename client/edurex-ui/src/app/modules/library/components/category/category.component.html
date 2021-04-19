@@ -435,3 +435,8 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
     </ng-template>
     </mat-tab>
 </mat-tab-group>
+
+<div *ngIf="showLoader" class="loader">
+  <mat-spinner color="primary"></mat-spinner><br>
+  <span style="color: white; position: fixed; top:400px">Loading ...</span>
+  </div>

@@ -46,10 +46,12 @@ import { InstituteManagementRoutingModule } from './institute-management.routing
 import { InstituteListComponent } from './components/institute-list/institute-list.component';
 import { EditInstituteComponent} from './components/edit-institute/edit-institute.component';
 import { CommunicationService } from '../../service/communication.service';
+import { ViewInstituteComponent } from './components/view-institute/view.institute.component';
 
 
 @NgModule({
-  declarations: [ InstituteManagementComponent ,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
+  declarations: [ InstituteManagementComponent ,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent,
+  ViewInstituteComponent],
   imports: [
     CommonModule,
     MatSliderModule,
@@ -93,6 +95,7 @@ import { CommunicationService } from '../../service/communication.service';
   ],
   exports : [],
   providers : [CommunicationService],
-  bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
+  bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent,
+  ViewInstituteComponent],
 })
 export class InstituteManagementModule { }

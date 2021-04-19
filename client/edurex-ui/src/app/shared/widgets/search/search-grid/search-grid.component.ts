@@ -218,6 +218,11 @@ export class SearchGridComponent implements OnInit {
     
   }
 
+  goToInstitute(institute_id : string)
+  {
+    window.open("e-library/institute/institute-management/view/"+institute_id);
+  }
+
   getInstitutes(user_id : string)
     {
       let instituteList = [];

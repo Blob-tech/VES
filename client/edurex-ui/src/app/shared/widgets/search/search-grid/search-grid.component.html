@@ -43,11 +43,11 @@
                                         <button *ngIf = "!noUser && userLoadMore" style="display : flex; justify-content: flex-center; width:100%;" (click)="loadMore('user')" mat-raised-button><mat-icon>keyboard_arrow_down</mat-icon> Load more </button>
                                 
                                    </span>
-                                <span *ngIf="toggle == 'institutes'">
+                                <span *ngIf="toggle == 'institutes'" >
                                 <div class="alert alert-danger alert-dismissible fade-in" *ngIf = "noInstitute">
                                                               {{noInstitute}}
                                 </div>
-                                <span *ngFor="let ins of instituteList">
+                                <span *ngFor="let ins of instituteList" (click)="goToInstitute(ins.organisation_id)">
                                                 <img height=60 width=60 style="border-radius : 50%; margin-right: 10px;" src= "{{ins.avatar ? logoUrl + ins.avatar : '/assets/images/insimg.png'}}">
                             
                                                 <a style="color : cornflowerblue">{{ins.organisation_name}}</a>

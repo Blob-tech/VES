@@ -17,7 +17,7 @@ users.get('/count/:institute',(req,res,next)=>
 {
     if(req.params.institute == 'unassigned')
     {
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -42,7 +42,7 @@ users.get('/count/:institute',(req,res,next)=>
                 }
                 else if(req.params.institute == 'sadmin')
                 {
-                    RoleAccess.find({$and : [{active : true},
+                    RoleAccess.find({$and : [
                     {role : "SADMIN"}]})
                     .then(
                         roles => 
@@ -68,7 +68,7 @@ users.get('/count/:institute',(req,res,next)=>
                 }
                     else
                     {
-                        RoleAccess.find({$and : [{active : true},
+                        RoleAccess.find({$and : [
                             {institute_id : req.params.institute},
                         {role : {$ne : "SADMIN"}}]})
                         .then(
@@ -103,7 +103,7 @@ users.get('/count/:institute/:filter',(req,res,next)=>
     if(req.params.institute == 'unassigned')
     {
         searchkey = req.params.filter;
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -137,7 +137,7 @@ users.get('/count/:institute/:filter',(req,res,next)=>
                 else if(req.params.institute = 'sadmin')
                 {
                     searchkey = req.params.filter;
-                        RoleAccess.find({$and : [{active : true},
+                        RoleAccess.find({$and : [
                     {role :  "SADMIN"}]})
                             .then(
                                 roles => 
@@ -172,7 +172,7 @@ users.get('/count/:institute/:filter',(req,res,next)=>
                     else
                     {
                         searchkey = req.params.filter;
-                        RoleAccess.find({$and : [{active : true},
+                        RoleAccess.find({$and : [
                         {institute_id : req.params.institute},
                     {role : {$ne : "SADMIN"}}]})
                             .then(
