@@ -33,14 +33,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import {MatTabsModule} from '@angular/material/tabs';
 import {NgBreadcrumbModule} from 'ng-breadcrumb';
-import {ClipboardModule} from '@angular/cdk/clipboard';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {PortalModule} from '@angular/cdk/portal';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import {CdkStepperModule} from '@angular/cdk/stepper';
-import {CdkTableModule} from '@angular/cdk/table';
-import {CdkTreeModule} from '@angular/cdk/tree';
-
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -55,9 +47,6 @@ import { InstituteListComponent } from './components/institute-list/institute-li
 import { EditInstituteComponent} from './components/edit-institute/edit-institute.component';
 import { CommunicationService } from '../../service/communication.service';
 import { ViewInstituteComponent } from './components/view-institute/view.institute.component';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
@@ -65,11 +54,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
   ViewInstituteComponent],
   imports: [
     CommonModule,
-    DragDropModule,
-    ScrollingModule,
     MatSliderModule,
     MatTabsModule,
-    MatDatepickerModule,
     MatButtonModule,
     MatToolbarModule,
     MatTooltipModule,
@@ -87,7 +73,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDialogModule,
     MatMenuModule,
     MatCheckboxModule,
-    MatChipsModule,
     MatPaginatorModule,
     MatSnackBarModule,
     MatSlideToggleModule,
@@ -106,7 +91,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     NgxDocViewerModule,
     MatVideoModule,
     PlyrModule,
-    SharedModule,
     InstituteManagementRoutingModule
   ],
   exports : [],
