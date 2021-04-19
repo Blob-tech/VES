@@ -13,41 +13,6 @@ button:focus {
     outline: none;
   }
 
- .expired
- {
-   background-color : grey;
- }
-
- .active
- {
-   background-color : limegreen;
-   color:white
- }
-
- 
- .pending_user
- {
-   background-color: orange;
-   color:white;
- }
-
- .pending_admin
- {
-   background-color: darkgoldenrod;
-   color:white
- }
-
- .revoked
- {
-   background-color :red;
-   color : white;
- }
-
- .not_assigned
- {
-   background-color : cornflowerblue;
-   color:white
- }
   .logo
   {
     height: 50px;
