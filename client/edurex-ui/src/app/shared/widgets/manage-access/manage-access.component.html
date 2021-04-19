@@ -3,7 +3,11 @@
 
 <!-- access Manage modal-->
 <ng-template #accessManager> 
-        <h1 mat-dialog-title> Manage User Access</h1>
+        <h1 mat-dialog-title > Manage User Access</h1>
+        <mat-icon  *ngIf="system_admin" style="color : blue;font-size: 50px; margin-right: 15px;">admin_panel_settings</mat-icon> 
+        <img *ngIf="!system_admin" class="logo" src="{{currentInstitute ? imgUrl + currentInstitute.avatar : '/assets/images/insimg.png'}}">
+        <h2 *ngIf="system_admin" style="color:gray">SYSTEM ADMIN</h2>
+        <h2 *ngIf="!system_admin" style="color:gray">{{currentInstitute.organisation_name}}</h2>
          <div mat-dialog-content>
            <div *ngIf="currentRole" class="alert alert-info">
              <span style="margin-right: 10px;"><strong>CURRENT ACCESS : </strong></span>
@@ -34,11 +38,11 @@
                       <mat-error *ngIf="role.hasError('required')">Value is required</mat-error>
                 </mat-form-field>  
 
-                <mat-form-field  class="form-group" appearance="outline">
+                <mat-form-field *ngIf="!system_admin" class="form-group" appearance="outline">
                         <mat-label >{{mode == 'institute' ? 'Institutes' : 'Users'}} </mat-label>
                         <mat-select multiple [disabled]="role.value == 'SADMIN' ? true : false" formControlName="access_list"  placeholder="{{mode == 'institute' ? 'Add Institute' : 'Add User'}}">
-                                <mat-option *ngFor="let access of accessList" [(value)] = "mode == 'institute' ? access.organisation_id : access.user_id"  matTooltip="{{mode == 'institute' ? access.organisation_name : access.name}}">
-                                {{mode == 'institute' ? access.organisation_name : access.name}} 
+                                <mat-option  [(value)] = "mode == 'institute' ? currentInstitute.organisation_id : access_id"  matTooltip="{{mode == 'institute' ? currentInstitute.organisation_name : ''}}">
+                                {{mode == 'institute' ? currentInstitute.organisation_name : ""}} 
                             </mat-option>
                               </mat-select>
                               </mat-form-field>
@@ -60,3 +64,5 @@
          </div>
          
        </ng-template>
+
+       

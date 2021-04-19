@@ -52,6 +52,8 @@ organisations.get('/list/all',(req,res,next)=>{
     })
 })
 
+
+
 //get a organisation by client id
 organisations.get('/view_by_client_id/:client_id',(req,res,next)=>{
 

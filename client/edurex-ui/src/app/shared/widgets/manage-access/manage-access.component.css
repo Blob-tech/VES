@@ -12,3 +12,12 @@ button:focus {
   mat-form-field button:focus {
     outline: none;
   }
+
+  .logo
+  {
+    height: 50px;
+    width: 50px;
+    margin-right: 15px;
+  }
+
+  
