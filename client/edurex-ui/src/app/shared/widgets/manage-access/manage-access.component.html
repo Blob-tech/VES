@@ -12,7 +12,7 @@
            <div *ngIf="currentRole" class="alert alert-info">
              <span style="margin-right: 10px;"><strong>CURRENT ACCESS : </strong></span>
              <span style="color: cornflowerblue; margin-right: 10px;"><strong>{{(currentRole ? currentRole.role : "" )| roleTranslate}}</strong></span>
-             <span style="color: gray; margin-right: 10px;">Valid Upto : <b>{{ currentRole ? currentRole.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+             <span style="color: gray; margin-right: 10px;">Valid Upto : <b>{{ currentRole && currentRole.valid_upto ? currentRole.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
              <span *ngIf="!isRoleExpired(currentRole)" style="color : green ;display: inline; margin-right: 20px;">ACTIVE</span>
             <span *ngIf="isRoleExpired(currentRole)" style="color :red ;display: inline; margin-right: 20px;">EXPIRED</span>
             <span *ngIf="!currentRole.active" style="color :red ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
@@ -59,7 +59,7 @@
          </div>
          <div mat-dialog-actions>
             <button mat-raised-button color="primary" [disabled]="disabledGiveAccess()" (click)="giveAccess()"
-             mat-dialog-close><mat-icon>verified</mat-icon>Give Access</button>
+            ><mat-icon>verified</mat-icon>Give Access</button>
            <button mat-raised-button color="warn" mat-dialog-close>Close</button>
          </div>
          
