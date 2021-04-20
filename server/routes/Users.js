@@ -213,7 +213,7 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
 
     if(req.params.institute == 'unassigned')
     {
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -247,7 +247,7 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
     }
     else if(req.params.institute == 'sadmin')
     {
-        RoleAccess.find({and : [{active : true},{role : 'SADMIN'}]})
+        RoleAccess.find({$and : [{role : 'SADMIN'}]})
         .then(
             roles => 
             {
@@ -281,7 +281,7 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
     }
     else {
 
-        RoleAccess.find({$and : [{active : true},
+        RoleAccess.find({$and : [
         {institute_id : req.params.institute},
         {role : {$ne : "SADMIN"}}]})
         .then(
@@ -350,7 +350,7 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
     else if(req.params.institute == 'sadmin')
     {
         RoleAccess.find({$and :
-            [{active : true},
+            [
              {role :  "SADMIN"}
            ]})
        .then(
