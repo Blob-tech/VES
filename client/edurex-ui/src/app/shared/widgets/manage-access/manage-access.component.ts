@@ -323,6 +323,7 @@ export class ManageAccessComponent implements OnInit {
           if(!(JSON.parse(JSON.stringify(data))['err']))
           {
             this._snacbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+            this.getCurrentRoleAccess(this.access_id,this.institute);
           }
           else
           {
