@@ -3,6 +3,7 @@ import { InstituteManagementService } from 'src/app/modules/library/service/inst
 import {config} from 'src/conf';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 
 @Component({
   selector: 'app-view-institute',
@@ -17,13 +18,45 @@ export class ViewInstituteComponent implements OnInit {
   
   url = "assets/images/user.png";
   imgUrl = config.host + "organisation_logo/";
+  studentCount ="";
+  adminCount = "";
+  contentCount="";
   constructor(private instituteService : InstituteManagementService, private _snackbar : MatSnackBar,
-    private route : ActivatedRoute) { }
+    private route : ActivatedRoute, private roleAccessService : RoleAccessService) { }
 
     
   ngOnInit(): void {
     
     this.get_institute(this.route.snapshot.paramMap.get('id'));
+    this.getPeopleCount(this.route.snapshot.paramMap.get('id'));
+  }
+
+  getPeopleCount(institute_id)
+  {
+    this.roleAccessService.getPeopleCount(institute_id,"CADMIN").subscribe(
+      data=>{
+        this.contentCount = JSON.stringify(data);
+      },
+      err=>{
+        this._snackbar.open(JSON.stringify(err),null,{duration:5000});
+      }
+    )
+    this.roleAccessService.getPeopleCount(institute_id,"IADMIN").subscribe(
+      data=>{
+        this.adminCount = JSON.stringify(data);
+      },
+      err=>{
+        this._snackbar.open(JSON.stringify(err),null,{duration:5000});
+      }
+    )
+    this.roleAccessService.getPeopleCount(institute_id,"STUDENT").subscribe(
+      data=>{
+        this.studentCount = JSON.stringify(data);
+      },
+      err=>{
+        this._snackbar.open(JSON.stringify(err),null,{duration:5000});
+      }
+    )
   }
 
 

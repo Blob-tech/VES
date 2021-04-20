@@ -50,6 +50,19 @@ export class RoleAccessService implements OnInit{
 
   }
 
+  getPeopleCount(institute_id : string,role : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"people_count/"+institute_id+"/"+role,{headers:headers});
+  }
+
+  approveAccess(user_id : string, institute_id : string , approver : string )
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"approve/"+ user_id +"/"+institute_id+"/"+approver,{headers:headers});
+  }
   getIndividualRoleAccess(user_id : string, institute_id : string)
   {
     let headers = new HttpHeaders();
