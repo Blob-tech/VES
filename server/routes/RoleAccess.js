@@ -39,6 +39,7 @@ roles.post('/access/add',(req,res,next)=>{
                     valid_upto : valid_upto,
                     active : true,
                     is_activated : false,
+                    approval : "user"
                 }
             },
             {
@@ -80,6 +81,34 @@ roles.put('/toggle_access/:user_id/:institute_id/:access',(req,res,next)=>{
     }
 })
 
+roles.put('/approve/:user_id/:institute_id/:approver',(req,res,next)=>
+{
+    if(req.params.institute_id == 'SADMIN')
+    {
+        Role.findOneAndUpdate({$and : [{active:true},{is_activated : false},{user_id : req.params.user_id},
+            {role : req.params.institute_id},{approval : req.params.approver}]},
+            {$set : {
+                is_activated : true,
+                approval : "approved"
+            }}).then(data=>{
+                res.json({"msg" : "Access Approved"})
+            }).catch(err=>{
+                res.json({"err" : err})
+            });
+    }
+    else{
+    Role.findOneAndUpdate({$and : [{active:true},{is_activated : false},{user_id : req.params.user_id},
+    {institute_id : req.params.institute_id},{approval : req.params.approver}]},
+    {$set : {
+        is_activated : true,
+        approval : "approved"
+    }}).then(data=>{
+        res.json({"msg" : "Access Approved"})
+    }).catch(err=>{
+        res.json({"err" : err})
+    });}
+})
+
 roles.put('/toggle_system_access/:user_id/:access',(req,res,next)=>{
     if(req.params.access == 'revoke')
     {
@@ -106,7 +135,20 @@ roles.put('/toggle_system_access/:user_id/:access',(req,res,next)=>{
     }
 })
 
+roles.get('/people_count/:institute_id/:role',(req,res,next)=>{
 
+    Role.find({$and : [{active : true},{is_activated : true},{institute_id : req.params.institute_id}
+    ,{role : req.params.role}]}).countDocuments((err,count)=>{
+        if(err)
+        {
+            res.json({"err" : "Server Error ! Error in retrieving count of" + req.params.role});
+        }
+        else
+        {
+            res.json(count);
+        }
+    })
+})
 roles.get('/individual_access/:user_id/:institute_id',(req,res,next)=>{
     Role.findOne({$and : [{user_id : req.params.user_id},{institute_id : req.params.institute_id}]}
         )

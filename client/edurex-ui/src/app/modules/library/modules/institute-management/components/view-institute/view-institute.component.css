@@ -22,6 +22,12 @@ mat-spinner
     justify-content: center;
 }
 
+.info
+{
+    font-size: 15px;
+    color: cornflowerblue;
+    margin-right: 10px;
+}
 
 .logo
 {
@@ -43,5 +49,27 @@ mat-spinner
 
 .header .sub-heading
 {
-    color:red;font-size: 15px;
+    color:red;font-size: 30px;
+}
+
+.count img
+{
+    border-radius : 50%;
+    height: 200px;
+    width:200px;
+    margin: 10px;
+    text-align: center;
+}
+
+.count .number
+{
+    color: coral;
+    font-size: 100px;
+    margin-right: 5px;
+}
+
+.count 
+{
+    color: coral;
+    font-size: 30px;
 }

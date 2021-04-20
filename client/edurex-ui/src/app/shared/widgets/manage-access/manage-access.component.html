@@ -13,10 +13,12 @@
              <span style="margin-right: 10px;"><strong>CURRENT ACCESS : </strong></span>
              <span style="color: cornflowerblue; margin-right: 10px;"><strong>{{(currentRole ? currentRole.role : "" )| roleTranslate}}</strong></span>
              <span style="color: gray; margin-right: 10px;">Valid Upto : <b>{{ currentRole && currentRole.valid_upto ? currentRole.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-             <span *ngIf="!isRoleExpired(currentRole)" style="color : green ;display: inline; margin-right: 20px;">ACTIVE</span>
+             <span *ngIf="!isRoleExpired(currentRole) && currentRole.is_activated" style="color : green ;display: inline; margin-right: 20px;">ACTIVE</span>
+             <span *ngIf="!isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+             <span *ngIf="!isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'admin'" style="color : coral ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
             <span *ngIf="isRoleExpired(currentRole)" style="color :red ;display: inline; margin-right: 20px;">EXPIRED</span>
             <span *ngIf="!currentRole.active" style="color :red ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
-            <button *ngIf="currentRole.active && !isRoleExpired(currentRole)" mat-raised-button color="warn"
+            <button *ngIf="currentRole.active && !isRoleExpired(currentRole) && currentRole.is_activated" mat-raised-button color="warn"
             (click)="revokeAccess()">
               <mat-icon>published_with_changes</mat-icon>
               Revoke Access</button>
