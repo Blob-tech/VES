@@ -3,8 +3,26 @@
     <span class="heading" >{{current_institute.organisation_name}}
         
     </span>
-    <span class="sub-heading" >Client Id : {{current_institute.client_id}}</span>
-
+    <span class="sub-heading" >( Client Id : {{current_institute.client_id}} )</span><br>
+    <span class="info"><mat-icon>account_circle</mat-icon> Admin : <strong>{{current_institute.contact_person}}</strong></span>
+    <span class="info"><mat-icon>phone</mat-icon> Phone : <strong>{{current_institute.contact_phone}}</strong></span>
+    <span class="info"><mat-icon>email</mat-icon> Email : <strong>{{current_institute.contact_email}}</strong></span>
+    <br>
+    <br>
+    <div class="row count">
+        <div class="col-4 col-lg-4 col-xs-4 col-sm-4 col-md-4">
+            <img src="/assets/images/admin_count.jpg">
+            <span class="number">{{adminCount}}</span><br> Admin
+        </div>
+        <div class="col-4 col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                <img src="/assets/images/content_count.jpg">
+                <span class="number">{{contentCount}}</span><br> Course Admin
+            </div>
+            <div class="col-4 col-lg-4 col-xs-4 col-sm-4 col-md-4">
+                    <img src="/assets/images/student_count.jpg">
+                    <span class="number">{{studentCount}}</span> <br>Students
+                </div>
+    </div>
 </div>
 
 
