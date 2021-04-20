@@ -78,7 +78,8 @@ export class LibraryComponent implements OnInit {
     isInstituteAdmin()
     {
       let current_role = this.sessionStorageService.getter('current_role')['role'];
-      if(current_role == "IADMIN")
+      let current_role_is_activated = this.sessionStorageService.getter('current_role')['is_activated'];
+      if(current_role == "IADMIN" && current_role_is_activated)
       {
         return true;
       }

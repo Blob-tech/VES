@@ -158,10 +158,15 @@
                   </mat-expansion-panel-header>
                   <p *ngFor = "let role of isSysAdmin()">
                       <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b><h3>{{role.role|roleTranslate}}</h3></b></span>
-                      <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                      <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                      <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
-                      <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                      <span *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+                      <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                      <span *ngIf="isRoleExpired(role) " style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                      <span *ngIf="!role.active " style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                       <span *ngIf="!isRoleExpired(role) && role.active && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                       <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,'SADMIN')" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                        <br>
                       
                   </p>
                   <mat-accordion multi>
@@ -174,14 +179,17 @@
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role|roleTranslate}}</b></span>
                         <span  *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                        <span *ngIf="!isRoleExpired(role) && viewMode == 'self'" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role) && viewMode == 'self'" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span><br>
-                        <span *ngIf="!role.active" style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
-                        
-                            <mat-slide-toggle *ngIf="viewMode == 'self'" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                        <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                        <span *ngIf="isRoleExpired(role)"  style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="!isRoleExpired(role)  && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                       <span *ngIf="!isRoleExpired(role)  && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                        <span *ngIf="!role.active " style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                        <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,ins.organisation_id)"color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                            <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated" [(ngModel)]="ins.organisation_id == defaultInstitute"
                              (click)="setDefaultInstitute(ins.organisation_id)"
                             [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
-                          <span *ngIf="viewMode == 'self'"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
+                          <span *ngIf="viewMode == 'self' && role.is_activated"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       
@@ -452,9 +460,15 @@
                   <p *ngFor = "let role of isSysAdmin()">
                       <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b><h3>{{role.role|roleTranslate}}</h3></b></span>
                       <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                      <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                       <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
                       <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                      <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,'SADMIN')" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                        <br>
+                      
                   </p>                  <mat-accordion multi>
                       <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
                         <mat-expansion-panel-header>
@@ -466,16 +480,20 @@
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role | roleTranslate}}</b></span>
                         <span *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                        <span *ngIf="!isRoleExpired(role) && viewMode == 'self'" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role) && viewMode == 'self'" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
-                        <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                        <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                        <span *ngIf="isRoleExpired(role) " style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                       <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                        <span *ngIf="!role.active " style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span><br>
+                        <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,ins.organisation_id)" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
                         <br>
                            
                             
-                        <mat-slide-toggle *ngIf="viewMode == 'self'" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                        <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated" [(ngModel)]="ins.organisation_id == defaultInstitute"
                         (click)="setDefaultInstitute(ins.organisation_id)"
                        [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
-                     <span *ngIf="viewMode == 'self'"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
+                     <span *ngIf="viewMode == 'self' && role.is_activated"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       </mat-expansion-panel>

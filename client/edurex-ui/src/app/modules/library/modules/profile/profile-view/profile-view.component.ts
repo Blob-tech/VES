@@ -449,7 +449,6 @@ export class ProfileViewComponent implements OnInit {
 
     getInstituteAndRole(user_id : string)
     {
-      console.log("Agni");
       this.showLoader = true;
       this.roleAccessService.getRoleAccess(user_id).subscribe(
         data=>{
@@ -473,6 +472,30 @@ export class ProfileViewComponent implements OnInit {
        
          
         
+      )
+    }
+
+    approveInstituteAccess(user_id,institute_id)
+    {
+      this.showLoader=true;
+      this.roleAccessService.approveAccess(user_id,institute_id,"user").subscribe(
+        data=>{
+          if(!(JSON.parse(JSON.stringify(data))['err']))
+          {
+            this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+            this.getInstituteAndRole(user_id);
+          }
+          else
+          {
+            this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+            this.showLoader=false;
+          }
+          
+        },
+        err=>{
+          this.snackBar.open("Error in approving access" + JSON.stringify(err),null,{duration : 5000});
+          this.showLoader=false;
+        }
       )
     }
 
