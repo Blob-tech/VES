@@ -4,6 +4,7 @@ import {config} from 'src/conf';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
+import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 
 @Component({
   selector: 'app-view-institute',
@@ -22,7 +23,7 @@ export class ViewInstituteComponent implements OnInit {
   adminCount = "";
   contentCount="";
   constructor(private instituteService : InstituteManagementService, private _snackbar : MatSnackBar,
-    private route : ActivatedRoute, private roleAccessService : RoleAccessService) { }
+    private route : ActivatedRoute, private roleAccessService : RoleAccessService, private sessionStorageService : SessionStorageService) { }
 
     
   ngOnInit(): void {
@@ -31,6 +32,10 @@ export class ViewInstituteComponent implements OnInit {
     this.getPeopleCount(this.route.snapshot.paramMap.get('id'));
   }
 
+  isRegisterEnabled()
+  {
+    
+  }
   getPeopleCount(institute_id)
   {
     this.roleAccessService.getPeopleCount(institute_id,"CADMIN").subscribe(
