@@ -21,6 +21,10 @@ mat-spinner
     z-index: 100;
     justify-content: center;
 }
+button:focus {
+    outline: none;
+  }
+
 
 .info
 {
