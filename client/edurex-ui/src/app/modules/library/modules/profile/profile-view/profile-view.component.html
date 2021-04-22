@@ -37,7 +37,7 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                         <form [formGroup]="basicInfoForm">
-                          <button mat-raised-button color="accent" class="label-button">Name</button>
+                          <button mat-button class="label-button">Name</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>User Name</mat-label>
                                 <input matInput formControlName="name" required placeholder="Enter user name" >
@@ -47,7 +47,7 @@
                                 <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{name.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Email</button>
+                            <button mat-button  class="label-button">Email</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Email</mat-label>
                                 <input matInput formControlName="email" required placeholder="Enter subscriber mail" >
@@ -56,7 +56,7 @@
                                 <mat-error *ngIf="email.hasError('pattern')">Please enter a valid email in the format xyz@abc.com</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{email.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Contact</button>
+                            <button mat-button  class="label-button">Contact</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Mobile/Phone Number</mat-label>
                                  <span matPrefix>+91 &nbsp;</span>
@@ -66,7 +66,7 @@
                                 <mat-error *ngIf="phone.hasError('pattern')">Please enter a valid 10 digit mobile number</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{phone.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Address</button>
+                            <button mat-button  class="label-button">Address</button>
                                 <mat-form-field  *ngIf="viewMode == 'self'" class="form-group" appearance="outline" style="width:90%">
                                     <mat-label>User Address</mat-label>
                                     <textarea matInput formControlName="address"  placeholder="Enter user address" ></textarea>
@@ -93,7 +93,7 @@
                    
                   </mat-expansion-panel-header>
                  <form [formGroup]="personalDetailsForm">
-                    <button mat-raised-button color="accent" class="label-button">Bio</button>
+                    <button mat-button class="label-button">Bio</button>
                    <mat-form-field *ngIf="viewMode == 'self'" class="form-group"appearance="outline" style="width:90%">
                       <mat-label>Bio</mat-label>
                                     <textarea matInput formControlName="bio"  placeholder="Enter your bio" ></textarea>
@@ -102,7 +102,7 @@
                                     <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
                    </mat-form-field>
                    <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{bio.value ? bio.value : "N/A"}}</strong></span><br>
-                        <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
+                        <button mat-button  class="label-button">Date of Birth</button>
                         <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                             <mat-label>DOB</mat-label>
                             <input  [max]="maxDate" matInput formControlName="dob"  placeholder="Choose a date" [matDatepicker]="picker">
@@ -110,7 +110,7 @@
                             <mat-datepicker #picker></mat-datepicker>                           
                       </mat-form-field>
                       <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{userMetas.personal_info ? (userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "N/A") : "N/A" }}</strong></span><br>
-                        <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
+                        <button mat-button  class="label-button" style="display: inline;">Insterests</button>
                        <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let int of personalInterests" [selectable]= true>
                             {{int.interest}}
@@ -134,7 +134,7 @@
                         
 
                        
-                        <button mat-raised-button color="accent" class="label-button">Gender</button> <b *ngIf="user_gender && viewMode == 'public'" style="margin-right : 15px;">{{user_gender != undefined ? user_gender : ''}}</b>
+                        <button mat-button  class="label-button">Gender</button> <b *ngIf="user_gender && viewMode == 'public'" style="margin-right : 15px;">{{user_gender != undefined ? user_gender : ''}}</b>
                       <mat-radio-group *ngIf="viewMode == 'self'" [(ngModel)]="user_gender" aria-label="Select an option">
                             <mat-radio-button value="MALE"><mat-icon>male</mat-icon>MALE</mat-radio-button>
                             <mat-radio-button value="FEMALE"><mat-icon>female</mat-icon>FEMALE</mat-radio-button>
@@ -308,7 +308,10 @@
               </mat-accordion>
             </div>
             <div class="profile-mobile-view">
-            <app-profile-grid [selectedUser] = "currentUser" 
+            <!--app-profile-grid [selectedUser] = "currentUser" 
+            [enabledSubtitle] = true [mode]='mode' [bio]="bio.value"></app-profile-grid-->
+            <app-profile-grid [selectedUser] = "currentUser" [viewMode]="viewMode" [enabeledSocialLinks]="visibilitySettings.viewSocialProfile"
+            [enabeledDetails] = "visibilitySettings.viewBasicInfo" [enabeledBio]="visibilitySettings.viewPersonalDetails"
             [enabledSubtitle] = true [mode]='mode' [bio]="bio.value"></app-profile-grid>
 
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1><br>
@@ -332,7 +335,7 @@
                      
                     </mat-expansion-panel-header>
                         <form [formGroup]="basicInfoForm">
-                          <button mat-raised-button color="accent" class="label-button">Name</button>
+                          <button mat-button class="label-button">Name</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>User Name</mat-label>
                                 <input matInput formControlName="name" required placeholder="Enter user name" >
@@ -342,7 +345,7 @@
                                 <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{name.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Email</button>
+                            <button mat-button  class="label-button">Email</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Email</mat-label>
                                 <input matInput formControlName="email" required placeholder="Enter subscriber mail" >
@@ -351,7 +354,7 @@
                                 <mat-error *ngIf="email.hasError('pattern')">Please enter a valid email in the format xyz@abc.com</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{email.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Contact</button>
+                            <button mat-button  class="label-button">Contact</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Mobile/Phone Number</mat-label>
                                  <span matPrefix>+91 &nbsp;</span>
@@ -362,7 +365,7 @@
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{phone.value}}</strong></span><br>
                             
-                            <button mat-raised-button color="accent" class="label-button">Address</button>
+                            <button mat-button  class="label-button">Address</button>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{address.value}}</strong></span><br>
                                 <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline" style="width:90%">
                                     <mat-label>User Address</mat-label>
@@ -392,7 +395,7 @@
                   </mat-expansion-panel-header>
                   
                     <form [formGroup]="personalDetailsForm">
-                        <button mat-raised-button color="accent" class="label-button">Bio</button>
+                        <button mat-button  class="label-button">Bio</button>
                         <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{bio.value ? bio.value : "N/A"}}</strong></span><br>
                         <br>
                    <mat-form-field *ngIf="viewMode == 'self'" class="form-group"appearance="outline" style="width:90%">
@@ -402,7 +405,7 @@
                                     <mat-hint align="end">{{bio.value?.length || 0}}/500</mat-hint>
                                     <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
                    </mat-form-field><br>
-                        <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
+                        <button mat-button  class="label-button">Date of Birth</button>
                         <mat-form-field  *ngIf="viewMode == 'self'" class="form-group"appearance="outline">
                            <mat-label>DOB</mat-label>
                            <input [max]="maxDate" matInput formControlName="dob" placeholder="Choose a date" [matDatepicker]="dbpicker">
@@ -410,7 +413,7 @@
                            <mat-datepicker #dbpicker></mat-datepicker>   
                         </mat-form-field>
                         <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{userMetas.personal_info ? ( userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "N/A") : "N/A"}}</strong></span><br>
-                        <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
+                        <button mat-button class="label-button" style="display: inline;">Insterests</button>
                         <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true>
                             {{interest.interest}}
@@ -432,7 +435,7 @@
                            (matChipInputTokenEnd)="addInterest($event)" placeholder="Add new interets">  
                         </mat-form-field><br>
                       </form>
-                      <button mat-raised-button color="accent" class="label-button">Gender</button>
+                      <button mat-button  class="label-button">Gender</button>
                       <b *ngIf="user_gender && viewMode == 'public'" style="margin-right : 15px;">{{user_gender != undefined ? user_gender : ''}}</b><br>
                       <mat-radio-group *ngIf="viewMode == 'self'" [(ngModel)]="user_gender" aria-label="Select an option">
                           <mat-radio-button value="MALE"><mat-icon>male</mat-icon>MALE</mat-radio-button><br>

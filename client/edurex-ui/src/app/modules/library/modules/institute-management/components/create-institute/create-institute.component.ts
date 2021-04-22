@@ -37,7 +37,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
   url = "assets/images/user.png";
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
-    private navbar : NavbarService) { }
+    private navbar : NavbarService, private subscriberService : SubscriberService) { }
 
     
   ngOnInit(): void {
@@ -218,12 +218,50 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
     }
   }
 
+  registerInstituteAdmin()
+  {
+    let userformData = new FormData()
+    userformData.append('avatar',this.imageFile);
+    userformData.append('user_id' ,this.client_id.value());
+    userformData.append('email' ,this.contact_email.value());
+    userformData.append('phone' ,this.contact_phone.value());
+    userformData.append('name' ,this.contact_person.value());
+    userformData.append('address' ,this.address.value());
+    userformData.append('password' ,this.contact_phone.value());
+    
+
+    this.subscriberService.register(userformData).subscribe(
+      data=>
+      {
+        
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          
+          this.error = null;
+        }
+        else
+        {
+          this.message = null;
+          this.error =  JSON.parse(JSON.stringify(data))['err'];
+         
+        }
+      },
+      err =>
+      {
+        this.message = null;
+        this.error = "Error in adding new subscriber to Edurex Database. Please try after few minutes.";
+        
+      }
+    )
+    
+  }
+
   
 
   register()
   {
     this.showLoader = true;
-    //console.log(this.organisationForm);
+   
     let formData = new FormData()
     formData.append('avatar',this.imageFile);
     
@@ -232,24 +270,31 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
       formData.append(key, value);
     }
 
-    console.log(formData);
+    
     this.instituteService.register(formData).subscribe(
       data=>
       {
         
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
+          //this.registerInstituteAdmin();
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
           this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/institute/institute-management/list/all');
+          this.router.navigateByUrl('e-library/institute/institute-management/list/all').then(
+            ()=>{
+              this.showLoader = false;
+            }
+          );
         }
-        else
+        
+        
         {
           this.message = null;
           this.error =  JSON.parse(JSON.stringify(data))['err'];
+          this.showLoader = false;
         }
-        this.showLoader = false;
+        
       },
       err =>
       {

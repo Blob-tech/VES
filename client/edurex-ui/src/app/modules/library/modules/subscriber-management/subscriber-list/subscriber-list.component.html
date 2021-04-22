@@ -32,6 +32,7 @@
       <app-manage-access *ngIf="(isInstituteAdmin() || isSystemAdmin()) && (user.user_id != currentUser.user_id)" style="margin-right: 1rem;" 
       [system_admin]="isSystemAdmin()" [institute]="currentInstitute.organisation_id"
       [disabled]="!user.isActivated" [access_id]="user.user_id"></app-manage-access>
+      
       <mat-slide-toggle  *ngIf="isSystemAdmin()" [(ngModel)]="user.isActivated" (click)="deactivate_user(user.isActivated,user.user_id)">{{user.isActivated ? "Active" : "Inactive"}}</mat-slide-toggle>
     </div>
     </div>

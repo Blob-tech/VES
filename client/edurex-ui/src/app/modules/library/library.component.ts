@@ -68,7 +68,7 @@ export class LibraryComponent implements OnInit {
     isSystemAdmin()
     {
       let current_role = this.sessionStorageService.getter('current_role')['role'];
-      if(current_role == "SADMIN")
+      if(current_role == "SADMIN" || this.current_ins.client_id == 'Admin')
       {
         return true;
       }

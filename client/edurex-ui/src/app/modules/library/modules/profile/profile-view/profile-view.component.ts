@@ -569,7 +569,7 @@ export class ProfileViewComponent implements OnInit {
     isSystemAdmin()
     {
       let currentRole = this.sessionStorageService.getter('current_role')['role'];
-      if(currentRole == 'SADMIN')
+      if(currentRole == 'SADMIN' || this.currentInstitute.client_id == 'Admin')
       {
         return true;
       }
