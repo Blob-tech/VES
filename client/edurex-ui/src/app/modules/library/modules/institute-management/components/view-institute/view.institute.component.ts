@@ -56,7 +56,7 @@ export class ViewInstituteComponent implements OnInit {
     this.getPeopleCount(this.route.snapshot.paramMap.get('id'));
     this.getPeopleByRole(this.route.snapshot.paramMap.get('id'));
     this.getSubscriptionCategories(this.route.snapshot.paramMap.get('id'));
-   
+    
   }
 
  getPeopleByRole(institute_id)
@@ -204,10 +204,7 @@ export class ViewInstituteComponent implements OnInit {
   }
 
  
- register()
- {
-   
- }
+
 
 
   giveAccess(users,institutes,role)

@@ -61,7 +61,7 @@
 <td [style.color]="org.isActivated ? '' : 'grey'" mat-cell *matCellDef="let org">
     <img [style.opacity]="!org.isActivated ? 0.2 : 1"
     src= "{{org.avatar ? imgUrl + org.avatar : '/assets/images/insimg.png'}}" height=30 width = 30>
-   <a routerLink="/e-library/institute/institute-management/view/{{org.organisation_id}}">{{org.organisation_name}}</a> </td>
+   <a href="/e-library/institute/institute-management/view/{{org.organisation_id}}">{{org.organisation_name}}</a> </td>
 </ng-container>
 
 <ng-container matColumnDef="actions">
