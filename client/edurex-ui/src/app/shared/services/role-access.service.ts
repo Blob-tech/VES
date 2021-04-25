@@ -27,6 +27,13 @@ export class RoleAccessService implements OnInit{
     return this.httpClient.post(this.URL+"access/add/",formData,{headers:headers})
   }
 
+  removeRoleAccess(institute_id,user_id)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL + "remove_access/"+institute_id+"/"+user_id,{headers : headers});
+  }
+
   getRoleAccess(user_id : string)
   {
     let headers = new HttpHeaders();
