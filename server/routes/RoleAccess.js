@@ -9,6 +9,16 @@ const Role = require('../models/RoleAccess');
 const Organisation = require('../models/Organisation');
 roles.use(cors());
 
+roles.put('/remove_access/:institute_id/:user_id',(req,res,next)=>{
+    Role.deleteOne({$and : [{institute_id : req.params.institute_id},{user_id:req.params.user_id}] }).then(
+        data=>{
+            res.json({"msg" : "Access has been removed permanently"})
+        }
+    ).catch(err=>{
+        res.json({"err" : "Server Error Occured !"+err})
+    })
+})
+
 roles.post('/access/add',(req,res,next)=>{
     let users = req.body.users.split(',');
     let institutes = req.body.institutes.split(',');

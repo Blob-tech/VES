@@ -1,4 +1,15 @@
-<button [disabled]="disabled" (click)="open(access_id,accessManager)" matTooltip="Manage Access"  mat-mini-fab class="action-button" color='info' ><mat-icon>add_task</mat-icon></button>
+<button 
+[ngClass]="{
+  'expired' : currentRole ? isRoleExpired(currentRole) : false,
+  'active' : currentRole ? !isRoleExpired(currentRole) && currentRole.is_activated && currentRole.active : false,
+  'pending_user' : currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'user' : false,
+  'pending_admin' : currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'admin' : false,
+  'revoked' : currentRole ? !currentRole.active : false,
+  'not_assigned' : !currentRole ? true : false
+}"  [disabled]="disabled" (click)="open(access_id,accessManager)" matTooltip="Manage Access"  mat-mini-fab class="action-button" color='info' >
+  <mat-icon
+  >add_task</mat-icon>
+</button>
 
 
 <!-- access Manage modal-->
@@ -7,7 +18,10 @@
         <mat-icon  *ngIf="system_admin" style="color : blue;font-size: 50px; margin-right: 15px;">admin_panel_settings</mat-icon> 
         <img *ngIf="!system_admin" class="logo" src="{{currentInstitute ? imgUrl + currentInstitute.avatar : '/assets/images/insimg.png'}}">
         <h2 *ngIf="system_admin" style="color:gray">SYSTEM ADMIN</h2>
-        <h2 *ngIf="!system_admin" style="color:gray">{{currentInstitute.organisation_name}}</h2>
+        <h2 *ngIf="!system_admin" style="color:gray;margin-right: 10px;">{{currentInstitute.organisation_name}}</h2>
+        <button *ngIf="currentRole" mat-raised-button color="accent" (click)="removeAccess()">
+          <mat-icon>delete_forever</mat-icon>Remove Permanently</button>
+          <br><br>
          <div mat-dialog-content>
            <div *ngIf="currentRole" class="alert alert-info">
              <span style="margin-right: 10px;"><strong>CURRENT ACCESS : </strong></span>
@@ -18,7 +32,7 @@
              <span *ngIf="!isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'admin'" style="color : coral ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
             <span *ngIf="isRoleExpired(currentRole)" style="color :red ;display: inline; margin-right: 20px;">EXPIRED</span>
             <span *ngIf="!currentRole.active" style="color :red ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
-            <button *ngIf="currentRole.active && !isRoleExpired(currentRole) && currentRole.is_activated" mat-raised-button color="warn"
+            <button *ngIf="currentRole.active && !isRoleExpired(currentRole)" mat-raised-button color="warn"
             (click)="revokeAccess()">
               <mat-icon>published_with_changes</mat-icon>
               Revoke Access</button>

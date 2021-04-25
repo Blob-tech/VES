@@ -76,7 +76,7 @@ export class CategoryComponent implements OnInit {
   )
 
   subscriptionCategoryForm = this.formBuilder.group({
-    subscription_category_name : ['',[Validators.required,Validators.maxLength(100)]]
+    subscription_category_name : ['',[Validators.required,Validators.maxLength(40)]]
   }
   )
 
@@ -142,6 +142,11 @@ export class CategoryComponent implements OnInit {
   get subcategory_name()
   {
     return this.articleSubCategoryForm.get('subcategory_name');
+  }
+
+  get subscription_category_name()
+  {
+    return this.articleSubCategoryForm.get('subscription_category_name');
   }
 
   get release()

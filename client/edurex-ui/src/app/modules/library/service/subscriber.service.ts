@@ -52,6 +52,28 @@ export class SubscriberService {
     
   }
 
+  get_user_by_role_institute(institute_id : string, role : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "people_list/" +institute_id +"/"
+    +role,{headers : headers});
+  }
+
+  get_unassigned_user_by_search(institute_id,searchkey)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "unassigned_user_search/"+institute_id+"/"+searchkey,{headers : headers});
+  }
+
+  get_unassigned_user(institute_id,users_per_page,page)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "unassigned_user/" +institute_id+"/"+users_per_page+"/"+page ,{headers : headers});
+  }
+  
   get_subscribers(institute : String, users_per_page : Number, page : Number)
   {
     let headers = new HttpHeaders();

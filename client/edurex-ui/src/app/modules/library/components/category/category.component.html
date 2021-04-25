@@ -28,7 +28,7 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
                 <mat-label>Subcategory Name</mat-label>
                 <input matInput formControlName ="subcategory_name" placeholder="Enter a subcategory Name" required>
                 <mat-hint>Subcategory name should not contain more than 100 characters.</mat-hint>
-                <mat-error *ngIf = "subcategory_name.hasError('required')">[value] is required</mat-error>
+                <mat-error *ngIf = "subcategory_name.hasError('required')">Value is required</mat-error>
                 <mat-error *ngIf = "subcategory_name.hasError('maxLength')">Character limit exceeded</mat-error>
               </mat-form-field>
               <button mat-raised-button color="primary" type="submit" class="action-button" 
@@ -50,7 +50,8 @@ routerLink = "/e-library/home" class="home-button"><mat-icon>home</mat-icon></bu
             <mat-form-field class="form-group" appearance="outline" >
               <mat-label>Subscription Category Name</mat-label>
               <input matInput formControlName ="subscription_category_name" placeholder="Enter a subscription category Name" required>
-              
+              <mat-hint>Subscription name should not contain more than 50 characters.</mat-hint>
+              <mat-error>Value is required and should be less than 50 characters</mat-error>
             </mat-form-field>
             <button mat-raised-button color="primary" type="submit" class="action-button" (click)="addSubscriptionCategory()" [disabled]="submitSubscriptionDisabled()">Add Category</button>
             <button mat-raised-button color="accent" type="reset" class="action-button">Reset</button>
