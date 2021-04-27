@@ -363,6 +363,7 @@ export class ManageAccessComponent implements OnInit {
       formData.append('institutes',this.access_list.value);
       formData.append('role',this.role.value);
       formData.append('valid_upto',this.valid_upto.value ? validupto.toDateString() : '');
+      formData.append('approval','user');
       this.roleAccessService.giveRoleAccess(formData).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))

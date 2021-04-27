@@ -7,7 +7,7 @@
     <span class="info"><mat-icon>account_circle</mat-icon> Admin : <strong><a href="/e-library/profile/public/{{current_institute.client_id}}">{{current_institute.contact_person}}</a></strong></span>
     <span class="info"><mat-icon>phone</mat-icon> Phone : <strong>{{current_institute.contact_phone}}</strong></span>
     <span class="info"><mat-icon>email</mat-icon> Email : <strong>{{current_institute.contact_email}}</strong></span>
-    <button mat-raised-button color="primary"><mat-icon>verified</mat-icon> Register Now</button>
+    <button (click)="register()" mat-raised-button color="primary"><mat-icon>verified</mat-icon> Register Now</button>
     <br>
     <br>
     <button routerLink="/e-library/institute/institute-management/edit/{{current_institute.organisation_id}}"
