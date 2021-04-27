@@ -1,5 +1,3 @@
-<app-library></app-library>
-
 <mat-sidenav-container class="profile-sidenav">
     <mat-sidenav opened mode="side" class="sidenav" >
         <app-profile-grid [selectedUser] = "currentUser" [viewMode]="viewMode" [enabeledSocialLinks]="visibilitySettings.viewSocialProfile"
@@ -13,7 +11,11 @@
         <div class="profile-desktop-view">
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1>
             <b>User Id : <span style="color : red; margin-right: 15px;">{{currentUser.user_id}}</span></b>
-            <span *ngIf="viewMode != 'self'">MANAGE ACCESS  <app-manage-access [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"></app-manage-access></span>
+            <span *ngIf="viewMode != 'self' && (isInstituteAdmin()|| isSystemAdmin())">MANAGE ACCESS  <app-manage-access 
+              [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"
+              [institute]="currentInstitute.organisation_id" 
+              [system_admin]="isSystemAdmin()"
+              ></app-manage-access></span>
             <div class="expansion-button">
                 <button mat-raised-button color="primary" (click)="accordion.openAll()">
                     <mat-icon>zoom_in</mat-icon>
@@ -35,7 +37,7 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                         <form [formGroup]="basicInfoForm">
-                          <button mat-raised-button color="accent" class="label-button">Name</button>
+                          <button mat-button class="label-button">Name</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>User Name</mat-label>
                                 <input matInput formControlName="name" required placeholder="Enter user name" >
@@ -45,7 +47,7 @@
                                 <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{name.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Email</button>
+                            <button mat-button  class="label-button">Email</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Email</mat-label>
                                 <input matInput formControlName="email" required placeholder="Enter subscriber mail" >
@@ -54,7 +56,7 @@
                                 <mat-error *ngIf="email.hasError('pattern')">Please enter a valid email in the format xyz@abc.com</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{email.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Contact</button>
+                            <button mat-button  class="label-button">Contact</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Mobile/Phone Number</mat-label>
                                  <span matPrefix>+91 &nbsp;</span>
@@ -64,7 +66,7 @@
                                 <mat-error *ngIf="phone.hasError('pattern')">Please enter a valid 10 digit mobile number</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{phone.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Address</button>
+                            <button mat-button  class="label-button">Address</button>
                                 <mat-form-field  *ngIf="viewMode == 'self'" class="form-group" appearance="outline" style="width:90%">
                                     <mat-label>User Address</mat-label>
                                     <textarea matInput formControlName="address"  placeholder="Enter user address" ></textarea>
@@ -79,7 +81,7 @@
                                 <button *ngIf="viewMode == 'self'" type="reset" mat-raised-button>Reset</button> 
                         </form>            
                   </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)&& userMetas.personal_info">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
@@ -91,7 +93,7 @@
                    
                   </mat-expansion-panel-header>
                  <form [formGroup]="personalDetailsForm">
-                    <button mat-raised-button color="accent" class="label-button">Bio</button>
+                    <button mat-button class="label-button">Bio</button>
                    <mat-form-field *ngIf="viewMode == 'self'" class="form-group"appearance="outline" style="width:90%">
                       <mat-label>Bio</mat-label>
                                     <textarea matInput formControlName="bio"  placeholder="Enter your bio" ></textarea>
@@ -99,16 +101,16 @@
                                     <mat-hint align="end">{{bio.value?.length || 0}}/500</mat-hint>
                                     <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
                    </mat-form-field>
-                   <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{bio.value}}</strong></span><br>
-                        <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
+                   <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{bio.value ? bio.value : "N/A"}}</strong></span><br>
+                        <button mat-button  class="label-button">Date of Birth</button>
                         <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                             <mat-label>DOB</mat-label>
                             <input  [max]="maxDate" matInput formControlName="dob"  placeholder="Choose a date" [matDatepicker]="picker">
                             <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>                           
                       </mat-form-field>
-                      <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "" }}</strong></span><br>
-                        <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
+                      <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{userMetas.personal_info ? (userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "N/A") : "N/A" }}</strong></span><br>
+                        <button mat-button  class="label-button" style="display: inline;">Insterests</button>
                        <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let int of personalInterests" [selectable]= true>
                             {{int.interest}}
@@ -132,7 +134,7 @@
                         
 
                        
-                        <button mat-raised-button color="accent" class="label-button">Gender</button> <b *ngIf="user_gender && viewMode == 'public'" style="margin-right : 15px;">{{user_gender != undefined ? user_gender : ''}}</b>
+                        <button mat-button  class="label-button">Gender</button> <b *ngIf="user_gender && viewMode == 'public'" style="margin-right : 15px;">{{user_gender != undefined ? user_gender : ''}}</b>
                       <mat-radio-group *ngIf="viewMode == 'self'" [(ngModel)]="user_gender" aria-label="Select an option">
                             <mat-radio-button value="MALE"><mat-icon>male</mat-icon>MALE</mat-radio-button>
                             <mat-radio-button value="FEMALE"><mat-icon>female</mat-icon>FEMALE</mat-radio-button>
@@ -156,9 +158,16 @@
                   </mat-expansion-panel-header>
                   <p *ngFor = "let role of isSysAdmin()">
                       <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b><h3>{{role.role|roleTranslate}}</h3></b></span>
-                      <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                      <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                      <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                      <span *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+                      <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                      <span *ngIf="isRoleExpired(role) " style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                      <span *ngIf="!role.active " style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                       <span *ngIf="!isRoleExpired(role) && role.active && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                       <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,'SADMIN')" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                        <br>
+                      
                   </p>
                   <mat-accordion multi>
                     <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
@@ -169,12 +178,18 @@
                         <b>Role Access</b><br>
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role|roleTranslate}}</b></span>
-                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                        <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span><br>
-                        
-                            <mat-checkbox *ngIf="viewMode == 'self'" [disabled]="isRoleExpired(role)"> Default Institute</mat-checkbox>
-                          
+                        <span  *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{ role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+                        <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                        <span *ngIf="isRoleExpired(role)"  style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="!isRoleExpired(role)  && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                       <span *ngIf="!isRoleExpired(role)  && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                        <span *ngIf="!role.active " style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                        <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,ins.organisation_id)"color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                            <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                             (click)="setDefaultInstitute(ins.organisation_id)"
+                            [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
+                          <span *ngIf="viewMode == 'self' && role.is_activated"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       
@@ -194,7 +209,7 @@
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile) && userMetas.social_profiles">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       
@@ -293,12 +308,19 @@
               </mat-accordion>
             </div>
             <div class="profile-mobile-view">
-            <app-profile-grid [selectedUser] = "currentUser" 
+            <!--app-profile-grid [selectedUser] = "currentUser" 
+            [enabledSubtitle] = true [mode]='mode' [bio]="bio.value"></app-profile-grid-->
+            <app-profile-grid [selectedUser] = "currentUser" [viewMode]="viewMode" [enabeledSocialLinks]="visibilitySettings.viewSocialProfile"
+            [enabeledDetails] = "visibilitySettings.viewBasicInfo" [enabeledBio]="visibilitySettings.viewPersonalDetails"
             [enabledSubtitle] = true [mode]='mode' [bio]="bio.value"></app-profile-grid>
 
             <h1 style="display:inline">{{currentUser.name.toUpperCase()}}</h1><br>
             <b style="margin-left : 2%">User Id : <span style="color : red">{{currentUser.user_id}}</span></b><br>
-            <span *ngIf="viewMode != 'self'">MANAGE ACCESS  <app-manage-access [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"></app-manage-access></span>
+            <span *ngIf="viewMode != 'self' && (isInstituteAdmin() || isSystemAdmin())">MANAGE ACCESS  <app-manage-access 
+              [disabled]="!currentUser.isActivated" [access_id]="currentUser.user_id"
+              [institute]="currentInstitute.organisation_id"
+              [system_admin]="isSystemAdmin()" 
+              ></app-manage-access></span>
            <br><br>
             <mat-accordion multi>
                 <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewBasicInfo">
@@ -313,7 +335,7 @@
                      
                     </mat-expansion-panel-header>
                         <form [formGroup]="basicInfoForm">
-                          <button mat-raised-button color="accent" class="label-button">Name</button>
+                          <button mat-button class="label-button">Name</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>User Name</mat-label>
                                 <input matInput formControlName="name" required placeholder="Enter user name" >
@@ -323,7 +345,7 @@
                                 <mat-error *ngIf="name.hasError('maxlength')">Character Limit Exceeded</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{name.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Email</button>
+                            <button mat-button  class="label-button">Email</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Email</mat-label>
                                 <input matInput formControlName="email" required placeholder="Enter subscriber mail" >
@@ -332,7 +354,7 @@
                                 <mat-error *ngIf="email.hasError('pattern')">Please enter a valid email in the format xyz@abc.com</mat-error>
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{email.value}}</strong></span><br>
-                            <button mat-raised-button color="accent" class="label-button">Contact</button>
+                            <button mat-button  class="label-button">Contact</button>
                             <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline">
                                 <mat-label>Mobile/Phone Number</mat-label>
                                  <span matPrefix>+91 &nbsp;</span>
@@ -343,7 +365,7 @@
                             </mat-form-field>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{phone.value}}</strong></span><br>
                             
-                            <button mat-raised-button color="accent" class="label-button">Address</button>
+                            <button mat-button  class="label-button">Address</button>
                             <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{address.value}}</strong></span><br>
                                 <mat-form-field *ngIf="viewMode == 'self'" class="form-group" appearance="outline" style="width:90%">
                                     <mat-label>User Address</mat-label>
@@ -360,7 +382,7 @@
                                 <button *ngIf="viewMode == 'self'" type="reset" mat-raised-button>Reset</button> 
                         </form>            
                   </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewPersonalDetails">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewPersonalDetails)">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Personal Details</b>
@@ -373,8 +395,8 @@
                   </mat-expansion-panel-header>
                   
                     <form [formGroup]="personalDetailsForm">
-                        <button mat-raised-button color="accent" class="label-button">Bio</button>
-                        <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{bio.value}}</strong></span><br>
+                        <button mat-button  class="label-button">Bio</button>
+                        <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{bio.value ? bio.value : "N/A"}}</strong></span><br>
                         <br>
                    <mat-form-field *ngIf="viewMode == 'self'" class="form-group"appearance="outline" style="width:90%">
                       <mat-label>Bio</mat-label>
@@ -383,15 +405,15 @@
                                     <mat-hint align="end">{{bio.value?.length || 0}}/500</mat-hint>
                                     <mat-error *ngIf="bio.hasError('maxlength')">Character Limit Exceeded</mat-error>
                    </mat-form-field><br>
-                        <button mat-raised-button color="accent" class="label-button">Date of Birth</button>
+                        <button mat-button  class="label-button">Date of Birth</button>
                         <mat-form-field  *ngIf="viewMode == 'self'" class="form-group"appearance="outline">
                            <mat-label>DOB</mat-label>
                            <input [max]="maxDate" matInput formControlName="dob" placeholder="Choose a date" [matDatepicker]="dbpicker">
                            <mat-datepicker-toggle  matSuffix [for]="dbpicker"></mat-datepicker-toggle>
                            <mat-datepicker #dbpicker></mat-datepicker>   
                         </mat-form-field>
-                        <span *ngIf="viewMode == 'public'" style="font-size : 15px;"><strong>{{userMetas.personal_info ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : ""}}</strong></span><br>
-                        <button mat-raised-button color="accent" class="label-button" style="display: inline;">Insterests</button>
+                        <span *ngIf="viewMode == 'public' && userMetas" style="font-size : 15px;"><strong>{{userMetas.personal_info ? ( userMetas.personal_info.dob ? (userMetas.personal_info.dob.split('T')[0].substr(1) | date : 'mediumDate') : "N/A") : "N/A"}}</strong></span><br>
+                        <button mat-button class="label-button" style="display: inline;">Insterests</button>
                         <span style="display: inline;"><mat-chip-list *ngIf="viewMode == 'public'">
                             <mat-chip selected color="primary" *ngFor="let interest of personalInterests" [selectable]= true>
                             {{interest.interest}}
@@ -413,7 +435,7 @@
                            (matChipInputTokenEnd)="addInterest($event)" placeholder="Add new interets">  
                         </mat-form-field><br>
                       </form>
-                      <button mat-raised-button color="accent" class="label-button">Gender</button>
+                      <button mat-button  class="label-button">Gender</button>
                       <b *ngIf="user_gender && viewMode == 'public'" style="margin-right : 15px;">{{user_gender != undefined ? user_gender : ''}}</b><br>
                       <mat-radio-group *ngIf="viewMode == 'self'" [(ngModel)]="user_gender" aria-label="Select an option">
                           <mat-radio-button value="MALE"><mat-icon>male</mat-icon>MALE</mat-radio-button><br>
@@ -441,8 +463,15 @@
                   <p *ngFor = "let role of isSysAdmin()">
                       <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b><h3>{{role.role|roleTranslate}}</h3></b></span>
                       <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                      <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
                       <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                      <span *ngIf="!role.active" style="color :orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                      <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                      <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,'SADMIN')" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                        <br>
+                      
                   </p>                  <mat-accordion multi>
                       <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
                         <mat-expansion-panel-header>
@@ -453,13 +482,21 @@
                         <b>Role Access</b><br>
                         <p *ngFor = "let role of getRoles(ins.organisation_id)"> 
                         <span style="color: cornflowerblue; display: inline; margin-right: 15px;"><b>{{role.role | roleTranslate}}</b></span>
-                        <span style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
-                        <span *ngIf="!isRoleExpired(role)" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
-                        <span *ngIf="isRoleExpired(role)" style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="viewMode == 'self'" style="display: inline; margin-right: 15px;">Valid Upto : <b>{{role.valid_upto ? role.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+                        <span *ngIf="!isRoleExpired(role)  && role.is_activated" style="color : green ;display: inline; margin-right: 15px;">ACTIVE</span>
+                        <span *ngIf="isRoleExpired(role) " style="color :red ;display: inline; margin-right: 15px;">EXPIRED</span>
+                        <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+                       <span *ngIf="!isRoleExpired(role)  && role.active && !role.is_activated && role.approval == 'admin'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+                        <span *ngIf="!role.active " style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span><br>
+                        <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,ins.organisation_id)" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
+                          <mat-icon>beenhere</mat-icon> Approve Access </button><br>
                         <br>
-                        
-                            <mat-checkbox  *ngIf="viewMode == 'self'"
-                            [disabled]="isRoleExpired(role)"> Default Institute</mat-checkbox>
+                           
+                            
+                        <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                        (click)="setDefaultInstitute(ins.organisation_id)"
+                       [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
+                     <span *ngIf="viewMode == 'self' && role.is_activated"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       </mat-expansion-panel>
@@ -478,7 +515,7 @@
                   </mat-expansion-panel-header>
                   <p>subscription</p>
                 </mat-expansion-panel>
-                <mat-expansion-panel *ngIf="viewMode == 'self' || visibilitySettings.viewSocialProfile">
+                <mat-expansion-panel *ngIf="(viewMode == 'self' || visibilitySettings.viewSocialProfile)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                       <b>Social Profiles</b>
@@ -576,9 +613,6 @@
             </div>
 </mat-sidenav-container>
 <div *ngIf="showLoader" class="loader">
-    <mat-spinner color="primary"></mat-spinner><br>
-    <span style="color: white; position: fixed; top:400px">Loading ...</span>
-    </div>
-
-
-
+  <mat-spinner color="primary"></mat-spinner><br>
+  <span style="color: white; position: fixed; top:400px">Loading ...</span>
+  </div>

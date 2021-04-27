@@ -27,7 +27,10 @@
               <mat-form-field  class="form-group" appearance="outline">
                   <mat-label > Password</mat-label>
                   <mat-icon matPrefix style="color : grey">lock</mat-icon>
-                  <input formControlName="pass" type="password" required  matInput placeholder="Enter your Password here">
+                  <input formControlName="pass" [type]="hide ? 'password' : 'text'" required  matInput placeholder="Enter your Password here">
+                  <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      </button>
                   <mat-icon style="color : gray" *ngIf="capslockOn" matSuffix matTooltip="CapsLock is on ! Password is case sensetive">keyboard_caps</mat-icon>
                   <mat-hint><p><a href="/forgot-password">Forgot Password ?</a></p></mat-hint>
                   <mat-error *ngIf="pass.hasError('required')">Password is required</mat-error>

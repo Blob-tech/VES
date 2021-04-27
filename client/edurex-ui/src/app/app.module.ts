@@ -39,8 +39,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatNativeDateModule } from '@angular/material/core';
-import { ProfileRoutingModule } from './modules/profile/profile-routing.module';
-import { ProfileModule } from './modules/profile/profile.module';
 import { SharedModule } from './shared/shared.module';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -64,7 +62,6 @@ import { AccessForbiddenComponent } from './components/access-forbidden/access-f
     BrowserModule,
     AppRoutingModule,
     LibraryRoutingModule,
-    ProfileRoutingModule,
     BrowserAnimationsModule,
     MaterialFileInputModule,
     MatButtonModule,
@@ -98,7 +95,6 @@ import { AccessForbiddenComponent } from './components/access-forbidden/access-f
     NgxSpinnerModule,
     MatVideoModule,
     NgbModule,
-    ProfileModule,
     SharedModule,
 
   ],

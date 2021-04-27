@@ -19,6 +19,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 
 @Component({
   selector: 'app-subscriber-list',
@@ -27,6 +28,7 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 })
 export class SubscriberListComponent implements OnInit {
 
+  showLoader = true;
   subscriberList = [];
   institutes = [];
   noSubs = null;
@@ -51,7 +53,8 @@ export class SubscriberListComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   filteredInstitutes: Observable<Institute[]>;
   selectedInstitutes = [];
-  
+  currentInstitute;
+  currentUser;
 
   @ViewChild('insInput') insInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -69,13 +72,16 @@ export class SubscriberListComponent implements OnInit {
     private instituteService : InstituteManagementService,
     private route : ActivatedRoute,public dialog: MatDialog,private formBuilder : FormBuilder,
     private localStorageService : LocalStorageService, private router : Router,
-     private libraryCategoryService : LibraryCategoryService)
+     private libraryCategoryService : LibraryCategoryService,
+     private sessionStorageService : SessionStorageService)
      {
       this.getFilteredInstitutes();
       }
 
   ngOnInit(): void {
 
+    this.currentInstitute = this.sessionStorageService.getter('current_institute');
+    this.currentUser = this.localStorageService.getter('user');
     this.getActiveInstituteList();
     this.getConfigParams();
     this.route.params.subscribe(routeParams => {
@@ -262,14 +268,17 @@ export class SubscriberListComponent implements OnInit {
           {
             this.noSubs = null;
           }
+          this.showLoader = false;
         }
         else
         {
           this._snacbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader = false;
         }
       },
       err=>{
         this._snacbar.open("Error in loading the subscribers");
+        this.showLoader = false;
       }
     )
   }
@@ -291,6 +300,26 @@ export class SubscriberListComponent implements OnInit {
     });
 
   }
+
+  isSystemAdmin()
+    {
+      let currentRole = this.sessionStorageService.getter('current_role')['role'];
+      if(currentRole == 'SADMIN' || this.currentInstitute.client_id == 'Admin')
+      {
+        return true;
+      }
+      return false;
+    }
+    
+    isInstituteAdmin()
+    {
+      let currentRole = this.sessionStorageService.getter('current_role')['role'];
+      if(currentRole == 'IADMIN')
+      {
+        return true;
+      }
+      return false;
+    }
 
   advance_search_click(searchkey,reset)
   {

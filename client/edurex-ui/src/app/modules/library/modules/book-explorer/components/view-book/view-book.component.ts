@@ -45,25 +45,30 @@ export class ViewBookComponent implements OnInit,AfterContentInit {
 
   getLangById(id : String)
   {
+    this.showLoader=true;
     this.bookService.getLangByID(id).subscribe(
       data=>{
         console.log(data);
         this.language = data;
+        this.showLoader = false;
       }
     )
   }
 
   getBookById(id : String)
   {
+    this.showLoader = true;
     this.bookService.getBookById(id).subscribe(
       data=>
       {
        
         this.book = data;
+        this.showLoader = false;
         
       },
       err=>{
         this._snackbar.open("Error in Loading the book with id :" + id,null,{duration : 5000});
+        this.showLoader = false;
       }
 
     )

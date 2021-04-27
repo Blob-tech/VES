@@ -1,27 +1,68 @@
-<button [disabled]="disabled" (click)="open(access_id,accessManager)" matTooltip="Manage Access"  mat-mini-fab class="action-button" color='info' ><mat-icon>add_task</mat-icon></button>
+<button 
+[ngClass]="{
+  'expired' : currentRole ? isRoleExpired(currentRole) : false,
+  'active' : currentRole ? !isRoleExpired(currentRole) && currentRole.is_activated && currentRole.active : false,
+  'pending_user' : currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'user' : false,
+  'pending_admin' : currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'admin' : false,
+  'revoked' : currentRole ? !currentRole.active : false,
+  'not_assigned' : !currentRole ? true : false
+}"  [disabled]="disabled" (click)="open(access_id,accessManager)" matTooltip="Manage Access"  mat-mini-fab class="action-button" color='info' >
+  <mat-icon
+  >add_task</mat-icon>
+</button>
 
 
 <!-- access Manage modal-->
 <ng-template #accessManager> 
-        <h1 mat-dialog-title> Manage User Access</h1>
+        <h1 mat-dialog-title > Manage User Access</h1>
+        <mat-icon  *ngIf="system_admin" style="color : blue;font-size: 50px; margin-right: 15px;">admin_panel_settings</mat-icon> 
+        <img *ngIf="!system_admin" class="logo" src="{{currentInstitute ? imgUrl + currentInstitute.avatar : '/assets/images/insimg.png'}}">
+        <h2 *ngIf="system_admin" style="color:gray">SYSTEM ADMIN</h2>
+        <h2 *ngIf="!system_admin" style="color:gray;margin-right: 10px;">{{currentInstitute.organisation_name}}</h2>
+        <button *ngIf="currentRole" mat-raised-button color="accent" (click)="removeAccess()">
+          <mat-icon>delete_forever</mat-icon>Remove Permanently</button>
+          <br><br>
          <div mat-dialog-content>
+           <div *ngIf="currentRole" class="alert alert-info">
+             <span style="margin-right: 10px;"><strong>CURRENT ACCESS : </strong></span>
+             <span style="color: cornflowerblue; margin-right: 10px;"><strong>{{(currentRole ? currentRole.role : "" )| roleTranslate}}</strong></span>
+             <span style="color: gray; margin-right: 10px;">Valid Upto : <b>{{ currentRole && currentRole.valid_upto ? currentRole.valid_upto.split('T')[0] : 'Lifetime'}}</b></span>
+             <span *ngIf="!isRoleExpired(currentRole) && currentRole.is_activated" style="color : green ;display: inline; margin-right: 20px;">ACTIVE</span>
+             <span *ngIf="!isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'user'" style="color : orange ;display: inline; margin-right: 20px;">Pending approval from User</span>
+             <span *ngIf="!isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.approval == 'admin'" style="color : coral ;display: inline; margin-right: 20px;">Pending approval from Institute Admin</span>
+            <span *ngIf="isRoleExpired(currentRole)" style="color :red ;display: inline; margin-right: 20px;">EXPIRED</span>
+            <span *ngIf="!currentRole.active" style="color :red ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
+            <button *ngIf="currentRole.active && !isRoleExpired(currentRole)" mat-raised-button color="warn"
+            (click)="revokeAccess()">
+              <mat-icon>published_with_changes</mat-icon>
+              Revoke Access</button>
+              <button *ngIf="!currentRole.active && !isRoleExpired(currentRole)" mat-raised-button color="primary"
+              (click)="renewAccess()">
+                <mat-icon>add_task</mat-icon>
+                Renew Access</button>
+           </div>
+           <br>
+           <button mat-raised-button  (click)="approveAccess()" color = "primary" *ngIf="currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.active && currentRole.approval == 'admin' : false">
+              <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                        <br>
+          
             <form [formGroup]="accessManagerForm">
                 <mat-form-field  class="form-group" appearance="outline">
                     <mat-label>Role</mat-label>
                     <mat-select formControlName="role" required (selectionChange)="resetAccessList($event)">
-                        <mat-option value="SADMIN">SYSTEM ADMIN</mat-option>
-                        <mat-option value="IADMIN">INSTITUTE ADMIN</mat-option>
-                        <mat-option value="CADMIN">CONTENT ADMIN</mat-option>
-                        <mat-option value="STUDENT">STUDENT</mat-option>
+                        <mat-option *ngIf="system_admin" value="SADMIN">SYSTEM ADMIN</mat-option>
+                        <mat-option *ngIf="!system_admin" value="IADMIN">INSTITUTE ADMIN</mat-option>
+                        <mat-option *ngIf="!system_admin" value="CADMIN">CONTENT ADMIN</mat-option>
+                        <mat-option *ngIf="!system_admin" value="STUDENT">STUDENT</mat-option>
                       </mat-select>
                       <mat-error *ngIf="role.hasError('required')">Value is required</mat-error>
                 </mat-form-field>  
 
-                <mat-form-field  class="form-group" appearance="outline">
+                <mat-form-field *ngIf="!system_admin" class="form-group" appearance="outline">
                         <mat-label >{{mode == 'institute' ? 'Institutes' : 'Users'}} </mat-label>
                         <mat-select multiple [disabled]="role.value == 'SADMIN' ? true : false" formControlName="access_list"  placeholder="{{mode == 'institute' ? 'Add Institute' : 'Add User'}}">
-                                <mat-option *ngFor="let access of accessList" [(value)] = "mode == 'institute' ? access.organisation_id : access.user_id"  matTooltip="{{mode == 'institute' ? access.organisation_name : access.name}}">
-                                {{mode == 'institute' ? access.organisation_name : access.name}} 
+                                <mat-option  [(value)] = "mode == 'institute' ? currentInstitute.organisation_id : access_id"  matTooltip="{{mode == 'institute' ? currentInstitute.organisation_name : ''}}">
+                                {{mode == 'institute' ? currentInstitute.organisation_name : ""}} 
                             </mat-option>
                               </mat-select>
                               </mat-form-field>
@@ -38,8 +79,10 @@
          </div>
          <div mat-dialog-actions>
             <button mat-raised-button color="primary" [disabled]="disabledGiveAccess()" (click)="giveAccess()"
-             mat-dialog-close><mat-icon>verified</mat-icon>Give Access</button>
+            ><mat-icon>verified</mat-icon>Give Access</button>
            <button mat-raised-button color="warn" mat-dialog-close>Close</button>
          </div>
          
        </ng-template>
+
+       

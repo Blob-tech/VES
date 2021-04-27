@@ -27,11 +27,61 @@ export class RoleAccessService implements OnInit{
     return this.httpClient.post(this.URL+"access/add/",formData,{headers:headers})
   }
 
+  removeRoleAccess(institute_id,user_id)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL + "remove_access/"+institute_id+"/"+user_id,{headers : headers});
+  }
+
   getRoleAccess(user_id : string)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
     return this.httpClient.get(this.URL+"institute/access/"+user_id,{headers:headers})
+  }
+
+  toggleAccess(user_id,institute_id,access)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"toggle_access/"+user_id+"/"+institute_id+"/"+access,{headers:headers});
+
+  }
+
+  toggleSystemAccess(user_id,access)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"toggle_system_access/"+user_id+"/"+access,{headers:headers});
+
+  }
+
+  getPeopleCount(institute_id : string,role : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"people_count/"+institute_id+"/"+role,{headers:headers});
+  }
+
+  approveAccess(user_id : string, institute_id : string , approver : string )
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL+"approve/"+ user_id +"/"+institute_id+"/"+approver,{headers:headers});
+  }
+  getIndividualRoleAccess(user_id : string, institute_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"individual_access/"+user_id+"/"+institute_id,{headers:headers});
+  }
+
+  getSystemAdminAccess(user_id:string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"system_access/"+user_id,{headers:headers});
   }
 
   isRoleExpired(role) : boolean

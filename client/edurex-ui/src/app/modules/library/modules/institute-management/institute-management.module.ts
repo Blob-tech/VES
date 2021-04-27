@@ -33,6 +33,14 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import {MatTabsModule} from '@angular/material/tabs';
 import {NgBreadcrumbModule} from 'ng-breadcrumb';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {PortalModule} from '@angular/cdk/portal';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {CdkStepperModule} from '@angular/cdk/stepper';
+import {CdkTableModule} from '@angular/cdk/table';
+import {CdkTreeModule} from '@angular/cdk/tree';
+
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -46,14 +54,22 @@ import { InstituteManagementRoutingModule } from './institute-management.routing
 import { InstituteListComponent } from './components/institute-list/institute-list.component';
 import { EditInstituteComponent} from './components/edit-institute/edit-institute.component';
 import { CommunicationService } from '../../service/communication.service';
+import { ViewInstituteComponent } from './components/view-institute/view.institute.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
-  declarations: [ InstituteManagementComponent ,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
+  declarations: [ InstituteManagementComponent ,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent,
+  ViewInstituteComponent],
   imports: [
     CommonModule,
+    DragDropModule,
+    ScrollingModule,
     MatSliderModule,
     MatTabsModule,
+    MatDatepickerModule,
     MatButtonModule,
     MatToolbarModule,
     MatTooltipModule,
@@ -71,6 +87,7 @@ import { CommunicationService } from '../../service/communication.service';
     MatDialogModule,
     MatMenuModule,
     MatCheckboxModule,
+    MatChipsModule,
     MatPaginatorModule,
     MatSnackBarModule,
     MatSlideToggleModule,
@@ -89,10 +106,12 @@ import { CommunicationService } from '../../service/communication.service';
     NgxDocViewerModule,
     MatVideoModule,
     PlyrModule,
+    SharedModule,
     InstituteManagementRoutingModule
   ],
   exports : [],
   providers : [CommunicationService],
-  bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent],
+  bootstrap: [InstituteManagementComponent,CreateInstituteComponent, InstituteListComponent, EditInstituteComponent,
+  ViewInstituteComponent],
 })
 export class InstituteManagementModule { }

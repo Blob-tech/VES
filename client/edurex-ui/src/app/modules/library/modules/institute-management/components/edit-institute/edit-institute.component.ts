@@ -28,7 +28,8 @@ import { CommunicationService } from 'src/app/modules/library/service/communicat
 })
 export class EditInstituteComponent implements OnInit {
 
-  
+
+  showLoader = true;
   public message = null;
   public error = null;
   public ishidden = true;
@@ -71,6 +72,7 @@ export class EditInstituteComponent implements OnInit {
   logo = new FormControl('');
   get_institute(id:String)
   {
+    this.showLoader = true;
     this.instituteService.view_institute(id).subscribe(
       data=>{
         this.current_institute = data[0];
@@ -83,15 +85,18 @@ export class EditInstituteComponent implements OnInit {
           address : this.current_institute.address,
           client_id : this.current_institute.client_id,
         },{emitEvent : true});
+        this.showLoader = false;
       },
       err=>{
         this._snackbar.open("Error in Loading the Institute with id :" + this.route.snapshot.paramMap.get('id'),null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
 
   getConfigParams()
   {
+    this.showLoader = true;
     this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -103,9 +108,11 @@ export class EditInstituteComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
         }
+        this.showLoader = false;
       },
       err=>{
-        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
@@ -216,6 +223,7 @@ export class EditInstituteComponent implements OnInit {
 
  update(id : String)
   {
+    this.showLoader = true;
     //console.log(this.editOrganisationForm);
     let formData = new FormData()
     
@@ -241,11 +249,13 @@ export class EditInstituteComponent implements OnInit {
           this.message = null;
           this.error =  JSON.parse(JSON.stringify(data))['err'];
         }
+        this.showLoader = false;
       },
       err =>
       {
         this.message = null;
-        this.error = "Error in updating an institute to Edurex Database. Please try after few minutes."
+        this.error = "Error in updating an institute to Edurex Database. Please try after few minutes.";
+        this.showLoader = false;
       }
     )
     
@@ -268,6 +278,7 @@ export class EditInstituteComponent implements OnInit {
 
   save_logo()
   {
+    this.showLoader = true;
     let formData = new FormData()
     formData.append('logo',this.LogoFile);
     this.instituteService.edit_institute_logo(formData,this.current_institute.organisation_id.toString().trim()).subscribe(
@@ -278,16 +289,19 @@ export class EditInstituteComponent implements OnInit {
           this.message = JSON.parse(JSON.stringify(data))['msg'];
           this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000});
           this.get_institute(this.current_institute.organisation_id);
+          this.showLoader = false;
         }
         else
         {
           this.message = null;
           this.error =  JSON.parse(JSON.stringify(data))['err'];          
+          this.showLoader =false;
         }
       },
       err => {
         this.message = null;
         this.error = "Error in updating an institute logo to Edurex Database. Please try after few minutes."; 
+        this.showLoader = false;
       } 
 
     )

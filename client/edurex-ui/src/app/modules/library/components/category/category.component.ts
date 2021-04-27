@@ -41,6 +41,7 @@ export class CategoryComponent implements OnInit {
   articleCategories = [];
   subscriptionCategories = [];
   config_params;
+  showLoader=true;
   header_color = ["#bbf2c9","#f4b5f5","#b6e4f0","#f08873","#f0e54f","#79912a","#4a6a87","#ab653f"]
   constructor(private formBuilder : FormBuilder,private libCategoryService : LibraryCategoryService,
     private _snackbar : MatSnackBar) { }
@@ -75,7 +76,7 @@ export class CategoryComponent implements OnInit {
   )
 
   subscriptionCategoryForm = this.formBuilder.group({
-    subscription_category_name : ['',[Validators.required,Validators.maxLength(100)]]
+    subscription_category_name : ['',[Validators.required,Validators.maxLength(40)]]
   }
   )
 
@@ -143,6 +144,11 @@ export class CategoryComponent implements OnInit {
     return this.articleSubCategoryForm.get('subcategory_name');
   }
 
+  get subscription_category_name()
+  {
+    return this.articleSubCategoryForm.get('subscription_category_name');
+  }
+
   get release()
   {
     return this.configForm.get('release');
@@ -184,6 +190,7 @@ export class CategoryComponent implements OnInit {
 
   getConfigValues()
   {
+    
     this.libCategoryService.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -213,6 +220,7 @@ export class CategoryComponent implements OnInit {
 
   setConfigValues()
   {
+    this.showLoader=true;
     this.libCategoryService.setConfigParameter(this.configForm.value).subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -224,9 +232,11 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
         }
+        this.showLoader = false;
       },
       err=>{
         this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this.showLoader=false;
       }
     )
   }
@@ -301,11 +311,12 @@ export class CategoryComponent implements OnInit {
                                                         { return tags.course_tag.startsWith('Y') || tags.course_tag.startsWith('y') });
                                                         this.courseTagsZ = this.courseTags.filter(tags =>
                                                           { return tags.course_tag.startsWith('Z') || tags.course_tag.startsWith('z') });
-
+                                                          this.showLoader=false;
       },
       err=>
       {
-        this._snackbar.open("Error in loading Course Tag",null,{duration : 500})
+        this._snackbar.open("Error in loading Course Tag",null,{duration : 500});
+        this.showLoader =false;
       }
     )
   }
@@ -324,6 +335,7 @@ export class CategoryComponent implements OnInit {
  
   addSubscriptionCategory()
   {
+    this.showLoader=true;
     this.libCategoryService.addSubscriptionCategory(this.subscriptionCategoryForm.value['subscription_category_name']).subscribe(
       data=>{
         if((JSON.parse(JSON.stringify(data))['msg']))
@@ -335,15 +347,18 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
+        this.showLoader=false;
       },
       err => {
         this._snackbar.open(JSON.stringify(err),null,{duration : 5000});
+        this.showLoader=false;
       }
     )
   }
   
   addCourseTag()
   {
+    this.showLoader=true;
     this.libCategoryService.addCourseTag(this.courseTagForm.value['course_tag']).subscribe(
       data=>{
         if((JSON.parse(JSON.stringify(data))['msg']))
@@ -355,15 +370,18 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
+        this.showLoader=false;
       },
       err => {
         this._snackbar.open(JSON.stringify(err),null,{duration : 5000});
+        this.showLoader=false;
       }
     )
   }
 
   addCategory()
   {
+    this.showLoader=true;
     this.libCategoryService.addCategory(this.articleCategoryForm.value['category_name']).subscribe(
       data=>{
         if((JSON.parse(JSON.stringify(data))['msg']))
@@ -375,9 +393,11 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
+        this.showLoader=false;
       },
       err => {
         this._snackbar.open(JSON.stringify(err),null,{duration : 5000});
+        this.showLoader=false;
       }
     )
   }
@@ -386,6 +406,7 @@ export class CategoryComponent implements OnInit {
   
   addSubCategory(id : String)
   {
+    this.showLoader=true;
       this.libCategoryService.addSubCategory(this.articleSubCategoryForm.value['subcategory_name'],id).subscribe
       (
         data=>{
@@ -399,19 +420,22 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
-
+        this.showLoader=false;
         },
         err =>{
           this._snackbar.open(JSON.stringify(err),null,{duration : 5000});
+          this.showLoader=false;
         }
       )
   }
  
   removeCourseTag(id : String)
   {
+    
     var res = confirm("Are you sure you want to delete this tag ?");
     if(res == true)
     {
+      this.showLoader=true;
       this.libCategoryService.removeCourseTag(id).subscribe
       (
         data=>{
@@ -425,10 +449,11 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
-
+        this.showLoader=false;
         },
         err =>{
           this._snackbar.open(JSON.stringify(err),null,{duration : 5000});
+          this.showLoader=false;
         }
       )
     }
@@ -439,6 +464,7 @@ export class CategoryComponent implements OnInit {
     var res = confirm("Are you sure you want to delete this subcategory ?Alert ! Books having this subcategory cannot be filtered using this subcategory any more");
     if(res == true)
     {
+      this.showLoader=true;
       this.libCategoryService.removeSubCategory(subcat,id).subscribe
       (
         data=>{
@@ -452,10 +478,11 @@ export class CategoryComponent implements OnInit {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
-
+        this.showLoader=false;
         },
         err =>{
           this._snackbar.open(JSON.stringify(err),null,{duration : 5000});
+          this.showLoader=false;
         }
       )
     }
@@ -466,6 +493,7 @@ export class CategoryComponent implements OnInit {
     var res = confirm("Are you sure, you want to remove this category ?Alert ! Content having this category cannot be filtered anymore.");
     if(res == true)
     {
+    this.showLoader=true;
     this.libCategoryService.removeCategory(id)
     .subscribe(
       data=>{
@@ -480,11 +508,12 @@ export class CategoryComponent implements OnInit {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
         }
 
-
+        this.showLoader=false;
       },
       err => {
 
         this._snackbar.open(JSON.stringify(err),null,{duration:5000});
+        this.showLoader=false;
       }
     )
   }
@@ -497,6 +526,7 @@ export class CategoryComponent implements OnInit {
       var res = confirm("Are you sure, you want to remove this category ?")
       if(res == true)
       {
+        this.showLoader=true;
       this.libCategoryService.removeSubscriptionCategory(id)
       .subscribe(
         data=>{
@@ -510,12 +540,13 @@ export class CategoryComponent implements OnInit {
           {
             this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
           }
-  
+          this.showLoader=false;
   
         },
         err => {
   
           this._snackbar.open(JSON.stringify(err),null,{duration:5000});
+          this.showLoader=false;
         }
       )
     }

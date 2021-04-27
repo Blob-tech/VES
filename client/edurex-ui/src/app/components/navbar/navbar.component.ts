@@ -61,7 +61,7 @@ export class NavbarComponent implements OnInit, DoCheck {
         this.loggedinAvatar = data['avatar'];
         this.localStorageService.setter('username',this.loggedinUsername);
         this.localStorageService.setter('avatar',this.loggedinAvatar);
-        this.profileViewUrl = '/profile/self/' + this.loggedinUser.user_id;
+        this.profileViewUrl = '/e-library/profile/self/' + this.loggedinUser.user_id;
       }
     )
     }

@@ -41,6 +41,11 @@ const roleAccessSchema = new schema(
            type : Boolean,
            required : true,
            default : false,
+       },
+       approval : 
+       {
+           type : String,
+           required : false,
        }
 
     }

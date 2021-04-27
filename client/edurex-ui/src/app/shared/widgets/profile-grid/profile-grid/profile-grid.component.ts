@@ -150,7 +150,7 @@ export class ProfileGridComponent implements OnInit {
   {
     if(this.mode == 'small')
     {
-      this.router.navigateByUrl("/profile/public/"+user_id);
+      this.router.navigateByUrl("/e-library/profile/public/"+user_id);
     }
     
   }

@@ -3,7 +3,7 @@
       <mat-card-title *ngIf="mode == 'small'" [style.color]="!selectedUser.isActivated ? 'grey' : ''"> <img
          matTooltip="{{selectedUser.name}}"  [style.opacity]="!selectedUser.isActivated ? 0.2 : 1"
        src= "{{selectedUser.avatar ? imgUrl + selectedUser.avatar : '/assets/images/user.png'}}" height=80 width = 80
-        style="border-radius : 50%;" ><a  href="/profile/public/{{selectedUser.user_id}}">
+        style="border-radius : 50%;" ><a style="color: cornflowerblue;">
           {{selectedUser.name.length < 40 ? selectedUser.name : selectedUser.name.substr(0,40) + '...'}}</a></mat-card-title>
       <mat-card-subtitle *ngIf = "enabledSubtitle && mode == 'small'" ><p>Phone : {{selectedUser.phone}}</p><p>Email : {{selectedUser.email}}</p></mat-card-subtitle>
     </mat-card-header>
@@ -26,7 +26,7 @@
      <button style="border : 5px solid white; margin-left : 55%; margin-top:-80% " 
      *ngIf="!selectedUser.avatar && mode == 'large' && isLoggedinUser()" mat-fab color="primary" (click)="open(editProfileImage)"><mat-icon>add_a_photo</mat-icon></button>
     <mat-card-content *ngIf="mode == 'large'" style="padding-left: 1rem; text-align: center;">
-      <a style="font-size : 20px"href="/profile/public/{{selectedUser.user_id}}">{{selectedUser.name}}</a><br>
+      <a style="font-size : 20px;color: cornflowerblue;">{{selectedUser.name}}</a><br>
       <span *ngIf="viewMode == 'self' || enabeledBio" style="color: grey; font-size: 15px; text-align: center;padding: 5px;">{{bio}}</span><br>
         <app-social-links *ngIf="viewMode == 'self' || enabeledSocialLinks" [userID]="selectedUser.user_id"></app-social-links>
       <p *ngIf="viewMode == 'self' || enabeledDetails"><mat-icon color="green">call</mat-icon> <b> : {{selectedUser.phone}}</b>

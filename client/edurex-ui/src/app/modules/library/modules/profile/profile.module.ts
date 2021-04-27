@@ -43,9 +43,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { PlyrModule } from 'ngx-plyr';
-import { BookExplorerComponent } from '../library/modules/book-explorer/book-explorer.component';
+
 import { SharedModule } from 'src/app/shared/shared.module';
-import { LibraryModule } from '../library/library.module';
+
 import { MatChipsModule } from '@angular/material/chips';
 import { BrowserModule } from '@angular/platform-browser';
 import {A11yModule} from '@angular/cdk/a11y';
@@ -57,6 +57,7 @@ import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
 import { ProfileGuradService } from './profile-guard';
+import { BookExplorerComponent } from '../book-explorer/book-explorer.component';
 
 
 
@@ -105,6 +106,7 @@ import { ProfileGuradService } from './profile-guard';
     MaterialFileInputModule,
     MatProgressBarModule,
     NgxMatSelectSearchModule,
+    MatSlideToggleModule,
     NgBreadcrumbModule,
     MatGridListModule,
     MatFormFieldModule,
@@ -119,7 +121,7 @@ import { ProfileGuradService } from './profile-guard';
     CommonModule,
     NgbModule,
     SharedModule,
-    LibraryModule
+    
 
 
   ],

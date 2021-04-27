@@ -1,11 +1,28 @@
+<div *ngIf="!ins.client_id"  style="margin-top : 150px;text-align: center;" class="alert alert-info">
+        <strong>You are not registered to any active institute. If your default Institute has been deactivated then please contact your Institute Admin</strong>
+</div>
 
-<div style="text-align: center;">
+<div *ngIf="!ins.client_id" class="row" >
+            <div class="col-lg-3 col-xl-3 col-sm-3 col-md-3" *ngFor="let ins of institutes;let i = index">
+                
+                <button class="institute" routerLink="/e-library/institute/institute-management/view/{{ins.organisation_id}}" matTooltip="{{ins.organisation_name}}"   mat-raised-button ><img height=40 width=40 src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 100 ? ins.organisation_name.substring(0,100)+"..." : ins.organisation_name}}</strong>
+                 </button>
+                
+            </div>
+        </div>
+<div *ngIf="!ins.client_id" style="text-align: center; display: flex; justify-content: center;">
+        <button mat-raised-button color="primary" [disabled]="initial_page == 1" style="margin-right: 10px;" (click)="previous()"><mat-icon>arrow_back_ios</mat-icon>Previous</button>
+        <button mat-raised-button color="primary" [disabled]="ifNext()" (click)="next()">Next<mat-icon>arrow_forward_ios</mat-icon></button>
+</div>
+    
+
+<div *ngIf="ins.client_id" style="text-align: center;">
         <img  *ngIf="ins.client_id == 'Admin'"src="/assets/images/admin.jpg" style="margin-top : 150px" height=200 width=200> 
-<img  *ngIf="ins.client_id != 'Admin'"src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}" style="margin-top : 150px" height=200 width=200><br><br>
+<img  *ngIf="ins.client_id != 'Admin'" src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}" style="margin-top : 150px" height=200 width=200><br><br>
          <span class="ins_name" style="color : grey ;">  {{ins.organisation_name ? ins.organisation_name : ''}} </span><br><br>
-         <button  routerLink="/e-library/book-explorer/list/all/all" color="primary" mat-raised-button styel="font-size : 20px; height : 100px">
+         <button   routerLink="/e-library/book-explorer/list/all/all" color="primary" mat-raised-button styel="font-size : 20px; height : 100px">
              Go to Library <mat-icon>arrow_right_alt</mat-icon></button>
-       
+</div>
 
 <div *ngIf="showLoader" class="loader">
                 <mat-spinner color="primary"></mat-spinner><br>

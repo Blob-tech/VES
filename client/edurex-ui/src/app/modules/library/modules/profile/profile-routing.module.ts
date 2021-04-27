@@ -5,11 +5,8 @@ import { ProfileGuradService } from './profile-guard';
 import { AuthGuradService } from 'src/app/shared/guard/auth-guard';
 
 
-
-
-
 const routes: Routes = [
-  {path : 'profile/:view/:user_id' , component : ProfileViewComponent, canActivate : [ProfileGuradService,AuthGuradService]},
+
   {path : '**' , redirectTo : '/404'}];
 
 @NgModule({
@@ -17,3 +14,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class ProfileRoutingModule { }
+

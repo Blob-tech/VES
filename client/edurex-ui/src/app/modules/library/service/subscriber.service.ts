@@ -2,7 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { config } from "src/conf";
 import { User } from '../modules/subscriber-management/models/subscriber';
-import { SocialProfile } from '../../profile/profile-view/profile-view.component';
+import { SocialProfile } from '../modules/profile/profile-view/profile-view.component';
+
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +52,28 @@ export class SubscriberService {
     
   }
 
+  get_user_by_role_institute(institute_id : string, role : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "people_list/" +institute_id +"/"
+    +role,{headers : headers});
+  }
+
+  get_unassigned_user_by_search(institute_id,searchkey)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "unassigned_user_search/"+institute_id+"/"+searchkey,{headers : headers});
+  }
+
+  get_unassigned_user(institute_id,users_per_page,page)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL + "unassigned_user/" +institute_id+"/"+users_per_page+"/"+page ,{headers : headers});
+  }
+  
   get_subscribers(institute : String, users_per_page : Number, page : Number)
   {
     let headers = new HttpHeaders();
@@ -158,6 +181,14 @@ export class SubscriberService {
     let headers = new HttpHeaders();
     headers.append('content-Type','application/json');
     return this.httpClient.post(this.URL + 'personal_info/add/'+user_id,formData,{headers : headers});
+  }
+
+  default_institute(user_id : string, institute : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.put(this.URL + "default_institute/" + user_id ,{"institute" : institute},{headers : headers});
+
   }
 
   set_visibility(user_id : string,body:any)

@@ -8,6 +8,36 @@ const fs = require('fs');
 const Organisation = require('../models/Organisation');
 organisations.use(cors());
 
+//get total institute counts
+organisations.get('/count',(req,res,next)=>{
+ Organisation.find({active : true}).countDocuments((err,count)=>{
+    if(err)
+    {
+        return json({"err" : "Server Error Occured !"})
+    }
+    else
+    {
+        res.json(count);
+    }
+ })
+ 
+})
+
+//get List of Organisation by page 
+organisations.get('/list/all/:org_per_page/:page',(req,res,next)=>{
+
+    Organisation.find()
+    Organisation.find({active : true})
+        .sort({organisation_name : 1}).skip((Number(req.params.page)-1)*(Number(req.params.org_per_page))).limit(Number(req.params.org_per_page))
+        .then(
+            data=>{
+                res.json(data);
+            }
+        ).catch(err=>{
+            res.json({"err":"Server Error ! Error in loading Organisations" + JSON.stringify(err)});
+        })
+});
+
 //get list of all organisation
 organisations.get('/list/all',(req,res,next)=>{
 
@@ -21,6 +51,8 @@ organisations.get('/list/all',(req,res,next)=>{
         res.json({"err" : "Server Error ! Error in loading Organisations" + JSON.stringify(err)})
     })
 })
+
+
 
 //get a organisation by client id
 organisations.get('/view_by_client_id/:client_id',(req,res,next)=>{
@@ -51,7 +83,7 @@ organisations.get('/view/:id',(req,res,next)=>{
 
 
 //add a new organisation
-organisations.post('/add',async (req,res,next)=>{
+organisations.post('/add',(req,res,next)=>{
 
     let avatar = null;
     
@@ -75,11 +107,10 @@ organisations.post('/add',async (req,res,next)=>{
 
    Organisation.findOne({$or : [{organisation_id : newOrganisation.organisation_id}
 , {client_id : newOrganisation.client_id}]
-        }).then ( async result => {
+        }).then ( result => {
        if(!result)
        {
-           const session = await mongoose.startSession();
-           session.startTransaction();
+           
            
 
         try{
@@ -88,11 +119,9 @@ organisations.post('/add',async (req,res,next)=>{
                     let name = avatar.name.split(".");
                     let stored_name=req.body.organisation_name+"-"+Date.now()+"."+ name[name.length-1];
                     avatar.mv("./uploads/organisation/logo/"+stored_name, 
-                    async (err)=>{
+                    (err)=>{
                         if(err)
                         {
-                            await session.abortTransaction();
-                            session.endSession();
                             res.json({"err" : "Error in uploading Organisation/Institute logo. Logo size exceeding the limit"})
                         }
                         })
@@ -101,15 +130,15 @@ organisations.post('/add',async (req,res,next)=>{
 
             
             Organisation.create(newOrganisation)
-            .then(async data=>
+            .then(data=>
                 {
                     let mongooseclient = require('mongoose')
-                    await mongooseclient.connect(process.env.MONGODB_URI, {useNewUrlParser:true});
+                    mongooseclient.connect(process.env.MONGODB_URI, {useNewUrlParser:true});
                     let connection = mongooseclient.connection;
                     let countercol =  connection.db.collection("counters");
                     let libraryconfig = connection.db.collection("library_config");
-                    await countercol.updateOne({},{$inc : {organisation : 1}});
-                    await libraryconfig.updateOne({institute_id : req.body.organisation_id},
+                    countercol.updateOne({},{$inc : {organisation : 1}});
+                    libraryconfig.updateOne({institute_id : req.body.organisation_id},
                         {set :{
                             release: 2592000000,
                             img_size:2,
@@ -123,16 +152,13 @@ organisations.post('/add',async (req,res,next)=>{
                         }
                     },{upsert : true}
                     )
-                    await session.commitTransaction();
-                    session.endSession();
                     res.json({"msg" : "Organisation with Id "+ newOrganisation.organisation_id + " has been successfully created."});
         
                 })
             .catch(
-               async err =>
+               err =>
                 {
-                    await session.abortTransaction();
-                    session.endSession();
+
                     if (err.code == 11000)
                     {
                         res.json({"err" : "Duplicate email id or Phone Number. Please register with unique Client Id, email id and phone number which has not been registered in this site"});
@@ -148,8 +174,7 @@ organisations.post('/add',async (req,res,next)=>{
             }
             catch(err)
             {
-                    await session.abortTransaction();
-                    session.endSession();
+
                     res.json({"err": " Error in adding a new Institute to Edurex Database. Please try after few minutes" + err});
             }
        }

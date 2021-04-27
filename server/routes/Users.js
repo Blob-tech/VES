@@ -17,7 +17,7 @@ users.get('/count/:institute',(req,res,next)=>
 {
     if(req.params.institute == 'unassigned')
     {
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -42,7 +42,7 @@ users.get('/count/:institute',(req,res,next)=>
                 }
                 else if(req.params.institute == 'sadmin')
                 {
-                    RoleAccess.find({$and : [{active : true},
+                    RoleAccess.find({$and : [
                     {role : "SADMIN"}]})
                     .then(
                         roles => 
@@ -68,7 +68,7 @@ users.get('/count/:institute',(req,res,next)=>
                 }
                     else
                     {
-                        RoleAccess.find({$and : [{active : true},
+                        RoleAccess.find({$and : [
                             {institute_id : req.params.institute},
                         {role : {$ne : "SADMIN"}}]})
                         .then(
@@ -103,7 +103,7 @@ users.get('/count/:institute/:filter',(req,res,next)=>
     if(req.params.institute == 'unassigned')
     {
         searchkey = req.params.filter;
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -137,7 +137,7 @@ users.get('/count/:institute/:filter',(req,res,next)=>
                 else if(req.params.institute = 'sadmin')
                 {
                     searchkey = req.params.filter;
-                        RoleAccess.find({$and : [{active : true},
+                        RoleAccess.find({$and : [
                     {role :  "SADMIN"}]})
                             .then(
                                 roles => 
@@ -172,7 +172,7 @@ users.get('/count/:institute/:filter',(req,res,next)=>
                     else
                     {
                         searchkey = req.params.filter;
-                        RoleAccess.find({$and : [{active : true},
+                        RoleAccess.find({$and : [
                         {institute_id : req.params.institute},
                     {role : {$ne : "SADMIN"}}]})
                             .then(
@@ -213,7 +213,7 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
 
     if(req.params.institute == 'unassigned')
     {
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -247,7 +247,7 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
     }
     else if(req.params.institute == 'sadmin')
     {
-        RoleAccess.find({and : [{active : true},{role : 'SADMIN'}]})
+        RoleAccess.find({$and : [{role : 'SADMIN'}]})
         .then(
             roles => 
             {
@@ -281,7 +281,7 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
     }
     else {
 
-        RoleAccess.find({$and : [{active : true},
+        RoleAccess.find({$and : [
         {institute_id : req.params.institute},
         {role : {$ne : "SADMIN"}}]})
         .then(
@@ -317,14 +317,85 @@ users.get('/list/:institute/:filter/:users_per_page/:page',(req,res,next)=>{
             }
 })
 
+//get list of unassigned users by searchkey
+users.get('/unassigned_user_search/:institute/:keyword', (req,res,next)=>{
 
+    RoleAccess.find({institute_id : req.params.institute})
+    .then(
+        roles=>{
+            roles = roles.map(value=> value.user_id);
+            let searchkey = req.params.keyword;
+            User.find({$and : [{active : true},{user_id : {$nin : roles}},
+                {$or : [{name : new RegExp(searchkey,'i')},
+                {email : new RegExp(searchkey,'i')},
+                {phone : new RegExp(searchkey,'i')},
+                {user_id : new RegExp(searchkey,'i')},
+            ]}
+        ]}).sort({name : 1})
+        .then(
+            data=>{
+                res.json(data);
+            }
+        ).catch(err=>{
+            res.json({"err" : "Server Error !" + err});
+        })
+
+        }
+    ).catch(err=>{
+        res.json({"err" : "Server Error !" + err});
+    })
+})
+//get list of unassigned user
+users.get('/unassigned_user/:institute/:users_per_page/:page',(req,res,next)=>{
+
+    RoleAccess.find({institute_id : req.params.institute})
+    .then(
+        roles=>{
+            roles = roles.map(value=> value.user_id);
+            User.find({$and : [{active : true},{user_id : {$nin : roles}}]})
+            .sort({name : 1})
+            .limit(Number(req.params.users_per_page)*Number(req.params.page))
+            .then(
+                data=>{
+                    res.json(data);
+                }
+            ).catch(err=>{
+                res.json({"err" : "Server Error !" + err});
+            })
+        }
+    ).catch(err=>{
+        res.json({"err" : "Server Error !" + err});
+    })
+})
+
+
+//get list of users institute wise
+users.get('/people_list/:institute/:role',(req,res,next)=>{
+    
+    RoleAccess.find({$and : [{institute_id : req.params.institute},{role : req.params.role}]}).then(
+      roles=>{
+        roles = roles.map(value => value.user_id);
+       User.find({$and : [{active : true},{user_id : {$in : roles}}]}).sort({name : 1}).
+       then(
+        data=>{
+            res.json(data);
+        }
+       ).catch(err=>{
+        res.json({"err" : "Server Error !" + err}); 
+       })
+         
+     }
+    ).catch(err=>{
+        res.json({"err" : "Server Error !" + err});
+    })
+})
 
 //get Users depend upon role and institutes
 users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
 
     if(req.params.institute == 'unassigned')
     {
-        RoleAccess.find({active : true})
+        RoleAccess.find({})
             .then(
                 roles => 
                 {
@@ -350,7 +421,7 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
     else if(req.params.institute == 'sadmin')
     {
         RoleAccess.find({$and :
-            [{active : true},
+            [
              {role :  "SADMIN"}
            ]})
        .then(
@@ -377,8 +448,7 @@ users.get('/list/:institute/:users_per_page/:page',(req,res,next)=>{
     }
     else {
         RoleAccess.find({$and :
-             [{active : true},
-              {institute_id : req.params.institute},
+             [{institute_id : req.params.institute},
               {role : {$ne : "SADMIN"}}
             ]})
         .then(
@@ -975,6 +1045,24 @@ users.post('/visibility/:user_id',(req,res,next)=>{
             },
         ).catch(err => {
             res.json({"err" : "Server Error ! Error in setting visibility"});
+        })
+})
+
+users.put('/default_institute/:user_id',(req,res,next)=>{
+    UserMeta.updateOne({user_id : req.params.user_id},
+        {
+            $set : {
+                default_institute : req.body.institute
+            }
+        },
+        {
+            upsert : true
+        }).then(
+            data=>{
+                res.json({"msg" : "Your Default Institute has been changed"});
+            },
+        ).catch(err => {
+            res.json({"err" : "Server Error ! Error in setting default Institute" + err});
         })
 })
 

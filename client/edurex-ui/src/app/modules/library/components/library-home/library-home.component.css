@@ -1,3 +1,32 @@
+.institute
+{
+    width: 90%;
+    height: fit-content;
+    padding: 1rem;
+    margin: 1rem;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.institute.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+.mat-tooltip.tooltip 
+{
+background-color: darkblue;
+font-size: 50px;
+}
+button:focus {
+  outline: none;
+}
+.institute 
+{
+  height : 200px;
+}
+
 .loader
 {
     position: fixed;

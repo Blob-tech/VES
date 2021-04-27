@@ -43,6 +43,13 @@ export class LibraryCategoryService {
     let current_institute_id = this.sessionStorageService.getter('current_institute').organisation_id;
     return this.httpClient.get(this.URL + "course/tags/list/"+current_institute_id+"/"+nameStartsWith,{headers:headers});
   }
+  getSubscriptionCategoriesById(institute_id)
+  {
+    let headers = new HttpHeaders();
+    
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"library/category/subscriptions/list/"+institute_id,{headers : headers});
+  }
   getSubscriptionCategories()
   {
     let headers = new HttpHeaders();

@@ -5,6 +5,7 @@ import { CreateInstituteComponent } from './components/create-institute/create-i
 import { InstituteListComponent } from './components/institute-list/institute-list.component';
 import { EditInstituteComponent } from './components/edit-institute/edit-institute.component';
 import { AuthGuradService } from 'src/app/shared/guard/auth-guard';
+import { ViewInstituteComponent } from './components/view-institute/view.institute.component';
 
 const routes = [
     {path : 'institute-management', component : InstituteManagementComponent ,
@@ -12,6 +13,7 @@ const routes = [
       {path : 'create-new',component : CreateInstituteComponent},
       {path : 'list/all', component : InstituteListComponent},
       {path : 'edit/:id', component : EditInstituteComponent},
+      {path : 'view/:id',component : ViewInstituteComponent},
       {path : '**', redirectTo : '/404'}
     ]},
     {path : '**', redirectTo : '/404'}

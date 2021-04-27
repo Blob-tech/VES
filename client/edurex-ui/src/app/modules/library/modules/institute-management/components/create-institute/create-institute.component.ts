@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { LibraryCategoryService } from 'src/app/modules/library/service/library-category.service';
 import { SubscriberService } from 'src/app/modules/library/service/subscriber.service';
 import { InstituteManagementService } from 'src/app/modules/library/service/institute-management.service';
+import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 
 
 
@@ -23,6 +24,7 @@ import { InstituteManagementService } from 'src/app/modules/library/service/inst
 })
 export class CreateInstituteComponent implements OnInit,OnChanges {
 
+  showLoader = true;
   message = null;
   error = null;
   ishidden = true;
@@ -36,7 +38,8 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
   url = "assets/images/user.png";
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
-    private navbar : NavbarService) { }
+    private navbar : NavbarService, private subscriberService : SubscriberService,
+    private roleAccessService : RoleAccessService) { }
 
     
   ngOnInit(): void {
@@ -139,6 +142,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
 
   getConfigParams()
   {
+    this.showLoader=true;
     this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
@@ -150,24 +154,29 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
         {
           this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
         }
+        this.showLoader = false;
       },
       err=>{
-        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
 
   getCounter()
   {
+    this.showLoader = true;
     this.navbar.getCounterList().subscribe(
       data=>{
         this.counter = data;
         const currentDate = new Date();
         const currentDateYear = currentDate.getFullYear().toString();
         this.organisationForm.patchValue({organisation_id : this.counter[0].organisation_prefix+currentDateYear+this.counter[0].organisation},{emitEvent : true});
+        this.showLoader = false;
       },
       err=>{
         this._snackbar.open("Error in loading counter",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }
@@ -211,11 +220,88 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
     }
   }
 
+  registerInstituteAdmin()
+  {
+    let userformData = new FormData()
+    userformData.append('avatar',this.imageFile);
+    userformData.append('user_id' ,this.client_id.value);
+    userformData.append('email' ,this.contact_email.value);
+    userformData.append('phone' ,this.contact_phone.value);
+    userformData.append('name' ,this.contact_person.value);
+    userformData.append('address' ,this.address.value);
+    userformData.append('password' ,this.contact_phone.value);
+
+    this.subscriberService.register(userformData).subscribe(
+      data=>
+      {
+        
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          
+          this.instituteAdminAccess();
+        }
+        else
+        {
+          this.message = null;
+          this.error =  JSON.parse(JSON.stringify(data))['err'];
+          this.showLoader = false;
+        }
+      },
+      err =>
+      {
+        this.message = null;
+        this.error = "Error in adding new subscriber to Edurex Database. Please try after few minutes.";
+        this.showLoader =false;
+        
+      }
+    )
+    
+  }
+
+
+  instituteAdminAccess()
+  {
+      let formData = new FormData();
+      let validupto : Date;
+     
+      formData.append('users', this.client_id.value);
+      formData.append('institutes',this.organisation_id.value);
+      formData.append('role','IADMIN');
+      formData.append('valid_upto', '');
+      formData.append('approval','user');
+      this.roleAccessService.giveRoleAccess(formData).subscribe(
+        data=>{
+          if(!(JSON.parse(JSON.stringify(data))['err']))
+          {
+            this.error = null;
+            this.message = JSON.parse(JSON.stringify(data))['msg'];
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
+            this.router.navigateByUrl('e-library/institute/institute-management/list/all').then(
+              ()=>{
+                this.showLoader = false;
+              }
+            );
+            
+          }
+          else
+          {
+            this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+            this.showLoader=false;
+          }
+        },
+        err=>{
+          this._snackbar.open("Error in Giving Access ! Please try after few minutes", null , {duration : 5000} );
+          this.showLoader=false;
+        }
+      )
+    
+  }
   
 
   register()
   {
-    //console.log(this.organisationForm);
+    this.showLoader = true;
+   
     let formData = new FormData()
     formData.append('avatar',this.imageFile);
     
@@ -224,28 +310,28 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
       formData.append(key, value);
     }
 
-    console.log(formData);
+    
     this.instituteService.register(formData).subscribe(
       data=>
       {
         
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
-          this.error = null;
-          this.message = JSON.parse(JSON.stringify(data))['msg'];
-          this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/institute/institute-management/list/all');
+          this.registerInstituteAdmin();
+         
         }
-        else
         {
           this.message = null;
           this.error =  JSON.parse(JSON.stringify(data))['err'];
+          this.showLoader = false;
         }
+        
       },
       err =>
       {
         this.message = null;
-        this.error = "Error in adding new Institute to Edurex Database. Please try after few minutes."
+        this.error = "Error in adding new Institute to Edurex Database. Please try after few minutes.";
+        this.showLoader = false;
       }
     )
     

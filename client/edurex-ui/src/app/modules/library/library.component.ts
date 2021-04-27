@@ -64,6 +64,27 @@ export class LibraryComponent implements OnInit {
      }
      return true;
     }
+  
+    isSystemAdmin()
+    {
+      let current_role = this.sessionStorageService.getter('current_role')['role'];
+      if(current_role == "SADMIN" || this.current_ins.client_id == 'Admin')
+      {
+        return true;
+      }
+      return false;
+    }
+
+    isInstituteAdmin()
+    {
+      let current_role = this.sessionStorageService.getter('current_role')['role'];
+      let current_role_is_activated = this.sessionStorageService.getter('current_role')['is_activated'];
+      if(current_role == "IADMIN" && current_role_is_activated)
+      {
+        return true;
+      }
+      return false;
+    }
 
   getAccessRoles(user_id)
   {
@@ -86,7 +107,7 @@ export class LibraryComponent implements OnInit {
           this.default_ins = this.roles.ins.filter(value => {
             return value.organisation_id == this.userMetas.default_institute
           })[0];
-          if(this.default_ins == undefined)
+          if(this.default_ins == undefined || this.default_ins.client_id =="")
           {
             let systemAdmin =  this.roles.role.filter(value => {
               return value.role == 'SADMIN'
@@ -129,12 +150,12 @@ export class LibraryComponent implements OnInit {
           this.current_role = this.roles.role.filter(value => {
             return value.institute_id == this.current_ins.organisation_id
           })[0];
-          if(this.current_role == undefined)
+          if(this.current_role == undefined || this.current_role.institute_id == '')
           {
             this.current_role = this.roles.role.filter(value => {
               return value.role == 'SADMIN'
             })[0];
-            if(this.current_role == undefined){
+            if(this.current_role == undefined || this.current_role.institute_id == ''){
             this.current_role = {
               access_given : '',
               active : false,
@@ -147,7 +168,7 @@ export class LibraryComponent implements OnInit {
           }
           
           this.localStorageService.setter('current_role',this.current_role);
-          if(this.sessionStorageService.getter('current_role') == null)
+          if(this.sessionStorageService.getter('current_role') == null || this.sessionStorageService.getter('current_role').client_id == "")
           {
             this.sessionStorageService.setter('current_role', this.localStorageService.getter('current_role'));
           }

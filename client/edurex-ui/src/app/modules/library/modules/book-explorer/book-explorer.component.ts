@@ -16,6 +16,7 @@ import { async } from '@angular/core/testing';
 export class BookExplorerComponent implements OnInit {
 
   categories=[];
+  showLoader = true;
   copyCategories=[];
   books = [];
   imgUrl = config.host + "thumbnail/";
@@ -29,21 +30,26 @@ export class BookExplorerComponent implements OnInit {
     this.getConfigParams();
   }
 
+  
   getCategories()
   {  
+    this.showLoader=true;
   this.libCategoryService.getArticleCategories().subscribe(
     data => {
       this.categories = data as Array<any>;
       this.copyCategories = data as Array<any>;
+      this.showLoader = false;
     },
     err => {
-      this._snackbar.open("Error in loading Article Category",null,{duration : 5000})
+      this._snackbar.open("Error in loading Article Category",null,{duration : 5000});
+      this.showLoader = false;
     }
   )
   }
 
   getLatestBooks(latest_number : string)
   { 
+
     this.bookService.getLatestBooks(latest_number).subscribe(
       data=>{
         this.getConfigParams()
@@ -92,20 +98,24 @@ export class BookExplorerComponent implements OnInit {
 
   getConfigParams()
   {
+    this.showLoader=true;
     this.libCategoryService.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
           this.getLatestBooks(this.configParams.books_per_page);
+          this.showLoader = false;
         }
         else
         {
-          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000})
+          this._snackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader = false;
         }
       },
       err=>{
-        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000})
+        this._snackbar.open("Error in Loading Library Config Parameters",null,{duration : 5000});
+        this.showLoader = false;
       }
     )
   }

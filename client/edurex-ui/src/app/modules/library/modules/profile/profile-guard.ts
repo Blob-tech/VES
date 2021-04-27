@@ -1,7 +1,8 @@
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
-import { SubscriberService } from '../library/service/subscriber.service';
+import { SubscriberService } from '../../service/subscriber.service';
+
 
 
 @Injectable()
@@ -40,7 +41,7 @@ export class ProfileGuradService implements CanActivate
       }
       else if(loggedinUserId == this.localStorageService.getter('user').user_id && view_mode == 'public')
       {
-          this._router.navigateByUrl('/profile/self/'+loggedinUserId);
+          this._router.navigateByUrl('/e-library/profile/self/'+loggedinUserId);
           return false;
       }
       else if(loggedinUserId != this.localStorageService.getter('user').user_id && view_mode == 'public')
@@ -49,7 +50,7 @@ export class ProfileGuradService implements CanActivate
       }
       else if(loggedinUserId != this.localStorageService.getter('user').user_id && view_mode == 'self')
       {
-        this._router.navigateByUrl('/profile/public/'+loggedinUserId);
+        this._router.navigateByUrl('/e-library/profile/public/'+loggedinUserId);
         return false;
       }
       
