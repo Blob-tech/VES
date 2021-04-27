@@ -24,6 +24,7 @@ roles.post('/access/add',(req,res,next)=>{
     let institutes = req.body.institutes.split(',');
     let role = req.body.role;
     let valid_upto = req.body.valid_upto;
+    let approval = req.body.approval;
 
     users.forEach(user => {
         institutes.forEach(institute => {
@@ -49,7 +50,7 @@ roles.post('/access/add',(req,res,next)=>{
                     valid_upto : valid_upto,
                     active : true,
                     is_activated : false,
-                    approval : "user"
+                    approval : approval
                 }
             },
             {
