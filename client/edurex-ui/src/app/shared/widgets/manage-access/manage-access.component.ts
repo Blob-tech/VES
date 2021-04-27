@@ -341,6 +341,30 @@ export class ManageAccessComponent implements OnInit {
     return false;
   }
 
+  approveAccess()
+  {
+    this.roleAccessService.approveAccess(this.access_id,this.institute,'admin').subscribe(
+      data=>{
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          this._snacbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+          this.getCurrentRoleAccess(this.access_id,this.institute);
+        }
+        else
+        {
+          this._snacbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+        
+        }
+        
+      },
+      err=>{
+        this._snacbar.open("Error in approving access" + JSON.stringify(err),null,{duration : 5000});
+        
+      }
+    )
+    
+  }
+
   giveAccess()
   {
     var res = true;

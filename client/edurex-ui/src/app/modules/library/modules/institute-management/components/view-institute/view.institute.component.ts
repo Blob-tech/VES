@@ -205,7 +205,7 @@ export class ViewInstituteComponent implements OnInit {
 
   register()
   {
-    var res=confirm("This will send for an approval request to admin of"+
+    var res=confirm("This will send for an approval request to admin of "+
     this.current_institute.organisation_name+". Are you sure ?" );
     if(res)
     {
