@@ -41,6 +41,10 @@
                 <mat-icon>add_task</mat-icon>
                 Renew Access</button>
            </div>
+           <br>
+           <button mat-raised-button  color = "primary" *ngIf="currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.active && currentRole.approval == 'admin' : false">
+              <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+                        <br>
           
             <form [formGroup]="accessManagerForm">
                 <mat-form-field  class="form-group" appearance="outline">

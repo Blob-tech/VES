@@ -170,15 +170,15 @@ export class ViewInstituteComponent implements OnInit {
       let selectedUser = event.container.data[event.currentIndex]
       if(event.container.id == 'cdk-drop-list-1')
       {
-         this.giveAccess(selectedUser['user_id'],this.institute_id,'IADMIN');
+         this.giveAccess(selectedUser['user_id'],this.institute_id,'IADMIN','user');
       }
       else if(event.container.id == 'cdk-drop-list-2')
       {
-         this.giveAccess(selectedUser['user_id'],this.institute_id,'CADMIN');
+         this.giveAccess(selectedUser['user_id'],this.institute_id,'CADMIN','user');
       }
       else if(event.container.id == 'cdk-drop-list-3')
       {
-         this.giveAccess(selectedUser['user_id'],this.institute_id,'STUDENT');
+         this.giveAccess(selectedUser['user_id'],this.institute_id,'STUDENT','user');
       }
       else if(event.container.id == 'cdk-drop-list-0')
       {
@@ -203,11 +203,20 @@ export class ViewInstituteComponent implements OnInit {
     }
   }
 
- 
+  register()
+  {
+    var res=confirm("This will send for an approval request to admin of"+
+    this.current_institute.organisation_name+". Are you sure ?" );
+    if(res)
+    {
+      this.giveAccess(this.currentUser.user_id,this.current_institute.organisation_id,
+        'STUDENT','admin');
+    }
+  }
 
 
 
-  giveAccess(users,institutes,role)
+  giveAccess(users,institutes,role, approvalTo)
   {
     
       let formData = new FormData();
@@ -221,6 +230,7 @@ export class ViewInstituteComponent implements OnInit {
       formData.append('institutes',institutes);
       formData.append('role',role);
       formData.append('valid_upto', this.valid_upto ? validupto.toDateString() : '');
+      formData.append('approval',approvalTo);
       this.roleAccessService.giveRoleAccess(formData).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
