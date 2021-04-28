@@ -28,7 +28,11 @@
         matTooltip="Select a theme!" > <mat-icon class="auto-flip">format_color_fill</mat-icon> Theme</button>
         <button (click)="open(counter)" mat-menu-item matTooltip="Configure Counter"><mat-icon class="auto-flip">scatter_plot</mat-icon>Counter</button>
         <button mat-menu-item 
-        matTooltip="System Configuration!" (click)="open(system)"> <mat-icon class="auto-flip">donut_small</mat-icon> System Icon</button>
+        matTooltip="System Icon!" (click)="openModal(system)"> <mat-icon class="auto-flip">donut_small</mat-icon> System Icon</button>
+        <button mat-menu-item 
+        matTooltip="System Configuration!" (click)="openModal(config)"> <mat-icon class="auto-flip">build</mat-icon> System Configuration</button>
+        <button mat-menu-item 
+        matTooltip="Packages!"> <mat-icon class="auto-flip">view_in_ar</mat-icon> Packages</button>
         <button mat-menu-item (click)="logout()"
         matTooltip="Logout"> <mat-icon class="auto-flip">logout</mat-icon> Logout</button>
       </mat-menu>
@@ -148,15 +152,10 @@
       </ng-template>
 
 
-          <!-- Edit system configuration Modal-->
+          <!-- Edit system icon Modal-->
     <ng-template #system let-c="close" let-d="dismiss">
-      <div class="modal-header">
-        <h2 class="modal-title">System Configuration </h2>
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+      <h2 mat-dialog-title>System Icon </h2>
+      <div mat-dialog-content>
         <div class="container">
             <span style="display: flex; margin:1rem">
                 <img class="icon" src="{{imgUrl}}"></span>
@@ -174,7 +173,7 @@
                   <mat-error *ngIf="name.hasError('required')">
                     Value is required
                   </mat-error>
-              </mat-form-field>
+              </mat-form-field><br>
 
           <button mat-button>Company or Organization</button> 
           <mat-form-field class="form-group" appearance="outline">
@@ -183,7 +182,7 @@
               <mat-error *ngIf="name.hasError('required')">
                 Value is required
               </mat-error>
-          </mat-form-field>
+          </mat-form-field><br>
 
           <button mat-button>Company Tagline</button> 
           <mat-form-field class="form-group" appearance="outline">
@@ -192,13 +191,82 @@
             <mat-error *ngIf="tagline.hasError('required')">
               Value is required
             </mat-error>
-        </mat-form-field>
+        </mat-form-field><br>
         </form>
         <br>
-        <button class="btn btn-xl btn-success" (click)="updateBrand()" [disabled]="systemForm.status != 'VALID'">Save</button>
-        </div>
       </div>
+    <div mat-dialog-actions>
+        <button type="button"mat-dialog-close mat-raised-button color="primary" (click)="updateBrand()" [disabled]="systemForm.status != 'VALID'" >Save</button>
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+        </div> 
+      </div> 
     </ng-template>
+
+
+          <!-- Edit system configuration Modal-->
+          <ng-template #config let-c="close" let-d="dismiss">
+              <h1 mat-dialog-title>System Configuration</h1>
+              <div mat-dialog-content>
+                       
+                  <form [formGroup]="configForm">
+        
+                      <button mat-button>Profile Image Size Limit</button> 
+                      <mat-form-field class="form-group" appearance="outline" >
+                          <mat-label>Profile Image Size Limit </mat-label>
+                          <mat-select formControlName ="profile_img_size"  required>
+                            <mat-option [value]=1>1 MB</mat-option>
+                            <mat-option [value]=2>2 MB</mat-option>
+                            <mat-option [value]=5>5 MB</mat-option>
+                            <mat-option [value]=10>10 MB</mat-option>
+                            <mat-option [value]=25>25 MB</mat-option>
+                            <mat-option [value]=50>50 MB</mat-option>
+                            <mat-option [value]=100>100 MB</mat-option>
+                          </mat-select>
+                        </mat-form-field><br>
+                      <button mat-button>Cover Image Size Limit</button> 
+                        <mat-form-field class="form-group" appearance="outline" >
+                            <mat-label>Cover Image Size Limit </mat-label>
+                            <mat-select formControlName ="cover_img_size"  required>
+                              <mat-option [value]=1>1 MB</mat-option>
+                              <mat-option [value]=2>2 MB</mat-option>
+                              <mat-option [value]=5>5 MB</mat-option>
+                              <mat-option [value]=10>10 MB</mat-option>
+                              <mat-option [value]=25>25 MB</mat-option>
+                              <mat-option [value]=50>50 MB</mat-option>
+                              <mat-option [value]=100>100 MB</mat-option>
+                            </mat-select>
+                          </mat-form-field><br>
+                      <button mat-button>Institute Logo Size Limit</button> 
+
+                          <mat-form-field class="form-group" appearance="outline" >
+                              <mat-label>Institute Logo Limit </mat-label>
+                              <mat-select formControlName ="institute_logo_size"  required>
+                                <mat-option [value]=1>1 MB</mat-option>
+                                <mat-option [value]=2>2 MB</mat-option>
+                                <mat-option [value]=5>5 MB</mat-option>
+                                <mat-option [value]=10>10 MB</mat-option>
+                                <mat-option [value]=25>25 MB</mat-option>
+                                <mat-option [value]=50>50 MB</mat-option>
+                                <mat-option [value]=100>100 MB</mat-option>
+                              </mat-select>
+                            </mat-form-field><br>
+                            <button mat-button>System Admin email</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                              <mat-label>System Admin Email</mat-label>
+                              <input type="email" matInput formControlName="admin_email" placeholder="Enter System admin email">
+                              <mat-hint>This email will be used for sending any notification from amdin</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field>
+        
+                 </form>
+                </div>
+                <div mat-dialog-actions>
+                    <button type="button"mat-dialog-close mat-raised-button color="primary"
+                    (click)="updateConfig()" [disabled]="configForm.status != 'VALID'">Save</button>
+                    <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+                  </div>
+                
+            </ng-template>
 
     <ng-template #edit_image let-c="close" let-d="dismiss">
         <div class="modal-header">

@@ -159,7 +159,8 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
   getConfigParams()
   {
     this.showLoader = true;
-    this.libCategoryServices.getConfigParameters().subscribe(
+    this.navbar.getSystemBranding().subscribe(
+    // this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
@@ -280,9 +281,10 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
           this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/subscriber/subscriber-management/categories').then(
-            ()=>{this.showLoader =false;}
-          );
+          // this.router.navigateByUrl('e-library/subscriber/subscriber-management/categories').then(
+          //   ()=>{this.showLoader =false;}
+          // );
+          this.showLoader=false;
         }
         else
         {

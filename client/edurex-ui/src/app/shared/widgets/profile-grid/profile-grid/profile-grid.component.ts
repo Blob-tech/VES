@@ -10,6 +10,7 @@ import { SubscriberService } from 'src/app/modules/library/service/subscriber.se
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
+import { NavbarService } from 'src/app/components/navbar/navbar.service';
 
 @Component({
   selector: 'app-profile-grid',
@@ -50,7 +51,7 @@ export class ProfileGridComponent implements OnInit {
   constructor(private libCategoryServices : LibraryCategoryService, private _snackbar : MatSnackBar,
     public dialog : MatDialog, private subscriberService : SubscriberService, private router : Router,
     private formBuilder : FormBuilder,private locaStorageService : LocalStorageService,
-    private roleAccessService : RoleAccessService) { }
+    private roleAccessService : RoleAccessService, private navbarService : NavbarService) { }
 
   ngOnInit(): void {
 
@@ -127,13 +128,14 @@ export class ProfileGridComponent implements OnInit {
 
   getConfigParams()
   {
-    this.libCategoryServices.getConfigParameters().subscribe(
+    this.navbarService.getSystemBranding().subscribe(
+   // this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
           this.configParams = data[0];
           this.updateLogoForm.get('logo').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
-          this.updateLogoForm.get('cover').setValidators([FileValidator.maxContentSize(this.configParams.avatar_size*1024*1024)]);
+          this.updateLogoForm.get('cover').setValidators([FileValidator.maxContentSize(this.configParams.cover_size*1024*1024)]);
         }
         else
         {

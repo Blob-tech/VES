@@ -44,6 +44,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { AccessForbiddenComponent } from './components/access-forbidden/access-forbidden.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -72,6 +74,7 @@ import { AccessForbiddenComponent } from './components/access-forbidden/access-f
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
     MatFormFieldModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -82,6 +85,7 @@ import { AccessForbiddenComponent } from './components/access-forbidden/access-f
     MatInputModule,
     MatStepperModule,
     MatFormFieldModule,
+    MatDialogModule,
     MatTooltipModule,
     MatButtonModule,
     MatProgressSpinnerModule,

@@ -301,6 +301,33 @@ app.get('/system/update/:name/:tagline/:icon_width',(req,res,next)=>{
     })
 })
 
+app.put('/config/update',(req,res,next)=>{
+    
+    connection.db.collection('system',(err,collection)=>{
+        if(err)
+        {
+            res.json({"err":"Error in updating system configuration"});
+        }
+        collection.updateOne({},
+            {$set : {
+                avatar_size: Number(req.body.profile_img_size),
+                cover_size: Number(req.body.cover_img_size),
+                logo_size: Number(req.body.ins_logo_size),
+                admin_email: req.body.admin_email
+            }}
+            ).then(
+                data=>{
+                    res.json({"msg" : "System Configuration has been updated successfully"})
+                }
+            ).catch(
+                err=>{
+                    res.json({"err" : "Error in updating system configuration"});
+                }
+            )
+        
+    })
+})
+
 app.listen(process.env.PORT, function()
 {
     console.log("Edurex Server is running on port "+ port);
