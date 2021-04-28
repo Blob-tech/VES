@@ -8,7 +8,7 @@ var mongoose = require('mongoose')
 var port = process.env.PORT || 3000
 var path = require('path');
 var filesystem = require('fs');
-var nodemailer = require('nodemailer');
+
 
 
 
@@ -45,18 +45,6 @@ var Module = require('./routes/Modules');
 var Organisation = require('./routes/Organisations');
 var RoleAccess = require('./routes/RoleAccess');
 var Search = require('./routes/Search');
-var Package = require('./routes/Packages');
-var SubscriptionAccess = require('./routes/SubscriptionAccess');
-var OTP = require('./routes/Otp');
-
-
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'agnibhachandra97@gmail.com',
-      pass: 'agniinferno8017354644',
-    }
-  });
 
 app.use('/thumbnail',express.static(path.join(__dirname, 'uploads/library/cover-photos/')));
 app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')));
@@ -64,7 +52,6 @@ app.use('/system',express.static(path.join(__dirname,'uploads/system/')));
 app.use('/organisation_logo',express.static(path.join(__dirname,'uploads/organisation/logo/')));
 app.use('/avatar',express.static(path.join(__dirname,'uploads/user/avatar')));
 app.use('/cover',express.static(path.join(__dirname,'uploads/user/cover')));
-app.use('/package',express.static(path.join(__dirname,'uploads/packages/icon/')));
 app.use('/counters',Counters)
 app.use('/library/category',LibraryCategory);
 app.use('/library/books',Book);
@@ -74,33 +61,6 @@ app.use('/course/module',Module);
 app.use('/organisation',Organisation);
 app.use('/role',RoleAccess);
 app.use('/search',Search);
-app.use('/package',Package);
-app.use('/subscription',SubscriptionAccess);
-app.use('/otp',OTP);
-
-
-app.get('/server_time',(req,res,next)=>{
-    var date = new Date();
-    res.json(date.toISOString());
-})
-app.get('/otp/:email',(req,res,next)=>{
-
-    var mailOptions = {
-        from: 'agnibhachandra97@gmail.com',
-        to: 'agnistephenite10@gmail.com',
-        subject: 'Password Reset OTP from VES',
-        text: '1255'
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-         res.json({"err" : "Erorr in Sendin OTP"})
-        } else {
-          res.json({"msg" : "OTP has been sent successfully to your registered email"})
-        }
-      });
-
-})
 
 
 app.get('/library/books/languages/list',(req,res,next)=>{
@@ -174,7 +134,6 @@ app.get('/library/config/list/:institute_id',(req,res,next)=>{
     });
 
 })
-
 
 app.get('/counter/list',(req,res,next)=>{
     connection.db.collection('counters',(err,collection)=>{
@@ -255,25 +214,7 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         res.json({"err" : "Error in updating institute counter prefix"});
     })
     }
-    else if(req.params.parameter == 'package')
-    {
-        collection.updateOne({},{$set : {package : Number(req.params.value)}}).then(data=>{
-            res.json({"msg":"Package Counter updated successfully"});   
-    }).catch(err=>{
-        res.json({"err" : "Error in updating package counter"});
-    })
-    }
-    else if(req.params.parameter=='package_prefix')
-    {
-        collection.updateOne({},{$set : {package_prefix : req.params.value}}).then(data=>{
-            res.json({"msg":"Package Prefix updated successfully"});
-            
-        }).catch(err=>{
-            res.json({"err" : "Error in updating package counter prefix"});
-        })
-
-    }
-
+    
     else if(req.params.parameter == 'course')
     {
         collection.updateOne({},{$set : {course : Number(req.params.value)}}).then(data=>{
@@ -286,29 +227,10 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
     else if(req.params.parameter == 'course_prefix')
     {
         collection.updateOne({},{$set : {course_prefix : req.params.value}}).then(data=>{
-        res.json({"msg":"Course Prefix updated successfully"});
+        res.json({"msg":"User Course Prefix updated successfully"});
         
     }).catch(err=>{
         res.json({"err" : "Error in updating course counter prefix"});
-    })
-    }
-
-    else if(req.params.parameter == 'premium')
-    {
-        collection.updateOne({},{$set : {premium : Number(req.params.value)}}).then(data=>{
-        res.json({"msg":"Premium Counter updated successfully"});
-        
-    }).catch(err=>{
-        res.json({"err" : "Error in updating counter Parameters"});
-    })
-    } 
-    else if(req.params.parameter == 'premium_prefix')
-    {
-        collection.updateOne({},{$set : {premium_prefix : req.params.value}}).then(data=>{
-        res.json({"msg":"Premium Prefix updated successfully"});
-        
-    }).catch(err=>{
-        res.json({"err" : "Error in updating premium counter prefix"});
     })
     }
 })
@@ -391,14 +313,7 @@ app.put('/config/update',(req,res,next)=>{
                 avatar_size: Number(req.body.profile_img_size),
                 cover_size: Number(req.body.cover_img_size),
                 logo_size: Number(req.body.ins_logo_size),
-                package_icon_size : Number(req.body.package_icon_size),
-                MAX_SPACE : Number(req.body.max_space),
-                MAX_USER : Number(req.body.max_user),
-                MAX_SUBSCRIPTION : Number(req.body.max_subscription),
-                admin_email: req.body.admin_email,
-                otp_size : Number(req.body.otp_size),
-                otp_resend_time : Number(req.body.otp_resend_time),
-                otp_valid_upto : Number(req.body.otp_valid_upto)
+                admin_email: req.body.admin_email
             }}
             ).then(
                 data=>{
