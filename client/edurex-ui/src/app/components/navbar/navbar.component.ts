@@ -89,9 +89,7 @@ export class NavbarComponent implements OnInit, DoCheck {
     organisation_prefix : ['', Validators.required],
     course : ['', Validators.required],
     course_prefix : ['', Validators.required],
-    package : ['',Validators.required],
-    package_prefix : ['',Validators.required],
-    library_client_id : [false,Validators.required]
+    library_client_id : ['true',Validators.required]
   })
 
   configForm = this.formBuilder.group(
@@ -99,11 +97,7 @@ export class NavbarComponent implements OnInit, DoCheck {
       profile_img_size : [2,Validators.required],
       institute_logo_size : [1, Validators.required],
       cover_img_size : [2, Validators.required],
-      admin_email : ['',Validators.required],
-      max_user :[0,[Validators.required]],
-      max_subscription : [0,[Validators.required]],
-      max_space :[0,[Validators.required]],
-      package_icon_size : [1,[Validators.required]]
+      admin_email : ['',Validators.required]
     }
   )
   systemForm = this.formBuilder.group({
@@ -114,34 +108,7 @@ export class NavbarComponent implements OnInit, DoCheck {
 
   cover = new FormControl('',[Validators.required,FileValidator.maxContentSize(5*1024*1024)]);
 
-    get package()
-    {
-      return this.counterForm.get('package');
-    }
-
-    get package_prefix()
-    {
-      return this.counterForm.get('package_prefix');
-    }
-    get package_icon_size()
-    {
-      return this.configForm.get('package_icon_size');
-    }
-    get max_user()
-    {
-      return this.configForm.get('max_user');
-    }
-
-    get max_subscription()
-    {
-      return this.configForm.get('max_subscription');
-    }
-
-    get max_space()
-    {
-      return this.configForm.get('max_space');
-    }
-
+   
     get profile_img_size()
     {
       return this.configForm.get('profile_img_size');
@@ -314,9 +281,7 @@ export class NavbarComponent implements OnInit, DoCheck {
         organisation_prefix : this.counterList[0].organisation_prefix,
         course : this.counterList[0].course,
         course_prefix : this.counterList[0].course_prefix,
-        package : this.counterList[0].package,
-        package_prefix : this.counterList[0].package_prefix,
-        library_client_id : this.counterList[0].library_client_id ? true : false},
+        library_client_id : this.counterList[0].library_client_id},
         {emitEvent : true});
       
       },
@@ -349,11 +314,7 @@ export class NavbarComponent implements OnInit, DoCheck {
               profile_img_size : this.brand[0].avatar_size,
               institute_logo_size : this.brand[0].logo_size,
               cover_img_size : this.brand[0].cover_size,
-              admin_email : this.brand[0].admin_email,
-              max_space : this.brand[0].MAX_SPACE,
-              max_user : this.brand[0].MAX_USER,
-              max_subscription : this.brand[0].MAX_SUBSCRIPTION,
-              package_icon_size : this.brand[0].package_icon_size
+              admin_email : this.brand[0].admin_email
             },
             {
               emitEvent : true
@@ -402,10 +363,6 @@ export class NavbarComponent implements OnInit, DoCheck {
       formData.append("ins_logo_size",this.institute_logo_size.value);
       formData.append("cover_img_size",this.cover_img_size.value);
       formData.append("admin_email",this.admin_email.value);
-      formData.append('max_user',this.max_user.value);
-      formData.append("max_space",this.max_space.value);
-      formData.append("max_subscription",this.max_subscription.value);
-      formData.append("package_icon_size",this.package_icon_size.value);
       this.navbarService.updateConfig(formData).subscribe(
 
         data=>{

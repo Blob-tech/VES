@@ -39,7 +39,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
     private navbar : NavbarService, private subscriberService : SubscriberService,
-    private roleAccessService : RoleAccessService) { }
+    private roleAccessService : RoleAccessService, navbarService : NavbarService) { }
 
     
   ngOnInit(): void {
@@ -143,7 +143,8 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
   getConfigParams()
   {
     this.showLoader=true;
-    this.libCategoryServices.getConfigParameters().subscribe(
+    this.navbar.getSystemBranding().subscribe(
+    //this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {

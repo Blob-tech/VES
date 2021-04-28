@@ -26,12 +26,12 @@
           <mat-icon class="auto-flip">account_circle</mat-icon>Profile</button>
         <button mat-menu-item [matMenuTriggerFor]="theme"
         matTooltip="Select a theme!" > <mat-icon class="auto-flip">format_color_fill</mat-icon> Theme</button>
-        <button (click)="openModal(counter)" mat-menu-item matTooltip="Configure Counter"><mat-icon class="auto-flip">scatter_plot</mat-icon>Counter</button>
+        <button (click)="open(counter)" mat-menu-item matTooltip="Configure Counter"><mat-icon class="auto-flip">scatter_plot</mat-icon>Counter</button>
         <button mat-menu-item 
         matTooltip="System Icon!" (click)="openModal(system)"> <mat-icon class="auto-flip">donut_small</mat-icon> System Icon</button>
         <button mat-menu-item 
         matTooltip="System Configuration!" (click)="openModal(config)"> <mat-icon class="auto-flip">build</mat-icon> System Configuration</button>
-        <button mat-menu-item routerLink="/e-library/package-management/packages/list"
+        <button mat-menu-item 
         matTooltip="Packages!"> <mat-icon class="auto-flip">view_in_ar</mat-icon> Packages</button>
         <button mat-menu-item (click)="logout()"
         matTooltip="Logout"> <mat-icon class="auto-flip">logout</mat-icon> Logout</button>
@@ -78,103 +78,77 @@
 
 
     <!-- Edit Content Modal-->
-    <ng-template id="counter-modal" #counter let-c="close" let-d="dismiss">
-        <h2 mat-dialog-title>Counter Configuration System</h2>
-        <div mat-dialog-content>
-        
+    <ng-template #counter let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h2 class="modal-title">Counter Configuration System</h2>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
             <form [formGroup]="counterForm">
             <button mat-button>Books/Article/Video Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Book id  Counter</mat-label>
                 <input matInput type="number" [formControl]="library" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem ;display: inline;" (click)="updateCounter(library.value,'library')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('0','library')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(library.value,'library')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','library')">Reset</button>
             <button mat-button>Books Counter Prefix</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Books/Article/Video Counter Prefix</mat-label>
                 <input matInput  [formControl]="library_prefix" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(library_prefix.value,'library_prefix')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('BK','library_prefix')">Reset</button>
-            <br>
-            <button *ngIf= "library_client_id" mat-button>Books Client Id</button>
-            <mat-checkbox [checked]="library_client_id ? 'true' : 'false'"></mat-checkbox>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(library_prefix.value,'library_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('BK','library_prefix')">Reset</button>
             <button mat-button>Subscriber Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Subscriber Counter</mat-label>
                 <input matInput type="number" [formControl]="user" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(user.value,'user')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('0','user')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(user.value,'user')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','user')">Reset</button>
             <button mat-button>Subscriber Counter Prefix</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Subscriber Counter Prefix</mat-label>
                 <input matInput  [formControl]="user_prefix" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(user_prefix.value,'user_prefix')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('USR','user_prefix')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(user_prefix.value,'user_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('USR','user_prefix')">Reset</button>
+            
             <button mat-button>Institute/Organisation Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Institute/Organisation Counter</mat-label>
                 <input matInput type="number" [formControl]="organisation" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(organisation.value,'organisation')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('0','organisation')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(organisation.value,'organisation')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','organisation')">Reset</button>
             <button mat-button>Institute Counter Prefix</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Institute Counter Prefix</mat-label>
                 <input matInput  [formControl]="organisation_prefix" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(organisation_prefix.value,'organisation_prefix')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('INS','organisation_prefix')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(organisation_prefix.value,'organisation_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('INS','organisation_prefix')">Reset</button>
             <button mat-button>Course Counter</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Course Counter</mat-label>
                 <input matInput type="number" [formControl]="course" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(course.value,'course')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('0','course')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(course.value,'course')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('0','course')">Reset</button>
             <button mat-button>Course Counter Prefix</button> 
             <mat-form-field class="form-group" appearance="outline">
                 <mat-label>Course Counter Prefix</mat-label>
                 <input matInput  [formControl]="course_prefix" required >
             </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(course_prefix.value,'course_prefix')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('CS','course_prefix')">Reset</button>
-            <br>
-
-            <button mat-button>Package Counter</button> 
-            <mat-form-field class="form-group" appearance="outline">
-                <mat-label>Package Counter</mat-label>
-                <input matInput  [formControl]="package" required >
-            </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(package.value,'package')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('0','package')">Reset</button>
-            <br>
-
-            <button mat-button>Package Counter Prefix</button> 
-            <mat-form-field class="form-group" appearance="outline">
-                <mat-label>Package Counter Prefix</mat-label>
-                <input matInput  [formControl]="package_prefix" required >
-            </mat-form-field>
-            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(package_prefix.value,'package_prefix')">Save</button>
-            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('PCKG','package_prefix')">Reset</button>
-            <br>
+            <button mat-raised-button class="btn btn-success"  style="margin-left : 1rem" (click)="updateCounter(course_prefix.value,'course_prefix')">Save</button>
+            <button mat-raised-button class="btn btn-info"  style="margin-left : 1rem" (click)="updateCounter('CS','course_prefix')">Reset</button>
+            
           </form>
-         
+          </div>
         </div>
-        <div mat-dialog-actions>
-          <button mat-raised-button color="warn" mat-dialog-close> Close</button>
-        </div>
-        
       </ng-template>
 
 
@@ -276,47 +250,13 @@
                                 <mat-option [value]=100>100 MB</mat-option>
                               </mat-select>
                             </mat-form-field><br>
-                            <button mat-button>Package Icon Size Limit</button> 
-                            <mat-form-field class="form-group" appearance="outline" >
-                              <mat-label>Package Icon Size Limit </mat-label>
-                              <mat-select formControlName ="package_icon_size"  required>
-                                <mat-option [value]=1>1 MB</mat-option>
-                                <mat-option [value]=2>2 MB</mat-option>
-                                <mat-option [value]=5>5 MB</mat-option>
-                                <mat-option [value]=10>10 MB</mat-option>
-                                <mat-option [value]=25>25 MB</mat-option>
-                                <mat-option [value]=50>50 MB</mat-option>
-                                <mat-option [value]=100>100 MB</mat-option>
-                              </mat-select>
-                            </mat-form-field><br>
                             <button mat-button>System Admin email</button>
                             <mat-form-field class="form-group" appearance="outline">
                               <mat-label>System Admin Email</mat-label>
                               <input type="email" matInput formControlName="admin_email" placeholder="Enter System admin email">
                               <mat-hint>This email will be used for sending any notification from amdin</mat-hint>
                               <mat-error>Value is required</mat-error>
-                            </mat-form-field><br>
-                            <button mat-button>Max User Limit</button>
-                            <mat-form-field class="form-group" appearance="outline">
-                            <mat-label>User Limit</mat-label>
-                              <input type="number" matInput formControlName="max_user">
-                              <mat-hint>Maximum user can be allocated for an institute</mat-hint>
-                              <mat-error>Value is required</mat-error>
-                            </mat-form-field><br>
-                            <button mat-button>Max Space Limit</button>
-                            <mat-form-field class="form-group" appearance="outline">
-                            <mat-label>Space Limit</mat-label>
-                              <input type="number" matInput formControlName="max_space">
-                              <mat-hint>Maximum disk space can be allocated for an institute</mat-hint>
-                              <mat-error>Value is required</mat-error>
-                            </mat-form-field><br>
-                            <button mat-button>Max Subscription Limit</button>
-                            <mat-form-field class="form-group" appearance="outline">
-                            <mat-label>User Limit</mat-label>
-                              <input type="number" matInput formControlName="max_subscription">
-                              <mat-hint>Maximum subscription categories can be allocated for an institute</mat-hint>
-                              <mat-error>Value is required</mat-error>
-                            </mat-form-field><br>
+                            </mat-form-field>
         
                  </form>
                 </div>
