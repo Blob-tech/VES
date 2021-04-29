@@ -486,6 +486,45 @@ users.get('/view/:user_id', async(req,res,next)=> {
     })
 })
 
+/*Change Passord*/
+users.post('/change_password',(req,res,next)=>{
+    User.find({$and : [{user_id : req.body.user_id},
+        {active : true},
+        {isActivated : true}
+    ]})
+    .then(data=>{
+        if(data.length==0)
+        {
+            res.json({"err" : "Your account has been deactivated . Please contract System Admin"});
+        }
+        else
+        {
+            let bool = bcrypt.compareSync(req.body.password,data[0].password);
+            if(req.body.password == req.body.new_password)
+            {
+                res.json({"err" : "Your new password is same as old password. Please try a different one for strong security"});
+            }
+            if(bool == false)
+            {
+             res.json({"err" : "Invalid Current Password"});
+            }
+            else
+            {
+                User.updateOne({user_id : req.body.user_id},
+                    {$set :
+                    {
+                        password : bcrypt.hashSync(req.body.new_password,10)
+                    }}).then(
+                        data=>{
+                            res.json({"msg" : "Your password has been changed successfully"});
+                        }
+                    ).catch(err=>{
+                        res.json({"err" : "Server Error ! Error in changing your password. Please try after few minutes "});
+                    })
+            }
+        }
+    })
+})
 
 users.post('/login',async(req,res,next)=>{
   

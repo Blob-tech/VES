@@ -42,8 +42,32 @@
                 Renew Access</button>
            </div>
            <br>
-           <button mat-raised-button  (click)="approveAccess()" color = "primary" *ngIf="currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.active && currentRole.approval == 'admin' : false">
-              <mat-icon>beenhere</mat-icon> Approve Access </button><br>
+           <form [formGroup]="regRequestForm"
+           *ngIf="currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.active && currentRole.approval == 'admin' : false">
+           <mat-form-field class="form-group" appearance="outline">
+            <mat-label>Access valid upto</mat-label>
+            <input [min]="minDate" matInput formControlName="reg_valid_upto"  placeholder="Choose a date" [matDatepicker]="datepicker">
+            <mat-datepicker-toggle  matSuffix [for]="datepicker"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker></mat-datepicker>                           
+      </mat-form-field>
+      <mat-button-toggle-group 
+      *ngIf="currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.active && currentRole.approval == 'admin' : false"
+      >
+          <mat-button-toggle mat-raised-button   color = "primary"
+           (click)="approveAccess()"> <mat-icon>beenhere</mat-icon> 
+           <strong>APPROVE {{approveAccessRole | roleTranslate }} ACCESS </strong>
+          </mat-button-toggle>
+          <mat-button-toggle mat-raised-button [matMenuTriggerFor]="roles"
+           color = "primary" ><mat-icon>expand_more</mat-icon></mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-menu  #roles="matMenu" >
+            <button mat-menu-item (click)="changeApproveRole('IADMIN')">Approve Admin Access</button>
+            <button mat-menu-item (click)="changeApproveRole('CADMIN')">Approve Content Admin Access</button>
+            <button  mat-menu-item (click)="changeApproveRole('STUDENT')">Approve Student Access</button>
+         </mat-menu>
+      </form>
+      
+           
                         <br>
           
             <form [formGroup]="accessManagerForm">
@@ -82,7 +106,12 @@
             ><mat-icon>verified</mat-icon>Give Access</button>
            <button mat-raised-button color="warn" mat-dialog-close>Close</button>
          </div>
+
+         
          
        </ng-template>
+
+
+      
 
        

@@ -9,6 +9,11 @@ button:focus {
       margin-right: 5%;
   }
 
+  mat-button-toggle-group 
+  {
+    margin-left: 5%;
+  }
+
   mat-form-field button:focus {
     outline: none;
   }
