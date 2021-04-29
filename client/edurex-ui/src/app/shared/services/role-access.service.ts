@@ -41,6 +41,13 @@ export class RoleAccessService implements OnInit{
     return this.httpClient.get(this.URL+"institute/access/"+user_id,{headers:headers})
   }
 
+  getActiveRoleAccess(user_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"active_institute/access/"+user_id,{headers:headers})
+  }
+
   toggleAccess(user_id,institute_id,access)
   {
     let headers = new HttpHeaders();

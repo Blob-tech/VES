@@ -212,4 +212,65 @@ roles.get('/institute/access/:user_id',(req,res,next)=>{
 
 })
 
+roles.get('/institute/access/:user_id',(req,res,next)=>{
+    let role;
+    Role.find({$and : [{active : true},{user_id : req.params.user_id}]}).then(
+        data=>{
+            role=data;
+            data = data.map(value =>{
+               return  value.institute_id
+            });
+            Organisation.find({$and : [{active : true},{isActivated : true},{organisation_id : {$in : data }}]})
+            .sort({organisation_name : 1})
+            .then(
+                result=>{
+                    res.json({"role" : role, "ins" : result});
+                }
+
+            ).catch(err=>{
+                res.json({"err" : "Error in loading institute list" + err});
+            })
+
+            
+        }
+    ).catch(err=>{
+        res.json({"err" : "Error in loading institute list" + err});
+    })
+
+})
+
+roles.get('/active_institute/access/:user_id',(req,res,next)=>{
+    let role;
+    Role.find({$and : 
+        [{active : true},
+        {user_id : req.params.user_id},
+        {is_activated : true},
+        {approval : 'approved'},
+        {$or : [{valid_upto:{$gte : new Date()}},{valid_upto : ''},{valid_upto : null}]}
+    ]}
+    ).then(
+        data=>{
+            role=data;
+            data = data.map(value =>{
+               return  value.institute_id
+            });
+            Organisation.find({$and : [{active : true},{isActivated : true},{organisation_id : {$in : data }}]})
+            .sort({organisation_name : 1})
+            .then(
+                result=>{
+                    res.json({"role" : role, "ins" : result});
+                }
+
+            ).catch(err=>{
+                res.json({"err" : "Error in loading institute list" + err});
+            })
+
+            
+        }
+    ).catch(err=>{
+        res.json({"err" : "Error in loading institute list" + err});
+    })
+
+})
+
 module.exports = roles;
