@@ -167,7 +167,6 @@
                        <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,'SADMIN')" color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.active && role.approval == 'user' && viewMode == 'self'">
                           <mat-icon>beenhere</mat-icon> Approve Access </button><br>
                         <br>
-                      
                   </p>
                   <mat-accordion multi>
                     <mat-expansion-panel [expanded]=true *ngFor="let ins of instituteList">
@@ -186,10 +185,10 @@
                         <span *ngIf="!role.active " style="color : orange ;display: inline; margin-right: 20px;">ACCESS REVOKED</span>
                         <button mat-raised-button (click)="approveInstituteAccess(currentUser.user_id,ins.organisation_id)"color = "primary" *ngIf="!isRoleExpired(role) && !role.is_activated && role.approval == 'user' && viewMode == 'self'">
                           <mat-icon>beenhere</mat-icon> Approve Access </button><br>
-                            <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                            <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated && !isRoleExpired(role)" [(ngModel)]="ins.organisation_id == defaultInstitute"
                              (click)="setDefaultInstitute(ins.organisation_id)"
-                            [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
-                          <span *ngIf="viewMode == 'self' && role.is_activated"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
+                            [disabled]="(ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
+                          <span *ngIf="viewMode == 'self' && role.is_activated && (!isRoleExpired(role) || ins.organisation_id == defaultInstitute)"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       
@@ -267,7 +266,47 @@
                         Security
                       </mat-panel-description>
                       </mat-expansion-panel-header>
-                      
+                      <button mat-button class="label-button">Change Password</button><br>
+                      <div class="alert alert-success" *ngIf="changePasswordSuccess" style="width: 90%;">{{changePasswordSuccess}}</div>
+                      <div class="alert alert-danger" *ngIf="changePasswordError" style="width: 90%;">{{changePasswordError}}</div><br>
+                      <form [formGroup]="changePasswordForm">
+                      <mat-form-field class="form-group"appearance="outline">
+                          <mat-label>Current Password</mat-label>
+                                        <input [type]="old_hide ? 'password' : 'text'" matInput formControlName="old_pass"  placeholder="Enter your current Password "  required>
+                                        <button type="button" mat-icon-button matSuffix (click)="old_hide = !old_hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            <mat-icon>{{old_hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                            </button>
+                                        <mat-hint><a href="/forgot-password">Forgot Password ?</a></mat-hint>
+                                        <mat-error *ngIf="old_pass.hasError('required')">Value is required</mat-error>
+                       </mat-form-field><br>
+                       <mat-form-field class="form-group" appearance="outline" >
+                          <mat-label>Password</mat-label>
+                          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"  required placeholder="Enter user password">
+                          <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </button>
+                          <mat-error style="font-size:15px;" *ngIf="password.hasError('required')">Value is required</mat-error>
+                          <mat-error *ngIf="password.hasError('minlength')">Password should be more than 8 characters</mat-error>
+                          <mat-error *ngIf ="password.hasError('pattern')">Password must contain at least 1 capital letter,1 small letter, and 1 special character</mat-error>
+                          <mat-error *ngIf="password.hasError('maxlength')">Password should not be more than 15 characters</mat-error>
+                          
+                      </mat-form-field><br>
+      
+                      <mat-form-field class="form-group" appearance="outline" >
+                          <mat-label>Reset Password</mat-label>
+                          <input matInput [type]="hide2 ? 'password' : 'text'" formControlName="resetPassword"  required placeholder="Enter user password">
+                          <button type="button" mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+                              <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </button>
+                          <mat-error *ngIf="resetPassword.hasError('required')">Value is required</mat-error>
+                          <mat-error *ngIf="resetPassword.hasError('notMatching')">Password doesn't matches</mat-error>
+                      </mat-form-field>
+                                <br>
+                      <button mat-raised-button color="primary" (click)="changePassword()"
+                      [disabled]="changePasswordForm.status != 'VALID'"> Change Password</button> <br><br>
+                      <div class="alert alert-success" *ngIf="changePasswordSuccess" style="width: 90%;">{{changePasswordSuccess}}</div>
+                      <div class="alert alert-danger" *ngIf="changePasswordError" style="width: 90%;">{{changePasswordError}}</div>
+                      </form>
                     </mat-expansion-panel>
                     <mat-expansion-panel>
                         
@@ -493,10 +532,10 @@
                         <br>
                            
                             
-                        <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated" [(ngModel)]="ins.organisation_id == defaultInstitute"
+                        <mat-slide-toggle *ngIf="viewMode == 'self' && role.is_activated && !isRoleExpired(role)" [(ngModel)]="ins.organisation_id == defaultInstitute"
                         (click)="setDefaultInstitute(ins.organisation_id)"
-                       [disabled]="isRoleExpired(role) || (ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
-                     <span *ngIf="viewMode == 'self' && role.is_activated"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
+                       [disabled]="(ins.organisation_id == defaultInstitute)"></mat-slide-toggle>
+                     <span *ngIf="viewMode == 'self' && role.is_activated && (!isRoleExpired(role) || ins.organisation_id == defaultInstitute)"><strong style="color: green;">{{ins.organisation_id == defaultInstitute ? "Default Institute" : "Set Default"}}</strong></span>
                       </p>
                       
                       </mat-expansion-panel>
@@ -572,7 +611,47 @@
                           Security
                         </mat-panel-description>
                         </mat-expansion-panel-header>
-                        
+                        <button mat-button class="label-button">Change Password</button><br>
+                        <div class="alert alert-success" *ngIf="changePasswordSuccess" style="width: 90%;">{{changePasswordSuccess}}</div>
+                        <div class="alert alert-danger" *ngIf="changePasswordError" style="width: 90%;">{{changePasswordError}}</div><br>
+                        <form [formGroup]="changePasswordForm">
+                        <mat-form-field class="form-group"appearance="outline">
+                            <mat-label>Current Password</mat-label>
+                                          <input [type]="old_hide ? 'password' : 'text'" matInput formControlName="old_pass"  placeholder="Enter your current Password "  required>
+                                          <button type="button" mat-icon-button matSuffix (click)="old_hide = !old_hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                              <mat-icon>{{old_hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                              </button>
+                                          <mat-hint><a href="/forgot-password">Forgot Password ?</a></mat-hint>
+                                          <mat-error *ngIf="old_pass.hasError('required')">Value is required</mat-error>
+                         </mat-form-field><br>
+                         <mat-form-field class="form-group" appearance="outline" >
+                            <mat-label>Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"  required placeholder="Enter user password">
+                            <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                            <mat-error style="font-size:15px;" *ngIf="password.hasError('required')">Value is required</mat-error>
+                            <mat-error *ngIf="password.hasError('minlength')">Password should be more than 8 characters</mat-error>
+                            <mat-error *ngIf ="password.hasError('pattern')">Password must contain at least 1 capital letter,1 small letter, and 1 special character</mat-error>
+                            <mat-error *ngIf="password.hasError('maxlength')">Password should not be more than 15 characters</mat-error>
+                            
+                        </mat-form-field><br>
+        
+                        <mat-form-field class="form-group" appearance="outline" >
+                            <mat-label>Reset Password</mat-label>
+                            <input matInput [type]="hide2 ? 'password' : 'text'" formControlName="resetPassword"  required placeholder="Enter user password">
+                            <button type="button" mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+                                <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                            <mat-error *ngIf="resetPassword.hasError('required')">Value is required</mat-error>
+                            <mat-error *ngIf="resetPassword.hasError('notMatching')">Password doesn't matches</mat-error>
+                        </mat-form-field>
+                                  <br>
+                        <button mat-raised-button color="primary" (click)="changePassword()"
+                        [disabled]="changePasswordForm.status != 'VALID'"> Change Password</button> <br><br>
+                        <div class="alert alert-success" *ngIf="changePasswordSuccess" style="width: 90%;">{{changePasswordSuccess}}</div>
+                        <div class="alert alert-danger" *ngIf="changePasswordError" style="width: 90%;">{{changePasswordError}}</div>
+                        </form>
                       </mat-expansion-panel>
                       <mat-expansion-panel>
                           <mat-expansion-panel-header>

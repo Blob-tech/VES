@@ -8,7 +8,7 @@ var mongoose = require('mongoose')
 var port = process.env.PORT || 3000
 var path = require('path');
 var filesystem = require('fs');
-
+var nodemailer = require('nodemailer');
 
 
 
@@ -46,6 +46,15 @@ var Organisation = require('./routes/Organisations');
 var RoleAccess = require('./routes/RoleAccess');
 var Search = require('./routes/Search');
 
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'agnibhachandra97@gmail.com',
+      pass: 'agniinferno8017354644',
+    }
+  });
+
 app.use('/thumbnail',express.static(path.join(__dirname, 'uploads/library/cover-photos/')));
 app.use('/article',express.static(path.join(__dirname, 'uploads/library/books/')));
 app.use('/system',express.static(path.join(__dirname,'uploads/system/')));
@@ -61,6 +70,30 @@ app.use('/course/module',Module);
 app.use('/organisation',Organisation);
 app.use('/role',RoleAccess);
 app.use('/search',Search);
+
+
+app.get('/server_time',(req,res,next)=>{
+    var date = new Date();
+    res.json(date.toISOString());
+})
+app.get('/otp/:email',(req,res,next)=>{
+
+    var mailOptions = {
+        from: 'agnibhachandra97@gmail.com',
+        to: 'agnistephenite10@gmail.com',
+        subject: 'Password Reset OTP from VES',
+        text: '1255'
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+         res.json({"err" : "Erorr in Sendin OTP"})
+        } else {
+          res.json({"msg" : "OTP has been sent successfully to your registered email"})
+        }
+      });
+
+})
 
 
 app.get('/library/books/languages/list',(req,res,next)=>{
