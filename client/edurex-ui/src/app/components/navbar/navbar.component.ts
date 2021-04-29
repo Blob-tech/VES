@@ -89,7 +89,7 @@ export class NavbarComponent implements OnInit, DoCheck {
     organisation_prefix : ['', Validators.required],
     course : ['', Validators.required],
     course_prefix : ['', Validators.required],
-    library_client_id : ['true',Validators.required]
+    library_client_id : [false,Validators.required]
   })
 
   configForm = this.formBuilder.group(
@@ -281,7 +281,7 @@ export class NavbarComponent implements OnInit, DoCheck {
         organisation_prefix : this.counterList[0].organisation_prefix,
         course : this.counterList[0].course,
         course_prefix : this.counterList[0].course_prefix,
-        library_client_id : this.counterList[0].library_client_id},
+        library_client_id : this.counterList[0].library_client_id ? true : false},
         {emitEvent : true});
       
       },

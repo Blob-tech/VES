@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, AfterViewInit } from '@angular/core';
 import { RoleAccessService } from 'src/app/shared/services/role-access.service';
 import { LocalStorageService } from 'src/app/shared/services/local-storage.service';
 import { config } from 'src/conf';
@@ -13,7 +13,7 @@ import { SessionStorageService } from 'src/app/shared/services/session-storage.s
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.css']
 })
-export class LibraryComponent implements OnInit {
+export class LibraryComponent implements OnInit,AfterViewInit {
 
   roles;
   loggedinUser;
@@ -26,23 +26,26 @@ export class LibraryComponent implements OnInit {
   showLoader = true;
 
   constructor(private roleAccessService :RoleAccessService, private localStorageService : LocalStorageService,
-    private subscriberService : SubscriberService, private router : Router,private sessionStorageService : SessionStorageService) { }
+    private subscriberService : SubscriberService, private router : Router,private sessionStorageService : SessionStorageService) { 
 
-  ngOnInit(): void {
-
-    this.loggedinUser = this.localStorageService.getter('user');
-    this.insUrl = config.host + 'organisation_logo/';
-    this.isValidInstituteAdmin();
+    this.loggedinUser = this.localStorageService.getter('user');  
     if(this.loggedinUser)
     {
       this.getAccessRoles(this.loggedinUser.user_id);
     }
     
+    }
+
+  ngOnInit(): void {
+
+    this.insUrl = config.host + 'organisation_logo/';
+    this.isValidInstituteAdmin();
+   
   }
 
-  ngAfterContentInit()
+  ngAfterViewInit()
   {
-    this.showLoader = false;
+    this.showLoader=false;
   }
 
   
@@ -67,6 +70,7 @@ export class LibraryComponent implements OnInit {
   
     isSystemAdmin()
     {
+     
       let current_role = this.sessionStorageService.getter('current_role')['role'];
       if(current_role == "SADMIN" || this.current_ins.client_id == 'Admin')
       {
@@ -88,7 +92,8 @@ export class LibraryComponent implements OnInit {
 
   getAccessRoles(user_id)
   {
-    this.roleAccessService.getRoleAccess(user_id).subscribe(
+    
+    this.roleAccessService.getActiveRoleAccess(user_id).subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
@@ -173,7 +178,7 @@ export class LibraryComponent implements OnInit {
             this.sessionStorageService.setter('current_role', this.localStorageService.getter('current_role'));
           }
           
-
+          //this.showLoader=false;
         },
         err=>
         {
