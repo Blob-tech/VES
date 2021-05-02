@@ -3,33 +3,36 @@ const schema = mongoose.Schema;
 
 const packagespremiumSchema = new schema(
     {
+       premium_id : 
+       {
+           type : String,
+           required : true
+       },
        package_id :
        {
            type : String,
            required : true
        } ,
-       premium_name :
-       {
-           type : String,
-           required : true
-       },
-       total_premium_price : 
+       premium_price : 
        {
            type : String,
            required : true,
        },
-       is_splitwise :
+       premium_monthly_price :
        {
-            type : Boolean,
-            default:false
+           type : String,
        },
-       splitwise_category : 
+       premium_weekly_price :
        {
-           type:String,
+           type : String,
        },
-       splitwise_price : 
+       premium_daily_price : 
        {
-           type :String
+            type : String   
+       },
+       premium_yearly_price :
+       {
+           type : String
        },
        type : {
 
@@ -37,18 +40,25 @@ const packagespremiumSchema = new schema(
         required : true,
         default : 'package'
        },
-       is_discounted_price :
+       is_daily :
        {
            type : Boolean,
            default : false
        },
-       discounted_premium_price :
+       is_weekly :
        {
-           type : String
+           type : Boolean,
+           default : false
        },
-       max_time_period:
+       is_yearly :
        {
-           type:Number
+           type : Boolean,
+           default : false
+       },
+       is_monthly :
+       {
+           type : Boolean,
+           default : false
        },
        active : 
        {

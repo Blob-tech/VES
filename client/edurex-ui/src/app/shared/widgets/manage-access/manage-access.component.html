@@ -18,10 +18,10 @@
         <mat-icon  *ngIf="system_admin" style="color : blue;font-size: 50px; margin-right: 15px;">admin_panel_settings</mat-icon> 
         <img *ngIf="!system_admin" class="logo" src="{{currentInstitute ? imgUrl + currentInstitute.avatar : '/assets/images/insimg.png'}}">
         <h2 *ngIf="system_admin" style="color:gray">SYSTEM ADMIN</h2>
-        <h2 *ngIf="!system_admin" style="color:gray;margin-right: 10px;">{{currentInstitute.organisation_name}}</h2>
-        <button *ngIf="currentRole" mat-raised-button color="accent" (click)="removeAccess()">
-          <mat-icon>delete_forever</mat-icon>Remove Permanently</button>
-          <br><br>
+        <h2 *ngIf="!system_admin" style="color:gray;margin-right: 10px; display: inline;">{{currentInstitute.organisation_name}}  </h2>
+        <button matTooltip="Remove Permanently" *ngIf="currentRole" mat-fab color="accent" (click)="removeAccess()">
+            <mat-icon>delete_forever</mat-icon></button>
+          <br>
          <div mat-dialog-content>
            <div *ngIf="currentRole" class="alert alert-info">
              <span style="margin-right: 10px;"><strong>CURRENT ACCESS : </strong></span>
@@ -44,7 +44,7 @@
            <br>
            <form [formGroup]="regRequestForm"
            *ngIf="currentRole ? !isRoleExpired(currentRole) && !currentRole.is_activated && currentRole.active && currentRole.approval == 'admin' : false">
-           <mat-form-field class="form-group" appearance="outline">
+           <mat-form-field class="form-group" appearance="outline" style="width: 40%;">
             <mat-label>Access valid upto</mat-label>
             <input [min]="minDate" matInput formControlName="reg_valid_upto"  placeholder="Choose a date" [matDatepicker]="datepicker">
             <mat-datepicker-toggle  matSuffix [for]="datepicker"></mat-datepicker-toggle>
@@ -55,7 +55,7 @@
       >
           <mat-button-toggle mat-raised-button   color = "primary"
            (click)="approveAccess()"> <mat-icon>beenhere</mat-icon> 
-           <strong>APPROVE {{approveAccessRole | roleTranslate }} ACCESS </strong>
+           <strong id="approveRole">APPROVE AS {{approveAccessRole | roleTranslate }}</strong>
           </mat-button-toggle>
           <mat-button-toggle mat-raised-button [matMenuTriggerFor]="roles"
            color = "primary" ><mat-icon>expand_more</mat-icon></mat-button-toggle>
@@ -65,13 +65,11 @@
             <button mat-menu-item (click)="changeApproveRole('CADMIN')">Approve Content Admin Access</button>
             <button  mat-menu-item (click)="changeApproveRole('STUDENT')">Approve Student Access</button>
          </mat-menu>
+         <hr>
       </form>
-      
-           
-                        <br>
-          
+               
             <form [formGroup]="accessManagerForm">
-                <mat-form-field  class="form-group" appearance="outline">
+                <mat-form-field  class="form-group" appearance="outline" style="width: 40%;">
                     <mat-label>Role</mat-label>
                     <mat-select formControlName="role" required (selectionChange)="resetAccessList($event)">
                         <mat-option *ngIf="system_admin" value="SADMIN">SYSTEM ADMIN</mat-option>
@@ -82,7 +80,7 @@
                       <mat-error *ngIf="role.hasError('required')">Value is required</mat-error>
                 </mat-form-field>  
 
-                <mat-form-field *ngIf="!system_admin" class="form-group" appearance="outline">
+                <mat-form-field *ngIf="!system_admin" class="form-group" appearance="outline" style="width: 40%;">
                         <mat-label >{{mode == 'institute' ? 'Institutes' : 'Users'}} </mat-label>
                         <mat-select multiple [disabled]="role.value == 'SADMIN' ? true : false" formControlName="access_list"  placeholder="{{mode == 'institute' ? 'Add Institute' : 'Add User'}}">
                                 <mat-option  [(value)] = "mode == 'institute' ? currentInstitute.organisation_id : access_id"  matTooltip="{{mode == 'institute' ? currentInstitute.organisation_name : ''}}">
@@ -101,11 +99,11 @@
             </form>
                    
          </div>
-         <div mat-dialog-actions>
+         <mat-dialog-actions align="end">
             <button mat-raised-button color="primary" [disabled]="disabledGiveAccess()" (click)="giveAccess()"
             ><mat-icon>verified</mat-icon>Give Access</button>
            <button mat-raised-button color="warn" mat-dialog-close>Close</button>
-         </div>
+         </mat-dialog-actions>
 
          
          

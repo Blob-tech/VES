@@ -5,18 +5,6 @@ const mongoose = require('mongoose');
 const Package = require('../models/Packages');
 packages.use(cors());
 
-//get package by id
-packages.get('/view/:package_id',(req,res,next)=>{
-    Package.find({package_id:req.params.package_id}).then(
-        data=>{
-            res.json(data);
-        },
-        err=>{
-            res.json({"err" : "Server Error Occured ! Error in retrieving package info"});
-        }
-    )
-})
-
 //get the list of active packages
 packages.get('/all',(req,res,next)=>{
     Package.find({active : true}).sort({package_name : 1})

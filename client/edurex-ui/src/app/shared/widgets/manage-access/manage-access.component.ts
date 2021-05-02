@@ -376,7 +376,26 @@ export class ManageAccessComponent implements OnInit {
 
   approveAccess()
   {
-    this.roleAccessService.approveAccess(this.access_id,this.institute,'admin').subscribe(
+    var res=true;
+    if(this.reg_valid_upto.value == '' || this.reg_valid_upto.value == undefined)
+    {
+      res = confirm("You have not entered any value for access time limit. This will give a lifetime access to the user");
+    }
+    let formData = new FormData();
+    let validupto : Date;
+      if(this.reg_valid_upto.value)
+      {
+        validupto = new Date(this.reg_valid_upto.value);
+        validupto.setDate(validupto.getDate()+1);
+      }  
+    formData.append("user_id",this.access_id);
+    formData.append("institute_id",this.institute);
+    formData.append("approver",'admin');
+    formData.append("role",this.approveAccessRole);
+    formData.append("valid_upto",this.reg_valid_upto.value ? validupto.toDateString() : '');
+    if(res){
+      console.log(formData);
+    this.roleAccessService.approveAccess(formData).subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
@@ -394,7 +413,7 @@ export class ManageAccessComponent implements OnInit {
         this._snacbar.open("Error in approving access" + JSON.stringify(err),null,{duration : 5000});
         
       }
-    )
+    )}
     
   }
 
