@@ -46,6 +46,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { AccessForbiddenComponent } from './components/access-forbidden/access-forbidden.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PackageRoutingModule } from './modules/library/modules/package-management/package-routing.module';
 
 
 @NgModule({
@@ -100,6 +101,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatVideoModule,
     NgbModule,
     SharedModule,
+    PackageRoutingModule
 
   ],
   exports:[],

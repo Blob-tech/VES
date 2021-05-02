@@ -19,6 +19,8 @@ const routes: Routes = [
   {path : 'forgot-password', component : ForgotPasswordComponent},
   {path : '404', component : NotFoundComponent , canActivate : [AuthGuradService]},
   {path : '403', component : AccessForbiddenComponent, canActivate : [AuthGuradService]},
+  {path : 'package-management',loadChildren:
+      ()=> import(`./modules/library/modules/package-management/package-management.module`).then(m=>m.PackageManagementModule), canActivate : [AuthGuradService]},
   {path : '', component : LibraryComponent, 
   children : [
     {path : '',component : LibraryHomeComponent, canActivate : [AuthGuradService]},

@@ -145,7 +145,7 @@ export class CreatePackageComponent implements OnInit {
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
           this._sanckbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/package-management/packages/list').then(
+          this.router.navigateByUrl('package-management/packages/list').then(
             ()=>{this.showLoader = false});
         }
         else
