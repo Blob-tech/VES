@@ -558,19 +558,32 @@ export class ProfileViewComponent implements OnInit {
       )
     }
 
-    approveInstituteAccess(user_id,institute_id)
+    approveInstituteAccess(user_id,institute_id,role,valid_upto)
     {
       this.showLoader=true;
-      this.roleAccessService.approveAccess(user_id,institute_id,"user").subscribe(
+      let validupto : Date;
+      if(valid_upto)
+      {
+        validupto = new Date(valid_upto);
+        //validupto.setDate(validupto.getDate()+1);
+      }  
+      let formData=new FormData();
+      formData.append("user_id",user_id);
+      formData.append("institute_id",institute_id);
+      formData.append("role",role);
+      formData.append("valid_upto",valid_upto ? validupto.toDateString() : '');
+      formData.append("approver","user");
+      this.roleAccessService.approveAccess(formData).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
             this.getInstituteAndRole(user_id);
+            this.showLoader=false;
           }
           else
           {
-            this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+            this.snackBar.open(JSON.stringify(JSON.parse(JSON.stringify(data))['err']),null,{duration:500000});
             this.showLoader=false;
           }
           

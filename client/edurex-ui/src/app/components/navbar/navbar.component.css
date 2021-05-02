@@ -81,6 +81,10 @@ button:focus {
 {
     display: none;
 }
+#brand-name
+{
+    display: none;
+}
 
 
 .hamburger-menu

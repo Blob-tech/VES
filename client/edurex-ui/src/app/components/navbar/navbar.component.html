@@ -31,7 +31,7 @@
         matTooltip="System Icon!" (click)="openModal(system)"> <mat-icon class="auto-flip">donut_small</mat-icon> System Icon</button>
         <button mat-menu-item 
         matTooltip="System Configuration!" (click)="openModal(config)"> <mat-icon class="auto-flip">build</mat-icon> System Configuration</button>
-        <button mat-menu-item 
+        <button mat-menu-item routerLink="/package-management/packages/list"
         matTooltip="Packages!"> <mat-icon class="auto-flip">view_in_ar</mat-icon> Packages</button>
         <button mat-menu-item (click)="logout()"
         matTooltip="Logout"> <mat-icon class="auto-flip">logout</mat-icon> Logout</button>
@@ -150,6 +150,24 @@
             <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(course_prefix.value,'course_prefix')">Save</button>
             <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('CS','course_prefix')">Reset</button>
             <br>
+
+            <button mat-button>Package Counter</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Package Counter</mat-label>
+                <input matInput  [formControl]="package" required >
+            </mat-form-field>
+            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(package.value,'package')">Save</button>
+            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('0','package')">Reset</button>
+            <br>
+
+            <button mat-button>Package Counter Prefix</button> 
+            <mat-form-field class="form-group" appearance="outline">
+                <mat-label>Package Counter Prefix</mat-label>
+                <input matInput  [formControl]="package_prefix" required >
+            </mat-form-field>
+            <button mat-raised-button color="primary"  style="margin-left : 1rem" (click)="updateCounter(package_prefix.value,'package_prefix')">Save</button>
+            <button mat-raised-button color="accent"  style="margin-left : 1rem" (click)="updateCounter('PCKG','package_prefix')">Reset</button>
+            <br>
           </form>
          
         </div>
@@ -258,13 +276,47 @@
                                 <mat-option [value]=100>100 MB</mat-option>
                               </mat-select>
                             </mat-form-field><br>
+                            <button mat-button>Package Icon Size Limit</button> 
+                            <mat-form-field class="form-group" appearance="outline" >
+                              <mat-label>Package Icon Size Limit </mat-label>
+                              <mat-select formControlName ="package_icon_size"  required>
+                                <mat-option [value]=1>1 MB</mat-option>
+                                <mat-option [value]=2>2 MB</mat-option>
+                                <mat-option [value]=5>5 MB</mat-option>
+                                <mat-option [value]=10>10 MB</mat-option>
+                                <mat-option [value]=25>25 MB</mat-option>
+                                <mat-option [value]=50>50 MB</mat-option>
+                                <mat-option [value]=100>100 MB</mat-option>
+                              </mat-select>
+                            </mat-form-field><br>
                             <button mat-button>System Admin email</button>
                             <mat-form-field class="form-group" appearance="outline">
                               <mat-label>System Admin Email</mat-label>
                               <input type="email" matInput formControlName="admin_email" placeholder="Enter System admin email">
                               <mat-hint>This email will be used for sending any notification from amdin</mat-hint>
                               <mat-error>Value is required</mat-error>
-                            </mat-form-field>
+                            </mat-form-field><br>
+                            <button mat-button>Max User Limit</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>User Limit</mat-label>
+                              <input type="number" matInput formControlName="max_user">
+                              <mat-hint>Maximum user can be allocated for an institute</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field><br>
+                            <button mat-button>Max Space Limit</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>Space Limit</mat-label>
+                              <input type="number" matInput formControlName="max_space">
+                              <mat-hint>Maximum disk space can be allocated for an institute</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field><br>
+                            <button mat-button>Max Subscription Limit</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>User Limit</mat-label>
+                              <input type="number" matInput formControlName="max_subscription">
+                              <mat-hint>Maximum subscription categories can be allocated for an institute</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field><br>
         
                  </form>
                 </div>

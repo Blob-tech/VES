@@ -45,6 +45,7 @@ import { BookExplorerRoutingModule } from './modules/book-explorer/book-explorer
 import { MatChipsModule } from '@angular/material/chips';
 import { ProfileModule } from './modules/profile/profile.module';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
+import { PackageManagementModule } from './modules/package-management/package-management.module';
 
 
 
@@ -101,8 +102,7 @@ import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
     NgBreadcrumbModule,
     LibraryRoutingModule,
     BookExplorerModule,
-    ProfileModule
-    
+    ProfileModule,
 
   ],
   exports : [LibraryComponent],
