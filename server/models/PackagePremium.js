@@ -3,46 +3,36 @@ const schema = mongoose.Schema;
 
 const packagespremiumSchema = new schema(
     {
-       premium_id :
+       premium_id : 
        {
            type : String,
-           required:true,
-           unique:true
+           required : true
        },
        package_id :
        {
            type : String,
            required : true
        } ,
-       premium_name :
+       premium_price : 
        {
            type : String,
-           required : true
+           required : true,
        },
-       premium_description :
-       {
-           type : String,
-       },
-       total_premium_price : 
+       premium_monthly_price :
        {
            type : String,
        },
-       premium_price :
+       premium_weekly_price :
        {
            type : String,
        },
-       is_splitwise :
+       premium_daily_price : 
        {
-            type : Boolean,
-            default:false
+            type : String   
        },
-       splitwise_category : 
+       premium_yearly_price :
        {
-           type:String,
-       },
-       splitwise_price : 
-       {
-           type :String
+           type : String
        },
        type : {
 
@@ -50,23 +40,25 @@ const packagespremiumSchema = new schema(
         required : true,
         default : 'package'
        },
-       is_discounted_price :
+       is_daily :
        {
            type : Boolean,
            default : false
        },
-       discounted_premium_price :
+       is_weekly :
        {
-           type : String
+           type : Boolean,
+           default : false
        },
-       discount_valid_upto :
+       is_yearly :
        {
-           type : Date,
-           default : ''
+           type : Boolean,
+           default : false
        },
-       max_time_period:
+       is_monthly :
        {
-           type:Number
+           type : Boolean,
+           default : false
        },
        active : 
        {
@@ -81,4 +73,4 @@ const packagespremiumSchema = new schema(
 );
 
 
-const Premium = module.exports = mongoose.model("Premium", packagespremiumSchema);
+const Package = module.exports = mongoose.model("Package", packageSchema);

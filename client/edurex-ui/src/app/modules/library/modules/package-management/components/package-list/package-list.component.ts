@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { PackageService } from 'src/app/modules/library/service/package.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {config} from 'src/conf';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-package-list',
@@ -14,8 +13,7 @@ export class PackageListComponent implements OnInit {
   packageList=[];
   showLoader=true;
   iconUrl = config.host + "package/";
-  constructor(private packageService : PackageService, private _snackbar : MatSnackBar,
-    private router : Router) { }
+  constructor(private packageService : PackageService, private _snackbar : MatSnackBar) { }
 
   ngOnInit(): void {
     this.getPackages();
@@ -33,17 +31,6 @@ export class PackageListComponent implements OnInit {
         this._snackbar.open("Error in retrieving the list of packages!",null,{duration:5000});
       }
     )
-  }
-
-  goToPackageView(package_id)
-  {
-      this.showLoader=true;
-      this.router.navigateByUrl("/e-library/package-management/packages/view/"+package_id).then(
-        ()=>{
-          window.scrollTo(0,0);
-          this.showLoader=false;
-        }
-      )
   }
 
 }
