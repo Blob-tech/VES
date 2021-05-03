@@ -35,7 +35,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule, MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -66,6 +66,7 @@ import { PackageViewComponent } from './components/package-view/package-view.com
     PortalModule,
     ScrollingModule,
     CdkStepperModule,
+    MatProgressSpinnerModule,
     CdkTableModule,
     CdkTreeModule,
     DragDropModule,
