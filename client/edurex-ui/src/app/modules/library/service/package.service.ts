@@ -21,6 +21,13 @@ export class PackageService {
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"all",{headers:headers})
+    return this.httpClient.get(this.URL+"all",{headers:headers});
+  }
+
+  getPackageById(package_id)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"view/"+package_id,{headers : headers});
   }
 }

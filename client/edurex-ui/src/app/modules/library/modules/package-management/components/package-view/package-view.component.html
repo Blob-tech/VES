@@ -1,1 +1,10 @@
-<p>package-view works!</p>
+<div class="header">
+<img  class="package_icon" *ngIf="package.package_avatar" src="{{package.package_avatar ? iconUrl + package.package_avatar : ''}}">
+<mat-icon  class="package_icon" *ngIf="!package.package_avatar">view_in_ar</mat-icon>
+<span><h1>{{package.package_name}}</h1></span>
+</div>
+
+<div  *ngIf="showLoader" class="loader">
+    <mat-spinner color="primary"></mat-spinner><br>
+    <span style="color: white; position: fixed; top:400px">Loading ...</span>
+    </div>
