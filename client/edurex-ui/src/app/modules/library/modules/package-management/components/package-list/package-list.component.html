@@ -18,8 +18,8 @@ mat-raised-button><mat-icon>home</mat-icon> Go to Home</button>
         </div>
         <div style="text-align: center;" class="col-3"
         *ngFor="let package of packageList">
-        <img class="package_icon" *ngIf="package.package_avatar" src="{{package.package_avatar ? iconUrl + package.package_avatar : ''}}">
-        <mat-icon class="package_icon" *ngIf="!package.package_avatar">
+        <img (click)="goToPackageView(package.package_id)" class="package_icon" *ngIf="package.package_avatar" src="{{package.package_avatar ? iconUrl + package.package_avatar : ''}}">
+        <mat-icon (click)="goToPackageView(package.package_id)" class="package_icon" *ngIf="!package.package_avatar">
             view_in_ar
         </mat-icon><br>
         <strong>{{package.package_name}}</strong><br><br>
@@ -29,25 +29,7 @@ mat-raised-button><mat-icon>home</mat-icon> Go to Home</button>
         </div>
     </div>
 
-    <!--div class="row mobile-view">
-        <div style="text-align: center;" class="col-3">
-            <button color="primary" routerLink="/package-management/packages/create"
-             mat-fab class="create-new"><mat-icon>add</mat-icon></button><br><br>
-             <b>Create New</b>
-        </div>
-        <div style="text-align: center;" class="col-3"
-        *ngFor="let package of packageList">
-        <img class="package_icon" *ngIf="package.package_avatar" src="{{package.package_avatar ? iconUrl + package.package_avatar : ''}}">
-        <mat-icon class="package_icon" *ngIf="!package.package_avatar">
-            view_in_ar
-        </mat-icon><br>
-        <strong>{{package.package_name}}</strong><br><br>
-        <mat-icon style="color: coral;">person</mat-icon><b>{{package.total_users}}</b>&nbsp;
-        <mat-icon style="color: green;">storage</mat-icon><b>{{package.total_media_disk_space/1024 > 1 ? (package.total_media_disk_space/1024).toFixed(2)  +
-     " GB" : package.total_media_disk_space + " MB"}}</b>
-        </div>
-    </div-->
-
+   
 <div *ngIf="showLoader" class="loader">
     <mat-spinner color="primary"></mat-spinner><br>
     <span style="color: white; position: fixed; top:400px">Loading ...</span>
