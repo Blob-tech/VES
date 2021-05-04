@@ -40,6 +40,7 @@ export class PackageListComponent implements OnInit {
       this.showLoader=true;
       this.router.navigateByUrl("/package-management/packages/view/"+package_id).then(
         ()=>{
+          window.scrollTo(0,0);
           this.showLoader=false;
         }
       )

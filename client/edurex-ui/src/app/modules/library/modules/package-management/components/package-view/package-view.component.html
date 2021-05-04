@@ -1,8 +1,102 @@
-<div class="header">
-<img  class="package_icon" *ngIf="package.package_avatar" src="{{package.package_avatar ? iconUrl + package.package_avatar : ''}}">
-<mat-icon  class="package_icon" *ngIf="!package.package_avatar">view_in_ar</mat-icon>
-<span><h1>{{package.package_name}}</h1></span>
+<div id="package_header" class="header">
+        <img *ngIf="package.package_avatar" class="logo" src="{{package.package_avatar ? iconUrl + package.package_avatar : ''}}">
+        <mat-icon class="logo" *ngIf="!package.package_avatar">view_in_ar</mat-icon>
+        <span class="heading" >{{package.package_name}}
+        </span>
+        <button matTooltip="Delete Package" mat-fab color="warn"><mat-icon>delete_forever</mat-icon></button>
+        <br><br>
+        <span class="sub-heading" >( Package Id: {{package.package_id}} )</span><br>
+        </div>
+    <hr><br><br>
+<div class="row">
+    <div class="col-4 package_info">
+        <mat-icon class="info" style="color: cornflowerblue;">person</mat-icon><br>
+        <strong>Total Users</strong><br><br>
+        <strong class="info-text">{{package.total_users}}</strong>
+    </div>
+    <div class="col-4 package_info">
+            <mat-icon class="info" style="color : green">storage</mat-icon><br>
+            <strong>Total Space</strong><br><br>
+            <strong class="info-text">{{package.total_media_disk_space/1024 > 1 ? (package.total_media_disk_space/1024).toFixed(2)  +
+                    " GB" : package.total_media_disk_space + " MB"}}</strong>
+    </div>
+    <div class="col-4 package_info">
+            <mat-icon class="info" style="color: crimson;">subscriptions</mat-icon><br>
+            <strong>Subscription Categories</strong><br><br>
+            <strong class="info-text">{{package.subscription_categories}}</strong>
+    </div>
 </div>
+<hr><br><br>
+<button (click)=" showHidePremiumForm()"
+mat-raised-button color="primary" style="width : 300px; height: 60px; margin-left: 100px;"><mat-icon> shop_two </mat-icon> Add a Premium</button>
+<br>
+<hr>
+<br>
+<form *ngIf="showPremium" [formGroup]="addPremiumForm" ngSubmit="addPremium()">
+    <mat-form-field class="form-group" appearance="outline" style="width : 90%">
+        <mat-label>Premium Name</mat-label>
+        <input matInput formControlName="premium_name" placeholder="Enter your premium name" required >
+        <mat-hint>Premium name should not exceed 50 characters</mat-hint>
+        <mat-hint align="end">{{premium_name.value.length}}/50</mat-hint>
+        <mat-error *ngIf="premium_name.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="premium_name.hasError('maxLength')">Max Character Limit Exceeded</mat-error>
+    </mat-form-field><br>
+    <mat-checkbox formControlName="is_splitwise">Is Premium Splitwise ?</mat-checkbox><br>
+    <mat-form-field *ngIf="is_splitwise.value" class="form-group" appearance="outline">
+        <mat-label>Splitwise Category</mat-label>
+        <mat-select formControlName="splitwise_category" required>
+            <mat-option value="daily">Daily</mat-option>
+            <mat-option value="weekly">Weekly</mat-option>
+            <mat-option value="monthly">Monthly</mat-option>
+            <mat-option value="yearly">Yearly</mat-option>
+        </mat-select>
+        <mat-error>Value is required</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="is_splitwise.value" class="form-group" appearance="outline">
+        <mat-label>
+            Splitwise Price
+        </mat-label>
+        <input matInput type="number" formControlName="splitwise_price"  required>
+        <span style="font-size: 15px;" matPrefix>&#x20B9; </span>
+        <mat-hint>Enter {{splitwise_category.value}} price between 1 and 100000000</mat-hint>
+        <mat-error *ngIf="splitwise_price.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="splitwise_price.hasError('min')">Minimum price should be 1</mat-error>
+        <mat-error *ngIf="splitwise_price.hasError('max')">Maximum price should be less than or equal to 100000000</mat-error>
+    </mat-form-field>
+    <mat-form-field  class="form-group" appearance="outline">
+        <mat-label>Total Premium Price</mat-label>
+        <input  matInput type="number" formControlName="total_premium_price"  required>
+        <span style="font-size: 15px;" matPrefix>&#x20B9; </span>
+        <mat-hint>Enter a price between 1 and 100000000</mat-hint>
+        <mat-error *ngIf="total_premium_price.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="total_premium_price.hasError('min')">Minimum price should be 1</mat-error>
+        <mat-error *ngIf="total_premium_price.hasError('max')">Maximum price should be less than or equal to 10000000000</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field  class="form-group" appearance="outline">
+        <mat-label>Total Period</mat-label>
+        <input  matInput type="number" formControlName="max_time_period"  required>
+        <span style="font-size: 15px;" matSuffix>{{splitwise_category.value ? 
+            (splitwise_category.value == 'monthly' ? 'Months' :
+             (splitwise_category.value == 'daily' ? 'Days' :
+             (splitwise_category.value == 'weekly' ? 'Weeks' : 'Years') ) ) : 'Years'}}</span>
+        <mat-hint>Enter a value between 1 and 1000000</mat-hint>
+        <mat-error *ngIf="max_time_period.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="max_time_period.hasError('min')">Minimum value should be 1</mat-error>
+        <mat-error *ngIf="max_time_period.hasError('max')">Maximum value should be less than or equal to 1000000</mat-error>
+    </mat-form-field>
+    <mat-checkbox *ngIf="is_splitwise.value" formControlName="is_discounted_price"> Discounted Price ?</mat-checkbox><br>
+    <mat-form-field *ngIf="is_splitwise.value && is_discounted_price.value" class="form-group" appearance="outline">
+        <mat-label>Discounted Premium Price</mat-label>
+        <input  matInput type="number" formControlName="discounted_premium_price"  required>
+        <span style="font-size: 15px;" matPrefix>&#x20B9; </span>
+        <mat-hint>Enter a price between 1 and 100000000</mat-hint>
+        <mat-error *ngIf="discounted_premium_price.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="discounted_premium_price.hasError('min')">Minimum price should be 1</mat-error>
+        <mat-error *ngIf="discounted_premium_price.hasError('max')">Maximum price should be less than or equal to 10000000000</mat-error>
+    </mat-form-field>
+    
+</form>
 
 <div  *ngIf="showLoader" class="loader">
     <mat-spinner color="primary"></mat-spinner><br>
