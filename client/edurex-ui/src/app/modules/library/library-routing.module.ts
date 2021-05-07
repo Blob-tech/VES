@@ -17,6 +17,8 @@ const routes = [
       {path : 'category/all', component : CategoryComponent, canActivate : [AuthGuradService]},
       {path : 'profile/:view/:user_id' , component : ProfileViewComponent, canActivate : [ProfileGuradService,AuthGuradService]},
       {path : 'book-explorer', loadChildren: () => import(`./modules/book-explorer/book-explorer.module`).then(m => m.BookExplorerModule), canActivate : [AuthGuradService]},
+      {path : 'package-management',loadChildren:
+      ()=> import(`./modules/package-management/package-management.module`).then(m=>m.PackageManagementModule), canActivate : [AuthGuradService]},
       {path : 'subscriber', loadChildren :
     ()=> import(`./modules/subscriber-management/subscriber-management.module`).then(m=>m.SubscriberManagementModule), canActivate : [AuthGuradService]},
     {path : 'institute', loadChildren :
