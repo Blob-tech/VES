@@ -13,6 +13,7 @@ import { LibraryCategoryService } from 'src/app/modules/library/service/library-
 import { InstituteManagementService } from 'src/app/modules/library/service/institute-management.service';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommunicationService } from 'src/app/modules/library/service/communication.service';
+import { Location } from '@angular/common';
 
 
 
@@ -48,7 +49,8 @@ export class EditInstituteComponent implements OnInit {
   constructor(private formBuilder : FormBuilder, private libCategoryServices : LibraryCategoryService,
     private _snackbar : MatSnackBar, private router : Router,private instituteService :InstituteManagementService,
     private navbar : NavbarService, private route : ActivatedRoute, conf: NgbModalConfig, private modalService: NgbModal,
-    public dialog: MatDialog, private communicationService : CommunicationService)
+    public dialog: MatDialog, private communicationService : CommunicationService,
+    private location : Location)
      {
       conf.backdrop = 'static'; 
     conf.keyboard = false;  }
@@ -97,7 +99,8 @@ export class EditInstituteComponent implements OnInit {
   getConfigParams()
   {
     this.showLoader = true;
-    this.libCategoryServices.getConfigParameters().subscribe(
+    this.navbar.getSystemBranding().subscribe(
+    //this.libCategoryServices.getConfigParameters().subscribe(
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
@@ -140,7 +143,8 @@ export class EditInstituteComponent implements OnInit {
       contact_phone :['',[Validators.required]],
       contact_person : ['',[Validators.required, Validators.maxLength(100)]],
       address : ['',[Validators.maxLength(500)]],
-      client_id :['',[Validators.required, Validators.maxLength(10)]],
+      // client_id :['',[Validators.required, Validators.maxLength(10)]],
+      client_id : new FormControl({value : '',disabled : true}),
       avatar : ['']//1 MB
     },
   )
@@ -231,6 +235,7 @@ export class EditInstituteComponent implements OnInit {
     for ( const key of Object.keys(this.editOrganisationForm.value) ) {
       const value = this.editOrganisationForm.value[key];
       formData.append(key, value);
+    
     }
 
     this.instituteService.update_institute(formData,id).subscribe(
@@ -242,7 +247,8 @@ export class EditInstituteComponent implements OnInit {
           this.error = null;
           this.message = JSON.parse(JSON.stringify(data))['msg'];
           this._snackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration:5000})
-          this.router.navigateByUrl('e-library/institute/institute-management/list/all');
+          this.location.back();
+         
         }
         else
         {

@@ -203,7 +203,6 @@ organisations.put('/edit/:id',(req,res,next)=>
                 contact_phone : req.body.contact_phone,
                 contact_person : req.body.contact_person,
                 address : req.body.address,
-                client_id : req.body.client_id
             }
 
         }).then(data => {

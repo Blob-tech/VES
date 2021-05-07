@@ -9,6 +9,11 @@ button:focus {
       margin-right: 5%;
   }
 
+  mat-button-toggle-group 
+  {
+    margin-left: 5%;
+  }
+
   mat-form-field button:focus {
     outline: none;
   }
@@ -56,3 +61,10 @@ button:focus {
   }
 
   
+  @media screen and (max-width:600px)
+  {
+    #approveRole
+    {
+      display: none;
+    }
+  }

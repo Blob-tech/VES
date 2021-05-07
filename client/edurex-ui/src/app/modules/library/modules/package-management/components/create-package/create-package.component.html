@@ -1,0 +1,80 @@
+
+<mat-card class="packageForm" >
+        <mat-card-header class="header">
+                <mat-card-title><h2>Add a Package</h2></mat-card-title>
+                <mat-card-subtitle>All fields marked * are required
+                  <br>
+                  Package Id : <strong>{{package_id.value}}</strong>
+                </mat-card-subtitle>
+            </mat-card-header>
+        
+            <form [formGroup]="addPackageForm" (ngSubmit)="addPackage()" >
+                <mat-form-field class="form-group" appearance="outline">
+                    <mat-label>Package Name </mat-label>
+                    <input matInput formControlName="package_name" required placeholder="Enter a package name" >
+                    <mat-hint>Package name should not exceed more than 50 characters</mat-hint>
+                    <mat-hint align="end">{{package_name.value?.length || 0}}/50</mat-hint>
+                    <mat-error *ngIf="package_name.hasError('required')">Value is required</mat-error>
+                    <mat-error *ngIf="package_name.hasError('maxlength')">Character Limit Exceeded</mat-error>
+                </mat-form-field>
+                <mat-form-field class="form-group" appearance="outline">
+                        <mat-label>Total Disk Space </mat-label>
+                        <input matInput type="number" formControlName="total_media_disk_space" required placeholder="Enter a Package memory space" >
+                        <span matSuffix> MB </span>
+                        <mat-hint>Enter a value between 1 to {{maxSpaceLimit}} in MB</mat-hint>
+                        <mat-error *ngIf="total_media_disk_space.hasError('required')">Value is required</mat-error>
+                        <mat-error *ngIf="total_media_disk_space.hasError('max')">Max Space Limit Exceeded</mat-error>
+                        <mat-error *ngIf="total_media_disk_space.hasError('min')">Min Space Limit is 1 MB</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>Total Number of Users </mat-label>
+                            <input matInput type="number" formControlName="total_users" required placeholder="Enter total users" >
+                            <mat-hint>Enter a value between 1 to {{maxUserLimit}}</mat-hint>
+                            <mat-error *ngIf="total_users.hasError('required')">Value is required</mat-error>
+                            <mat-error *ngIf="total_users.hasError('max')">Max User Limit Exceeded</mat-error>
+                            <mat-error *ngIf="total_users.hasError('min')">Min User Limit is 1 </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="form-group" appearance="outline">
+                                <mat-label>Total Subscription Categories </mat-label>
+                                <input matInput type="number" formControlName="subscription_categories" required placeholder="Enter a Package memory space" >
+                                <mat-hint>Enter a value between 1 to {{maxSubscriptionLimit}}</mat-hint>
+                                <mat-error *ngIf="subscription_categories.hasError('required')">Value is required</mat-error>
+                                <mat-error *ngIf="subscription_categories.hasError('max')">Max Space Limit Exceeded</mat-error>
+                                <mat-error *ngIf="subscription_categories.hasError('min')">Min Subscription Categories is 1</mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="form-group"   appearance="outline">
+                                <mat-label>Package Icon</mat-label>
+                                <ngx-mat-file-input #removableInput formControlName="package" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
+                                (change)="onSelectIcon($event)" ></ngx-mat-file-input>
+                                <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event);">
+                                  <mat-icon>clear</mat-icon>
+                                </button>
+                                <mat-hint>Images in .jpg, .jpeg,.png  only allowed </mat-hint>
+                                <!--mat-error *ngIf="package.hasError('required')">
+                                  Please select a file
+                                </mat-error-->
+                                <mat-error *ngIf="package.hasError('maxContentSize')">
+                                  The total size must not exceed {{configParams.package_icon_size}} MB.
+                                </mat-error>
+                              </mat-form-field>
+                        
+                        <img style="height: 200px; width: 150px;"  mat-card-image src="{{url}}" alt="Chapter Photo"><br>
+                                        <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                        <mat-progress-bar mode="determinate" value="{{iconprogress}}"></mat-progress-bar>
+                        <br>
+
+                        <button type="submit" mat-raised-button style="margin-right: 1rem;" color="primary"
+                        [disabled]="addPackageForm.status != 'VALID'">Save</button>
+                        <button type="reset" mat-raised-button>Reset</button>
+    
+            </form>
+        
+    </mat-card>
+    
+
+    <div *ngIf="showLoader" class="loader">
+        <mat-spinner color="primary"></mat-spinner><br>
+        <span style="color: white; position: fixed; top:400px">Loading ...</span>
+        </div>
+    
+    

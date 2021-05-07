@@ -4,7 +4,7 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ValidatorFn, FormGroup } from '@angular/forms';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { SocialLinksComponent } from 'src/app/shared/widgets/social-links/social-links.component';
@@ -16,6 +16,7 @@ import { LibraryCategoryService } from '../../../service/library-category.servic
 import { User } from '../../subscriber-management/models/subscriber';
 import { InstituteManagementService } from '../../../service/institute-management.service';
 import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
+import { ServerTimeService } from 'src/app/shared/services/server-time.service';
 
 
 
@@ -29,6 +30,22 @@ export interface PersonaInterest
   interest : string;
 }
 
+const resetPasswordValidator: ValidatorFn = (fg: FormGroup) => {
+  const pass = fg.get('password').value;
+  const repass = fg.get('resetPassword').value;
+
+  if(pass!= null && pass!='' && repass!=null && repass!='' && pass!=repass)
+  {
+      fg.get('resetPassword').setErrors({notMatching : true});
+  }
+  else
+  {
+    fg.get('resetPassword').setErrors(null);
+  }
+  return pass !== null && repass !== null && pass == repass
+    ? null
+    : { range: true };
+};
 
 @Component({
   selector: 'app-profile-view',
@@ -48,6 +65,12 @@ export class ProfileViewComponent implements OnInit {
   dark_mode;
   viewMode;
   currentInstitute;
+  old_hide = true;
+  hide=true;
+  hide2=true;
+  changePasswordSuccess=null;
+  changePasswordError=null;
+  currentDate=null;
 
 
   visibilitySettings = {
@@ -72,14 +95,19 @@ export class ProfileViewComponent implements OnInit {
   constructor(private subscriberServices : SubscriberService, private snackBar : MatSnackBar,
     private route : ActivatedRoute,private formBuilder : FormBuilder, private router : Router,
     private libCategoryService : LibraryCategoryService,private roleAccessService : RoleAccessService,
-    private localStorageService : LocalStorageService, private sessionStorageService : SessionStorageService,) { }
+    private localStorageService : LocalStorageService, private sessionStorageService : SessionStorageService,
+    private serverTimeService : ServerTimeService) { }
 
   ngOnInit(): void {
 
     this.maxDate = new Date();
     this.currentInstitute = this.sessionStorageService.getter('current_institute');
     this.dark_mode = this.localStorageService.getter("dark-mode") == "true" ? true : false;
-    
+    this.serverTimeService.getServerTime().subscribe(
+      data=>{
+        this.currentDate=data;
+      }
+    );
     
     this.route.params.subscribe(routeParams => {
       this.viewMode = routeParams.view;
@@ -202,8 +230,29 @@ export class ProfileViewComponent implements OnInit {
       interested_in : [''],
     }
   )
+  changePasswordForm = this.formBuilder.group(
+    {
+      old_pass :['',[Validators.required]],
+      password : ['',[Validators.required,Validators.minLength(8),Validators.maxLength(15),Validators.pattern("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]*$")]],
+      resetPassword : ['',[Validators.required]],
+    },
+    { validator: resetPasswordValidator}
+  )
 
-  
+  get old_pass()
+  {
+    return this.changePasswordForm.get('old_pass');
+  }
+
+  get password()
+  {
+    return this.changePasswordForm.get('password');
+  }
+
+  get resetPassword()
+  {
+    return this.changePasswordForm.get('resetPassword');
+  }
 
   get name()
   {
@@ -304,6 +353,40 @@ export class ProfileViewComponent implements OnInit {
 
   }
 
+  changePassword()
+  { 
+    var res = confirm("Are you sure you want to change password ?");
+    if(res){
+    this.showLoader=true;
+    let formData =new FormData();
+    formData.append('user_id',this.currentUser.user_id);
+    formData.append('password',this.old_pass.value);
+    formData.append('new_password',this.password.value);
+    this.subscriberServices.change_password(formData).subscribe(
+      data=>{
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          this.changePasswordError=null;
+          this.changePasswordSuccess=JSON.parse(JSON.stringify(data))['msg'];
+          //this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+        }
+        else
+        {
+          this.changePasswordSuccess=null;
+          this.changePasswordError=JSON.parse(JSON.stringify(data))['err'];
+          //this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+        }
+        this.showLoader = false;
+      },
+      err=>{
+        this.changePasswordSuccess=null;
+        this.changePasswordError="Error in changing Password ! Please try after few minutes";
+        //this.snackBar.open("Error in updating Social Profiles",null,{duration : 5000});
+        this.showLoader = false;
+      }
+    )
+    }
+  }
   addInterest(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -475,19 +558,32 @@ export class ProfileViewComponent implements OnInit {
       )
     }
 
-    approveInstituteAccess(user_id,institute_id)
+    approveInstituteAccess(user_id,institute_id,role,valid_upto)
     {
       this.showLoader=true;
-      this.roleAccessService.approveAccess(user_id,institute_id,"user").subscribe(
+      let validupto : Date;
+      if(valid_upto)
+      {
+        validupto = new Date(valid_upto);
+        //validupto.setDate(validupto.getDate()+1);
+      }  
+      let formData=new FormData();
+      formData.append("user_id",user_id);
+      formData.append("institute_id",institute_id);
+      formData.append("role",role);
+      formData.append("valid_upto",valid_upto ? validupto.toDateString() : '');
+      formData.append("approver","user");
+      this.roleAccessService.approveAccess(formData).subscribe(
         data=>{
           if(!(JSON.parse(JSON.stringify(data))['err']))
           {
             this.snackBar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
             this.getInstituteAndRole(user_id);
+            this.showLoader=false;
           }
           else
           {
-            this.snackBar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration:5000});
+            this.snackBar.open(JSON.stringify(JSON.parse(JSON.stringify(data))['err']),null,{duration:500000});
             this.showLoader=false;
           }
           
@@ -545,7 +641,7 @@ export class ProfileViewComponent implements OnInit {
 
     isRoleExpired(role) : boolean
     {
-      let currentDate = new Date().toDateString();
+      let currentDate=this.currentDate;
       if(role.valid_upto == '' || role.valid_upto == null)
       {
         return false;

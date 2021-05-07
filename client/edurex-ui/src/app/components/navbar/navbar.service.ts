@@ -28,6 +28,13 @@ export class NavbarService {
     headers.append("Content-Type","application/json");
     return this.http.get(this.URL+"system/update/"+name+"/"+tagline + "/" + icon_width,{headers:headers});
    }
+
+   updateConfig(formData)
+   {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.http.put(this.URL+"config/update",formData,{headers:headers});
+   }
    
    getCounterList()
   {

@@ -69,6 +69,8 @@ import { SessionStorageService } from './services/session-storage.service';
     MatFormFieldModule,
     MatInputModule,
     MatBadgeModule,
+    MatButtonToggleModule,
+    MatMenuModule,
     MatIconModule,
     MatExpansionModule,
     MatSidenavModule,

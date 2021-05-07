@@ -1,11 +1,11 @@
 <div *ngIf="!ins.client_id"  style="margin-top : 150px;text-align: center;" class="alert alert-info">
-        <strong>You are not registered to any active institute. If your default Institute has been deactivated then please contact your Institute Admin</strong>
+        <strong>You are not registered to any active institute. If your default Institute has been deactivated or your access has been expired then please contact your Institute Admin</strong>
 </div>
 
 <div *ngIf="!ins.client_id" class="row" >
             <div class="col-lg-3 col-xl-3 col-sm-3 col-md-3" *ngFor="let ins of institutes;let i = index">
                 
-                <button class="institute" routerLink="/e-library/institute/institute-management/view/{{ins.organisation_id}}" matTooltip="{{ins.organisation_name}}"   mat-raised-button ><img height=40 width=40 src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 100 ? ins.organisation_name.substring(0,100)+"..." : ins.organisation_name}}</strong>
+                <button class="institute" (click)="goToInstitute(ins.organisation_id)" matTooltip="{{ins.organisation_name}}"   mat-raised-button ><img height=40 width=40 src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}"><br><strong>{{ins.organisation_name.length > 100 ? ins.organisation_name.substring(0,100)+"..." : ins.organisation_name}}</strong>
                  </button>
                 
             </div>

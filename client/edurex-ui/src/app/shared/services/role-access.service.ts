@@ -41,6 +41,13 @@ export class RoleAccessService implements OnInit{
     return this.httpClient.get(this.URL+"institute/access/"+user_id,{headers:headers})
   }
 
+  getActiveRoleAccess(user_id : string)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.get(this.URL+"active_institute/access/"+user_id,{headers:headers})
+  }
+
   toggleAccess(user_id,institute_id,access)
   {
     let headers = new HttpHeaders();
@@ -64,11 +71,11 @@ export class RoleAccessService implements OnInit{
     return this.httpClient.get(this.URL+"people_count/"+institute_id+"/"+role,{headers:headers});
   }
 
-  approveAccess(user_id : string, institute_id : string , approver : string )
+  approveAccess(formData)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.put(this.URL+"approve/"+ user_id +"/"+institute_id+"/"+approver,{headers:headers});
+    return this.httpClient.put(this.URL+"approve_access",formData,{headers:headers});
   }
   getIndividualRoleAccess(user_id : string, institute_id : string)
   {

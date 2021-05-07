@@ -86,11 +86,11 @@
                             <mat-icon>clear</mat-icon>
                           </button>
                           <mat-hint>Images in .jpg, .jpeg  or .png only allowed </mat-hint>
-                          <mat-error *ngIf="logo.hasError('required')">
+                          <mat-error *ngIf="cover.hasError('required')">
                             Please select a file
                           </mat-error>
-                          <mat-error *ngIf="logo.hasError('maxContentSize')">
-                            The total size must not exceed {{configParams.avatar_size}} MB).
+                          <mat-error *ngIf="cover.hasError('maxContentSize')">
+                            The total size must not exceed {{configParams.cover_size}} MB).
                           </mat-error>
                         </mat-form-field>
         </form>

@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';import { now } from 'moment
 import { RoleAccessService } from '../../services/role-access.service';
 import { SessionStorageService } from '../../services/session-storage.service';
 import {config} from 'src/conf';
+import { ServerTimeService } from '../../services/server-time.service';
 
 
 
@@ -44,10 +45,12 @@ export class ManageAccessComponent implements OnInit {
   currentInstitute=null;
   badgeValue='';
   imgUrl = config.host + "organisation_logo/";
+  currentDate=null;
+  approveAccessRole = 'STUDENT';
   constructor(private formBuilder : FormBuilder, private subscriberServices : SubscriberService,
     private instituteService : InstituteManagementService, private _snacbar : MatSnackBar,
     public dialog: MatDialog, private roleAccessService : RoleAccessService,
-    private sessionStorageService : SessionStorageService)
+    private sessionStorageService : SessionStorageService,private serverTimeService : ServerTimeService)
      {
        this.minDate  = new Date() ;
 
@@ -60,6 +63,11 @@ export class ManageAccessComponent implements OnInit {
       this.getInstituteById(this.institute);
       this.getCurrentRoleAccess(this.access_id,this.institute);
     }
+    this.serverTimeService.getServerTime().subscribe(
+      data=>{
+        this.currentDate=data;
+      }
+    );
   }
 
   initializeBadgeValue()
@@ -75,6 +83,11 @@ export class ManageAccessComponent implements OnInit {
     {
       this.badgeValue = 'N';
     }
+  }
+
+  changeApproveRole(role : string)
+  {
+    this.approveAccessRole=role;
   }
 
   removeAccess()
@@ -115,13 +128,16 @@ export class ManageAccessComponent implements OnInit {
   }
   isRoleExpired(role) : boolean
     {
-      let currentDate = new Date().toDateString();
+      
+      let currentDate = this.currentDate;
       if(role.valid_upto == '' || role.valid_upto == null)
       {
+        
         return false;
       }
       if(new Date(currentDate.split('T')[0]) > new Date(role.valid_upto.split('T')[0]))
       {
+        
         return true;
       }
       return false;
@@ -310,6 +326,23 @@ export class ManageAccessComponent implements OnInit {
       valid_upto : [''],
     })
 
+    regRequestForm = this.formBuilder.group(
+      {
+        reg_role:[''],
+        reg_valid_upto :['']
+      }
+    )
+
+  get reg_role()
+  {
+    return this.regRequestForm.get('reg_role');
+  }
+
+  get reg_valid_upto()
+  {
+    return this.regRequestForm.get('reg_valid_upto');
+  }
+
   get role()
   {
     return this.accessManagerForm.get('role');
@@ -343,7 +376,26 @@ export class ManageAccessComponent implements OnInit {
 
   approveAccess()
   {
-    this.roleAccessService.approveAccess(this.access_id,this.institute,'admin').subscribe(
+    var res=true;
+    if(this.reg_valid_upto.value == '' || this.reg_valid_upto.value == undefined)
+    {
+      res = confirm("You have not entered any value for access time limit. This will give a lifetime access to the user");
+    }
+    let formData = new FormData();
+    let validupto : Date;
+      if(this.reg_valid_upto.value)
+      {
+        validupto = new Date(this.reg_valid_upto.value);
+        validupto.setDate(validupto.getDate()+1);
+      }  
+    formData.append("user_id",this.access_id);
+    formData.append("institute_id",this.institute);
+    formData.append("approver",'admin');
+    formData.append("role",this.approveAccessRole);
+    formData.append("valid_upto",this.reg_valid_upto.value ? validupto.toDateString() : '');
+    if(res){
+      console.log(formData);
+    this.roleAccessService.approveAccess(formData).subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
@@ -361,7 +413,7 @@ export class ManageAccessComponent implements OnInit {
         this._snacbar.open("Error in approving access" + JSON.stringify(err),null,{duration : 5000});
         
       }
-    )
+    )}
     
   }
 

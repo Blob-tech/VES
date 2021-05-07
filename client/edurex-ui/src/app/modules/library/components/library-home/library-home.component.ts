@@ -3,6 +3,7 @@ import { LocalStorageService } from 'src/app/shared/services/local-storage.servi
 import { config } from 'src/conf';
 import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 import { InstituteManagementService } from '../../service/institute-management.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-library-home',
@@ -19,7 +20,8 @@ export class LibraryHomeComponent implements OnInit {
   institutes=[];
   total_ins;
   constructor(private sessionStorageService : SessionStorageService,private instituteService : InstituteManagementService,
-    private instituteManagementService : InstituteManagementService) { }
+    private instituteManagementService : InstituteManagementService,
+    private router : Router) { }
 
   ngOnInit(): void {
 
@@ -80,6 +82,14 @@ export class LibraryHomeComponent implements OnInit {
     this.getInstitutes();
   }
 
+  goToInstitute(institute_id)
+  {
+    this.router.navigateByUrl("/e-library/institute/institute-management/view/"+institute_id).then(
+      ()=>{
+        location.reload();
+      }
+    )
+  }
   // ngDoCheck()
   // {
   //  this.ins = this.sessionStorageService.getter('current_institute');

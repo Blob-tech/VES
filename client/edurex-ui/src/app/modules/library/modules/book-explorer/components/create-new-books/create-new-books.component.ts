@@ -22,6 +22,7 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
   error = null;
   ishidden = true;
   languages;
+  client_id;
   counter;
   filtered_languages = [];
   configParams;
@@ -36,6 +37,7 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
 
     
   ngOnInit(): void {
+    this.client_id=this.sessionStorageService.getter('current_institute')['client_id'];
     this.getCategories();
     this.getSubscriptionCategories();
     this.getConfigParams();
@@ -212,7 +214,7 @@ export class CreateNewBooksComponent implements OnInit,OnChanges {
         this.counter = data;
         const  currentDate = new Date();
         const currentDateYear = currentDate.getFullYear().toString();
-        this.createBookForm.patchValue({book_id : this.counter[0].library_prefix+ currentDateYear+this.counter[0].library},{emitEvent : true});
+        this.createBookForm.patchValue({book_id : this.counter[0].library_prefix+ this.client_id +currentDateYear+this.counter[0].library},{emitEvent : true});
         this.showLoader = false;
       },
       err=>{

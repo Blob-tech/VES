@@ -1,9 +1,9 @@
 
 
 <mat-menu  #institutes="matMenu" >
-     <button *ngIf="isSysAdmin()" (click)="changeCurrentInstitute('SADMIN')" mat-menu-item>
+     <!--button *ngIf="isSysAdmin()" (click)="changeCurrentInstitute('SADMIN')" mat-menu-item>
          <mat-icon style="color : blue;font-size: 40px;">admin_panel_settings</mat-icon> System Admin
-     </button>
+     </button-->
         <button (click)="changeCurrentInstitute(ins.organisation_id)"
          matTooltip="{{ins.organisation_name}}" *ngFor="let ins of roles['ins']" mat-menu-item>
             <img src="{{ins.avatar ? insUrl + ins.avatar : '/assets/images/insimg.png'}}" height=40 width=40>
