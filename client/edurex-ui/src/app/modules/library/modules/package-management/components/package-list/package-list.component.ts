@@ -38,7 +38,7 @@ export class PackageListComponent implements OnInit {
   goToPackageView(package_id)
   {
       this.showLoader=true;
-      this.router.navigateByUrl("/package-management/packages/view/"+package_id).then(
+      this.router.navigateByUrl("/e-library/package-management/packages/view/"+package_id).then(
         ()=>{
           window.scrollTo(0,0);
           this.showLoader=false;
