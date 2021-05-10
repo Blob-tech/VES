@@ -3,6 +3,7 @@ const packages = express.Router();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const Package = require('../models/Packages');
+const Premium = require('../models/PackagePremium');
 packages.use(cors());
 
 //get package by id
@@ -13,6 +14,21 @@ packages.get('/view/:package_id',(req,res,next)=>{
         },
         err=>{
             res.json({"err" : "Server Error Occured ! Error in retrieving package info"});
+        }
+    )
+})
+
+packages.get('/premium/:package_id',(req,res,next)=>{
+
+    Premium.find({$and : [{active : true},{package_id : req.params.package_id}]})
+    .sort({package_name : 1})
+    .then(
+        data=>{
+            res.json(data);
+        }
+    ).catch(
+        err=>{
+            res.json({"err":"Server Error ! Error in Loading package premiums"});
         }
     )
 })
@@ -44,6 +60,35 @@ packages.put('/remove/:package_id',(req,res,next)=>{
                 res.json({"err":"Server Error ! Error in deleting package"})
             })
 });
+
+//Add a new premium to package
+packages.post('/premium/add',(req,res,next)=>{
+
+    let newPremium = new Premium(
+        {
+            package_id : req.body.package_id,
+            premium_name : req.body.premium_name,
+            total_premium_price : req.body.total_premium_price,
+            premium_price : req.body.premium_price,
+            is_splitwise : req.body.is_splitwise,
+            splitwise_category : req.body.splitwise_category,
+            splitwise_price : req.body.splitwise_price,
+            is_discounted_price : req.body.is_discounted_price,
+            discounted_premium_price : req.body.discounted_premium_price,
+            max_time_period : req.body.max_time_period 
+        }
+    );
+
+    Premium.create(newPremium).then(
+        data=>{
+            res.json({"msg" : "Package : " + req.body.package_name + " has been created successfully"});
+        }
+    ).catch(
+        err=>{
+            res.json({"err" : "Server Error Occured ! Please try again" + JSON.stringify(err)});
+        }
+    )
+})
 
 // Add a new  Package to the database
 
