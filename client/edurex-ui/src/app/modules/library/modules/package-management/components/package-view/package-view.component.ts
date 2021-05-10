@@ -6,6 +6,9 @@ import {config} from 'src/conf';
 import { from } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 
+
+
+
 @Component({
   selector: 'app-package-view',
   templateUrl: './package-view.component.html',
@@ -14,9 +17,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class PackageViewComponent implements OnInit,DoCheck{
 
   package;
-  showLoader=true;
+  showLoader=false;
   iconUrl = config.host + "package/";
   showPremium=false;
+  premiumList=[];
   constructor(private packageService : PackageService,private matsnackbar : MatSnackBar,
     private route : ActivatedRoute, private formBuilder : FormBuilder) { }
 
@@ -33,6 +37,39 @@ export class PackageViewComponent implements OnInit,DoCheck{
     );
   }
 
+  enabledAddPremiumSave() : boolean
+  {
+    if(this.is_splitwise.value == false)
+    {
+      if(this.premium_name.valid && this.premium_price.valid && this.max_time_period.valid  )
+      {
+        return true;
+      }
+    }    
+    else
+    {
+      if(this.is_discounted_price.value == false)
+      {
+        if(this.premium_name.valid && this.splitwise_category.valid
+        && this.max_time_period.valid && this.splitwise_price.valid &&
+        this.total_premium_price.valid)
+        {
+          return true;
+        }
+      }
+      else
+      {
+        if(this.premium_name.valid && this.splitwise_category.valid 
+        && this.max_time_period.valid && this.splitwise_price.valid &&
+        this.total_premium_price.valid  && this.discounted_premium_price.valid)
+        {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   showHidePremiumForm()
   {
     this.showPremium = !this.showPremium;
@@ -43,6 +80,7 @@ export class PackageViewComponent implements OnInit,DoCheck{
       is_splitwise : [false],
       splitwise_category :['',Validators.required],
       splitwise_price :['',[Validators.required,Validators.min(1),Validators.max(100000000)]],
+      premium_price : ['',[Validators.required,Validators.min(1),Validators.max(10000000000)]],
       total_premium_price : ['',[Validators.required,Validators.min(1),Validators.max(10000000000)]],
       is_discounted_price :[false],
       max_time_period : ['',[Validators.required,Validators.min(1),Validators.max(1000000)]],
@@ -75,6 +113,11 @@ export class PackageViewComponent implements OnInit,DoCheck{
     return this.addPremiumForm.get('total_premium_price');
   }
 
+  get premium_price()
+  {
+    return this.addPremiumForm.get('premium_price');
+  }
+
   get is_discounted_price()
   {
     return this.addPremiumForm.get('is_discounted_price');
@@ -91,9 +134,56 @@ export class PackageViewComponent implements OnInit,DoCheck{
   }
   addPremium()
   {
-
+    this.showLoader=true;
+    let formData = new FormData();
+    formData.append("package_id",this.route.snapshot.paramMap.get('id'));
+    for ( const key of Object.keys(this.addPremiumForm.value) ) {
+      const value = this.addPremiumForm.value[key];
+      formData.append(key, value);
+    }
+    this.packageService.addPremium(formData).subscribe(
+      data=>{
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          this.getPremiums(this.route.snapshot.paramMap.get('id'));
+          this.matsnackbar.open(JSON.parse(JSON.stringify(data))['msg'],null,{duration : 5000});
+          this.showLoader=false;
+        }
+        else
+        {
+          this.matsnackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader=false;
+        }
+      },
+      err=>{
+        this.matsnackbar.open("Error in adding premium to this package. Please try after sometime",null,{duration : 5000});
+        this.showLoader=false;
+      }
+    )
   }
 
+  getPremiums(package_id)
+  {
+    this.showLoader=true;
+    this.packageService.getPremiumByPackageId(package_id).subscribe(
+      data=>{
+        if(!(JSON.parse(JSON.stringify(data))['err']))
+        {
+          this.premiumList = data as Array<any>;
+          this.showLoader=false;
+        }
+        else
+        {
+          this.matsnackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader=false;
+        }
+      },
+      err => {
+        this.matsnackbar.open("Error Occured !" + JSON.stringify(err),null,{duration : 5000});
+        this.showLoader=false;
+      }
+    )
+  }
   getPackage(package_id)
   {
     this.showLoader=true;
@@ -102,12 +192,18 @@ export class PackageViewComponent implements OnInit,DoCheck{
         if(!(JSON.parse(JSON.stringify(data))['err']))
         {
           this.package = data[0];
+          this.getPremiums(package_id);
           this.showLoader=false;
         }
         else
         {
           this.matsnackbar.open(JSON.parse(JSON.stringify(data))['err'],null,{duration : 5000});
+          this.showLoader=false;
         }
+      },
+      err => {
+        this.matsnackbar.open("Error Occured !" + JSON.stringify(err),null,{duration : 5000});
+        this.showLoader=false;
       }
     )
   }
