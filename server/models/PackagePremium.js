@@ -18,6 +18,11 @@ const packagespremiumSchema = new schema(
            type : String,
            required : true,
        },
+       premium_price :
+       {
+           type : String,
+           required : true
+       },
        is_splitwise :
        {
             type : Boolean,
@@ -63,4 +68,4 @@ const packagespremiumSchema = new schema(
 );
 
 
-const Package = module.exports = mongoose.model("Package", packageSchema);
+const Premium = module.exports = mongoose.model("Premium", packagespremiumSchema);

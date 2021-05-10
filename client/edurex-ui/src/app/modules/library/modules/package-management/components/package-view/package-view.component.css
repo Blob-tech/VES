@@ -40,6 +40,10 @@ mat-spinner
     color: coral;
 }
 
+.action-button
+{
+    margin:5px;
+}
 .logo
 {
     height: 100px;
@@ -48,6 +52,16 @@ mat-spinner
     margin-right: 15px;
     margin-left : 15px;
     border-radius:50%;
+}
+
+.discount_percentage
+{
+    font:40px;
+}
+
+.premium-card
+{
+    margin: 2px;
 }
 
 .header

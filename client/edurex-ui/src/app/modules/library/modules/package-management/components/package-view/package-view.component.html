@@ -52,7 +52,7 @@ mat-raised-button color="primary" style="width : 300px; height: 60px;"><mat-icon
         </mat-select>
         <mat-error>Value is required</mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="is_splitwise.value n" class="form-group" appearance="outline">
+    <mat-form-field *ngIf="is_splitwise.value" class="form-group" appearance="outline">
         <mat-label>
             Splitwise Price
         </mat-label>
@@ -63,9 +63,18 @@ mat-raised-button color="primary" style="width : 300px; height: 60px;"><mat-icon
         <mat-error *ngIf="splitwise_price.hasError('min')">Minimum price should be 1</mat-error>
         <mat-error *ngIf="splitwise_price.hasError('max')">Maximum price should be less than or equal to 100000000</mat-error>
     </mat-form-field>
-    <mat-form-field  class="form-group" appearance="outline">
+    <mat-form-field  *ngIf="is_splitwise.value"  class="form-group" appearance="outline">
         <mat-label>Total Premium Price</mat-label>
         <input  matInput type="number" formControlName="total_premium_price"  required>
+        <span style="font-size: 15px;" matPrefix>&#x20B9; </span>
+        <mat-hint>Enter a price between 1 and 100000000</mat-hint>
+        <mat-error *ngIf="total_premium_price.hasError('required')">Value is required</mat-error>
+        <mat-error *ngIf="total_premium_price.hasError('min')">Minimum price should be 1</mat-error>
+        <mat-error *ngIf="total_premium_price.hasError('max')">Maximum price should be less than or equal to 10000000000</mat-error>
+    </mat-form-field>
+    <mat-form-field  *ngIf="!is_splitwise.value"  class="form-group" appearance="outline">
+        <mat-label>Premium Price</mat-label>
+        <input  matInput type="number" formControlName="premium_price"  required>
         <span style="font-size: 15px;" matPrefix>&#x20B9; </span>
         <mat-hint>Enter a price between 1 and 100000000</mat-hint>
         <mat-error *ngIf="total_premium_price.hasError('required')">Value is required</mat-error>
@@ -76,7 +85,7 @@ mat-raised-button color="primary" style="width : 300px; height: 60px;"><mat-icon
     <mat-form-field  class="form-group" appearance="outline">
         <mat-label>Total Period</mat-label>
         <input  matInput type="number" formControlName="max_time_period"  required>
-        <span style="font-size: 15px;" matSuffix>{{splitwise_category.value ? 
+        <span style="font-size: 15px;" matSuffix>{{splitwise_category.value && is_splitwise.value == true? 
             (splitwise_category.value == 'monthly' ? 'Months' :
              (splitwise_category.value == 'daily' ? 'Days' :
              (splitwise_category.value == 'weekly' ? 'Weeks' : 'Years') ) ) : 'Years'}}</span>
@@ -93,11 +102,36 @@ mat-raised-button color="primary" style="width : 300px; height: 60px;"><mat-icon
         <mat-hint>Enter a price between 1 and 100000000</mat-hint>
         <mat-error *ngIf="discounted_premium_price.hasError('required')">Value is required</mat-error>
         <mat-error *ngIf="discounted_premium_price.hasError('min')">Minimum price should be 1</mat-error>
-        <mat-error *ngIf="discounted_premium_price.hasError('max')">Maximum price should be less than or equal to 10000000000</mat-error>
-    </mat-form-field>
-    
+    </mat-form-field><br>
+    <button type="submit" class="action-button" [disabled]="!enabledAddPremiumSave()"
+     mat-raised-button color="primary" (click)="addPremium()">Save</button>
 </form>
+<br>
+<h1 class="subscriptions"> Premium(s) </h1>
+<hr>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-4" *ngFor="let premium of premiumList">
+            <mat-card class="premium-card">
+                <mat-card-header>
+                    <div *ngIf="premium.discounted_premium_price != '' || 
+                    premium.discounted_premium_price != 0" mat-card-avatar>
+                        <button class="discount_percentage" mat-fab color="primary">{{(((premium.total_premium_price - premium.discounted_premium_price)/premium.total_premium_price)*100).toFixed(1)}} %</button>
+                    </div>
+                    <mat-card-title>
+                            {{premium.premium_name}}
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-actions style="text-align: center;">
+                    <button mat-raised-button color="primary"> Go to Subscribers</button>
+                </mat-card-actions>
 
+            </mat-card>
+            
+        </div>
+    </div>
+</div>
 <div  *ngIf="showLoader" class="loader">
     <mat-spinner color="primary"></mat-spinner><br>
     <span style="color: white; position: fixed; top:400px">Loading ...</span>
