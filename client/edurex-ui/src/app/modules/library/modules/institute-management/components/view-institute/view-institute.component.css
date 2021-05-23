@@ -94,7 +94,50 @@ button:focus {
     font-size: 50px;
 }
 
+@media screen and (max-width : 600px)
+{
+  .logo
+  {
+    height: 50px;
+    width : 50px;
+  }
 
+  .header .heading
+  {
+    font-size: 20px;
+  }
+
+  .header .sub-heading
+  {
+    font-size: 10px;
+  }
+
+  .count img
+  {
+    height: 100px;
+    width : 100px;
+  }
+
+  .count .number
+  {
+    font-size: 50px;
+  }
+
+  .count
+  {
+    font-size: 20px;
+  }
+
+  .section h1
+  {
+    font-size: 20px;
+  }
+  
+  .info
+  {
+    font-size: 10px;
+  }
+}
 
 
 

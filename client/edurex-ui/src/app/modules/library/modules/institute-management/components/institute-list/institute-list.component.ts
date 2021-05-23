@@ -38,7 +38,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     only_active = false;
     showLoader = true;
 
-    displayedColumns: string[] = ['select','organisation_id', 'organisation_name','package','actions', 'status'];
+    displayedColumns: string[] = ['select','organisation_id', 'organisation_name','actions', 'status'];
    
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

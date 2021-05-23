@@ -91,7 +91,10 @@ export class NavbarComponent implements OnInit, DoCheck {
     course_prefix : ['', Validators.required],
     package : ['',Validators.required],
     package_prefix : ['',Validators.required],
-    library_client_id : [false,Validators.required]
+    premium : ['',Validators.required],
+    premium_prefix : ['',Validators.required],
+    library_client_id : [false,Validators.required],
+
   })
 
   configForm = this.formBuilder.group(
@@ -123,6 +126,17 @@ export class NavbarComponent implements OnInit, DoCheck {
     {
       return this.counterForm.get('package_prefix');
     }
+
+    get premium()
+    {
+      return this.counterForm.get('premium');
+    }
+
+    get premium_prefix()
+    {
+      return this.counterForm.get('premium_prefix');
+    }
+
     get package_icon_size()
     {
       return this.configForm.get('package_icon_size');
@@ -316,6 +330,8 @@ export class NavbarComponent implements OnInit, DoCheck {
         course_prefix : this.counterList[0].course_prefix,
         package : this.counterList[0].package,
         package_prefix : this.counterList[0].package_prefix,
+        premium : this.counterList[0].premium,
+        premium_prefix : this.counterList[0].premium_prefix,
         library_client_id : this.counterList[0].library_client_id ? true : false},
         {emitEvent : true});
       
