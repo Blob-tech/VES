@@ -31,6 +31,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
   languages;
   counter;
   configParams;
+  instituteAdminId;
   maxImgSize : number;
   avatarprogress: number;
   docprogress : number;
@@ -173,6 +174,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
         const currentDate = new Date();
         const currentDateYear = currentDate.getFullYear().toString();
         this.organisationForm.patchValue({organisation_id : this.counter[0].organisation_prefix+currentDateYear+this.counter[0].organisation},{emitEvent : true});
+        this.instituteAdminId = this.counter[0].user_prefix+currentDateYear+this.counter[0].user;
         this.showLoader = false;
       },
       err=>{
@@ -225,7 +227,7 @@ export class CreateInstituteComponent implements OnInit,OnChanges {
   {
     let userformData = new FormData()
     userformData.append('avatar',this.imageFile);
-    userformData.append('user_id' ,this.client_id.value);
+    userformData.append('user_id' ,this.instituteAdminId);
     userformData.append('email' ,this.contact_email.value);
     userformData.append('phone' ,this.contact_phone.value);
     userformData.append('name' ,this.contact_person.value);

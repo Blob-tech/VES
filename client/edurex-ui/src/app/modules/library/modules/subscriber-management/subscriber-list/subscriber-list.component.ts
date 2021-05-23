@@ -82,7 +82,7 @@ export class SubscriberListComponent implements OnInit {
 
     this.currentInstitute = this.sessionStorageService.getter('current_institute');
     this.currentUser = this.localStorageService.getter('user');
-    this.getActiveInstituteList();
+    //this.getActiveInstituteList();
     this.getConfigParams();
     this.route.params.subscribe(routeParams => {
       this.getUserCount(routeParams.cat);
