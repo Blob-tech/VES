@@ -52,7 +52,7 @@
 <br>
 <div *ngIf="bookView == 'GRID'" class="container normal-display">
     <div class="row">
-   <div class="col-sm-4 col-md-4 col-lg-4 book" *ngFor="let book of books;let i = index;">
+   <div class="col-sm-6 col-md-6 col-lg-6 book" *ngFor="let book of books;let i = index;">
     <mat-card (click)="viewBook(book.book_id)">
         <mat-card-header style="margin : 1rem; border-radius : 2px">
             <div mat-card-avatar>

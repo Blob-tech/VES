@@ -171,6 +171,7 @@ app.get('/library/config/list/:institute_id',(req,res,next)=>{
 
 })
 
+
 app.get('/counter/list',(req,res,next)=>{
     connection.db.collection('counters',(err,collection)=>{
         if(err)
@@ -285,6 +286,25 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         
     }).catch(err=>{
         res.json({"err" : "Error in updating course counter prefix"});
+    })
+    }
+
+    else if(req.params.parameter == 'premium')
+    {
+        collection.updateOne({},{$set : {premium : Number(req.params.value)}}).then(data=>{
+        res.json({"msg":"Premium Counter updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating counter Parameters"});
+    })
+    } 
+    else if(req.params.parameter == 'premium_prefix')
+    {
+        collection.updateOne({},{$set : {premium_prefix : req.params.value}}).then(data=>{
+        res.json({"msg":"Premium Prefix updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating premium counter prefix"});
     })
     }
 })

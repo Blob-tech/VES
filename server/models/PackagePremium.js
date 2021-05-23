@@ -3,6 +3,12 @@ const schema = mongoose.Schema;
 
 const packagespremiumSchema = new schema(
     {
+       premium_id :
+       {
+           type : String,
+           required:true,
+           unique:true
+       },
        package_id :
        {
            type : String,
@@ -13,15 +19,17 @@ const packagespremiumSchema = new schema(
            type : String,
            required : true
        },
+       premium_description :
+       {
+           type : String,
+       },
        total_premium_price : 
        {
            type : String,
-           required : true,
        },
        premium_price :
        {
            type : String,
-           required : true
        },
        is_splitwise :
        {
@@ -50,6 +58,11 @@ const packagespremiumSchema = new schema(
        discounted_premium_price :
        {
            type : String
+       },
+       discount_valid_upto :
+       {
+           type : Date,
+           default : ''
        },
        max_time_period:
        {
