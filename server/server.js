@@ -259,7 +259,7 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         res.json({"err" : "Error in updating package counter"});
     })
     }
-    else if(req.params.parameter='package_prefix')
+    else if(req.params.parameter=='package_prefix')
     {
         collection.updateOne({},{$set : {package_prefix : req.params.value}}).then(data=>{
             res.json({"msg":"Package Prefix updated successfully"});
