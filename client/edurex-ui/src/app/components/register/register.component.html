@@ -1,10 +1,8 @@
-
-    <mat-grid-list cols="10" rowHeight="110px">
-            <mat-grid-tile  class="register"
+    <mat-grid-list style="margin-top: 150px;" cols="10" rowHeight="110px">
+            <mat-grid-tile class="register"
             [colspan] = 6
             [rowspan] =6 >
-            <h1 style="color : teal;font-size:40px"> WELCOME to VES ! </h1>
-            <app-register-subscriber></app-register-subscriber>
+            <app-register-subscriber [external]="true"></app-register-subscriber>
         </mat-grid-tile>
                 
             <mat-grid-tile
@@ -16,6 +14,5 @@
             </mat-grid-tile>
             </mat-grid-list>
               
-            
             
       
