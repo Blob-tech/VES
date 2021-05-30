@@ -237,8 +237,8 @@ export class DisplayBookComponent implements OnInit {
         {
           this.books = data as Array<any>;
           this.dataSource = new MatTableDataSource<Book>(this.books);
-          this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
           this.copyBooks =data;
           if(this.books.length == 0)
           {

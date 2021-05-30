@@ -16,7 +16,7 @@
             <mat-card-subtitle>All fields marked * are required</mat-card-subtitle>
         </mat-card-header>
     <form [formGroup]="subscriberForm" (ngSubmit)="register()" >
-        <mat-form-field class="form-group" appearance="outline" >
+        <mat-form-field *ngIf="!external" class="form-group" appearance="outline" style='width : 90%'  >
             <mat-label>User Id</mat-label>
             <input matInput formControlName="user_id"  required placeholder="Enter an user Id" readonly>
             <mat-error *ngIf="user_id.hasError('required')">Value is required</mat-error>
@@ -25,8 +25,8 @@
             <mat-label>Institute/Organization Id</mat-label>
             <input matInput formControlName="institute_id"   placeholder="Enter user Institutional or organization id Id">
         </mat-form-field-->
-        <mat-form-field class="form-group" appearance="outline">
-            <mat-label>User Name</mat-label>
+        <mat-form-field class="form-group" appearance="outline" style="width : 90%">
+            <mat-label>Name</mat-label>
             <input matInput formControlName="name" required placeholder="Enter user name" >
             <mat-hint>User name should not exceed more than 200 characters</mat-hint>
             <mat-hint align="end">{{name.value?.length || 0}}/200</mat-hint>
@@ -58,7 +58,7 @@
                           <mat-error *ngIf="institute.hasError('required')">Value is required</mat-error>
             </mat-form-field-->
 
-            <mat-form-field class="form-group" appearance="outline" style="width:90%">
+            <mat-form-field *ngIf="!external" class="form-group" appearance="outline" style="width:90%">
                 <mat-label>User Address</mat-label>
                 <textarea matInput formControlName="address"  placeholder="Enter user address" ></textarea>
                 <mat-hint>Subscriber address should not exceed more than 500 characters</mat-hint>
@@ -89,7 +89,7 @@
                     <mat-error *ngIf="resetPassword.hasError('notMatching')">Password doesn't matches</mat-error>
                 </mat-form-field>
                           <br>
-                        <mat-form-field class="form-group" style="  display: inline-block; margin-right: 100px;"  appearance="outline">
+                        <mat-form-field  *ngIf="!external" class="form-group" style="  display: inline-block; margin-right: 100px;"  appearance="outline">
                                 <mat-label>Profile Image</mat-label>
                                 <ngx-mat-file-input #removableInput formControlName="avatar" accept=".jpg,.jpeg,.png"  placeholder="Browse Image"
                                 (change)="onSelectAvatar($event)" ></ngx-mat-file-input>
@@ -103,16 +103,16 @@
                               </mat-form-field>
                              
                         
-                        <img style="height: 200px; width: 150px; margin-right: 1rem;"  mat-card-image src="{{url}}" alt="Chapter Photo">
+                        <img *ngIf="!external" style="height: 200px; width: 150px; margin-right: 1rem;"  mat-card-image src="{{url}}" alt="Chapter Photo">
                         
                         <br>
-                                        <mat-hint>Images in .jpg, .jpeg and .png only allowed </mat-hint>
-                                        <mat-progress-bar mode="determinate" value="{{avatarprogress}}"></mat-progress-bar>
+                                        <mat-hint *ngIf="!external">Images in .jpg, .jpeg and .png only allowed </mat-hint>
+                                        <mat-progress-bar *ngIf="!external" mode="determinate" value="{{avatarprogress}}"></mat-progress-bar>
 
                         <br>
     
                         <button type="submit"  mat-raised-button style="margin-right: 1rem;" color="primary"
-                        [disabled]="submitDisabled()">Save</button>
+                        [disabled]="submitDisabled()">Register</button>
                         <button type="reset" mat-raised-button>Reset</button>
     
     </form>

@@ -10,4 +10,6 @@ const Organisation = require('../models/Organisation');
 subscriptions.use(cors());
 
 
+
+module.exports = subscriptions;
     
