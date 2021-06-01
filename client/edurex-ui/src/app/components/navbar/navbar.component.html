@@ -340,6 +340,29 @@
                               <mat-hint>Maximum subscription categories can be allocated for an institute</mat-hint>
                               <mat-error>Value is required</mat-error>
                             </mat-form-field><br>
+                            <button mat-button>OTP Size</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>OTP Size</mat-label>
+                              <input type="number" matInput formControlName="otp_size">
+                              <mat-hint>Number of digits in an OTP</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field><br>
+                            <button mat-button>OTP Resend Time</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>OTP Resend time</mat-label>
+                              <input type="number" matInput formControlName="otp_resend_time">
+                              <span matSuffix>Seconds</span>
+                              <mat-hint>OTP can be resend in the given time</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field><br>
+                            <button mat-button>OTP Valid upto</button>
+                            <mat-form-field class="form-group" appearance="outline">
+                            <mat-label>OTP Valid Upto</mat-label>
+                              <input type="number" matInput formControlName="otp_valid_upto">
+                              <span #matSuffix>Seconds</span>
+                              <mat-hint>Maximum time an OTP is valid</mat-hint>
+                              <mat-error>Value is required</mat-error>
+                            </mat-form-field><br>
         
                  </form>
                 </div>
