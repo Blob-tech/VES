@@ -46,6 +46,8 @@ var Organisation = require('./routes/Organisations');
 var RoleAccess = require('./routes/RoleAccess');
 var Search = require('./routes/Search');
 var Package = require('./routes/Packages');
+var SubscriptionAccess = require('./routes/SubscriptionAccess');
+var OTP = require('./routes/Otp');
 
 
 let transporter = nodemailer.createTransport({
@@ -73,6 +75,8 @@ app.use('/organisation',Organisation);
 app.use('/role',RoleAccess);
 app.use('/search',Search);
 app.use('/package',Package);
+app.use('/subscription',SubscriptionAccess);
+app.use('/otp',OTP);
 
 
 app.get('/server_time',(req,res,next)=>{
@@ -391,7 +395,10 @@ app.put('/config/update',(req,res,next)=>{
                 MAX_SPACE : Number(req.body.max_space),
                 MAX_USER : Number(req.body.max_user),
                 MAX_SUBSCRIPTION : Number(req.body.max_subscription),
-                admin_email: req.body.admin_email
+                admin_email: req.body.admin_email,
+                otp_size : Number(req.body.otp_size),
+                otp_resend_time : Number(req.body.otp_resend_time),
+                otp_valid_upto : Number(req.body.otp_valid_upto)
             }}
             ).then(
                 data=>{

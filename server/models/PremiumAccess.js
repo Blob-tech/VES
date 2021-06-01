@@ -16,7 +16,7 @@ const premiumAccessSchema = new schema(
         access_given_on :
         {
             type : Date,
-            default : Date()
+            required : true
         },
         valid_upto:
         {
