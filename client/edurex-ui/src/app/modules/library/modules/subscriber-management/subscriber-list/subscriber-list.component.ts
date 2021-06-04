@@ -82,7 +82,7 @@ export class SubscriberListComponent implements OnInit {
 
     this.currentInstitute = this.sessionStorageService.getter('current_institute');
     this.currentUser = this.localStorageService.getter('user');
-    this.getActiveInstituteList();
+    //this.getActiveInstituteList();
     this.getConfigParams();
     this.route.params.subscribe(routeParams => {
       this.getUserCount(routeParams.cat);
@@ -90,6 +90,7 @@ export class SubscriberListComponent implements OnInit {
      
     });
   }
+  
 
   getFilteredInstitutes()
   {
@@ -252,7 +253,7 @@ export class SubscriberListComponent implements OnInit {
       data=>{
         if(!JSON.parse(JSON.stringify(data))['err'])
         {
-          this.subscriberList = data as Array<any>;
+          this.subscriberList = data as User[];
           if(this.onlyActive == true)
           {
             this.subscriberList = this.subscriberList.filter(value => {return value.isActivated == true});

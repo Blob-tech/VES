@@ -79,6 +79,11 @@ button:focus {
     margin-bottom: 1rem;
 }
 
+.book mat-card-title
+{
+    overflow-wrap: break-word;    
+}
+
 .mat-card-title span
 {
     margin-bottom: 1%;

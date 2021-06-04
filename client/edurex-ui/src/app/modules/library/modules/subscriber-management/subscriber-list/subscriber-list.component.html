@@ -45,7 +45,7 @@
       <mat-option value="DELETE">Delete</mat-option>
       <mat-option value="DEACTIVATE">Deactivate</mat-option>
       <mat-option value="ACTIVATE">Activate</mat-option>
-      <mat-option value="ACCESS">Manage Access</mat-option>
+      <!--mat-option value="ACCESS">Manage Access</mat-option-->
     </mat-select>
   </mat-form-field>
   
@@ -124,8 +124,10 @@
   
     <ng-container  matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td  mat-cell *matCellDef="let user">
-          <mat-slide-toggle [disabled]="!isSystemAdmin()" [(ngModel)]="user.isActivated" (click)="deactivate_user(user.isActivated,user.user_id)">{{user.isActivated ? "Active" : "Inactive"}}</mat-slide-toggle>
+        <td  [style.color]="user.isActivated ? 'green' : 'red'" mat-cell *matCellDef="let user">
+          <mat-slide-toggle *ngIf="isSystemAdmin()" [(ngModel)]="user.isActivated" (click)="deactivate_user(user.isActivated,user.user_id)">{{user.isActivated ? "Active" : "Inactive"}}</mat-slide-toggle>
+          <span 
+           *ngIf="!isSystemAdmin()">{{user.isActivated ? "Active" : "Inactive"}}</span>
            </td>
         </ng-container>
   

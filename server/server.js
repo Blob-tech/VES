@@ -46,6 +46,8 @@ var Organisation = require('./routes/Organisations');
 var RoleAccess = require('./routes/RoleAccess');
 var Search = require('./routes/Search');
 var Package = require('./routes/Packages');
+var SubscriptionAccess = require('./routes/SubscriptionAccess');
+var OTP = require('./routes/Otp');
 
 
 let transporter = nodemailer.createTransport({
@@ -73,6 +75,8 @@ app.use('/organisation',Organisation);
 app.use('/role',RoleAccess);
 app.use('/search',Search);
 app.use('/package',Package);
+app.use('/subscription',SubscriptionAccess);
+app.use('/otp',OTP);
 
 
 app.get('/server_time',(req,res,next)=>{
@@ -171,6 +175,7 @@ app.get('/library/config/list/:institute_id',(req,res,next)=>{
 
 })
 
+
 app.get('/counter/list',(req,res,next)=>{
     connection.db.collection('counters',(err,collection)=>{
         if(err)
@@ -258,7 +263,7 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         res.json({"err" : "Error in updating package counter"});
     })
     }
-    else if(req.params.parameter='package_prefix')
+    else if(req.params.parameter=='package_prefix')
     {
         collection.updateOne({},{$set : {package_prefix : req.params.value}}).then(data=>{
             res.json({"msg":"Package Prefix updated successfully"});
@@ -285,6 +290,25 @@ app.put('/counter/:value/:parameter',(req,res,next)=>{
         
     }).catch(err=>{
         res.json({"err" : "Error in updating course counter prefix"});
+    })
+    }
+
+    else if(req.params.parameter == 'premium')
+    {
+        collection.updateOne({},{$set : {premium : Number(req.params.value)}}).then(data=>{
+        res.json({"msg":"Premium Counter updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating counter Parameters"});
+    })
+    } 
+    else if(req.params.parameter == 'premium_prefix')
+    {
+        collection.updateOne({},{$set : {premium_prefix : req.params.value}}).then(data=>{
+        res.json({"msg":"Premium Prefix updated successfully"});
+        
+    }).catch(err=>{
+        res.json({"err" : "Error in updating premium counter prefix"});
     })
     }
 })
@@ -371,7 +395,10 @@ app.put('/config/update',(req,res,next)=>{
                 MAX_SPACE : Number(req.body.max_space),
                 MAX_USER : Number(req.body.max_user),
                 MAX_SUBSCRIPTION : Number(req.body.max_subscription),
-                admin_email: req.body.admin_email
+                admin_email: req.body.admin_email,
+                otp_size : Number(req.body.otp_size),
+                otp_resend_time : Number(req.body.otp_resend_time),
+                otp_valid_upto : Number(req.body.otp_valid_upto)
             }}
             ).then(
                 data=>{

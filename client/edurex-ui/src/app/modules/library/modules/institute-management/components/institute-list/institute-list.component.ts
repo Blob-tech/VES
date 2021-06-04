@@ -12,6 +12,7 @@ import { Institute } from '../../models/institute';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NgbModalConfig,NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { sync } from 'glob';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 
 
@@ -20,6 +21,13 @@ import { sync } from 'glob';
     templateUrl: './institute-list.component.html',
     styleUrls: ['./institute-list.component.css'],
     providers :[NgbModalConfig,NgbModal],
+    animations: [
+      trigger('detailExpand', [
+        state('collapsed', style({height: '0px', minHeight: '0'})),
+        state('expanded', style({height: '*'})),
+        transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      ]),
+    ],
   })
   export class InstituteListComponent implements OnInit {
 
@@ -30,7 +38,7 @@ import { sync } from 'glob';
     only_active = false;
     showLoader = true;
 
-    displayedColumns: string[] = ['select','organisation_id', 'organisation_name', 'actions', 'status'];
+    displayedColumns: string[] = ['select','organisation_id', 'organisation_name','package','actions', 'status'];
    
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

@@ -91,7 +91,10 @@ export class NavbarComponent implements OnInit, DoCheck {
     course_prefix : ['', Validators.required],
     package : ['',Validators.required],
     package_prefix : ['',Validators.required],
-    library_client_id : [false,Validators.required]
+    premium : ['',Validators.required],
+    premium_prefix : ['',Validators.required],
+    library_client_id : [false,Validators.required],
+
   })
 
   configForm = this.formBuilder.group(
@@ -103,7 +106,10 @@ export class NavbarComponent implements OnInit, DoCheck {
       max_user :[0,[Validators.required]],
       max_subscription : [0,[Validators.required]],
       max_space :[0,[Validators.required]],
-      package_icon_size : [1,[Validators.required]]
+      package_icon_size : [1,[Validators.required]],
+      otp_resend_time : [1,[Validators.required]],
+      otp_size : [1,[Validators.required]],
+      otp_valid_upto : [1,[Validators.required]]
     }
   )
   systemForm = this.formBuilder.group({
@@ -123,6 +129,17 @@ export class NavbarComponent implements OnInit, DoCheck {
     {
       return this.counterForm.get('package_prefix');
     }
+
+    get premium()
+    {
+      return this.counterForm.get('premium');
+    }
+
+    get premium_prefix()
+    {
+      return this.counterForm.get('premium_prefix');
+    }
+
     get package_icon_size()
     {
       return this.configForm.get('package_icon_size');
@@ -140,6 +157,21 @@ export class NavbarComponent implements OnInit, DoCheck {
     get max_space()
     {
       return this.configForm.get('max_space');
+    }
+
+    get otp_size()
+    {
+      return this.configForm.get('otp_size');
+    }
+
+    get otp_resend_time()
+    {
+      return this.configForm.get('otp_resend_time')
+    }
+
+    get otp_valid_upto()
+    {
+      return this.configForm.get('otp_valid_upto')
     }
 
     get profile_img_size()
@@ -316,6 +348,8 @@ export class NavbarComponent implements OnInit, DoCheck {
         course_prefix : this.counterList[0].course_prefix,
         package : this.counterList[0].package,
         package_prefix : this.counterList[0].package_prefix,
+        premium : this.counterList[0].premium,
+        premium_prefix : this.counterList[0].premium_prefix,
         library_client_id : this.counterList[0].library_client_id ? true : false},
         {emitEvent : true});
       
@@ -353,7 +387,10 @@ export class NavbarComponent implements OnInit, DoCheck {
               max_space : this.brand[0].MAX_SPACE,
               max_user : this.brand[0].MAX_USER,
               max_subscription : this.brand[0].MAX_SUBSCRIPTION,
-              package_icon_size : this.brand[0].package_icon_size
+              package_icon_size : this.brand[0].package_icon_size,
+              otp_size : this.brand[0].otp_size,
+              otp_resend_time : this.brand[0].otp_resend_time,
+              otp_valid_upto : this.brand[0].otp_valid_upto
             },
             {
               emitEvent : true
@@ -406,6 +443,9 @@ export class NavbarComponent implements OnInit, DoCheck {
       formData.append("max_space",this.max_space.value);
       formData.append("max_subscription",this.max_subscription.value);
       formData.append("package_icon_size",this.package_icon_size.value);
+      formData.append("otp_size",this.otp_size.value);
+      formData.append("otp_resend_time",this.otp_resend_time.value);
+      formData.append("otp_valid_upto",this.otp_valid_upto.value);
       this.navbarService.updateConfig(formData).subscribe(
 
         data=>{

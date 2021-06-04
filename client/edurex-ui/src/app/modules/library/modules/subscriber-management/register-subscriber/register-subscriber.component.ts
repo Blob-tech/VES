@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { FormBuilder, Validators, ValidatorFn, FormGroup } from '@angular/forms';
 import { LibraryCategoryService } from '../../../service/library-category.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -37,7 +37,10 @@ const resetPassValidator: ValidatorFn = (fg: FormGroup) => {
 })
 export class RegisterSubscriberComponent implements OnInit,OnChanges {
 
-  showLoader = true;
+  @Input()
+  external : boolean = false;
+
+  showLoader = false;
   message = null;
   error = null;
   ishidden = true;
@@ -56,10 +59,10 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
     
   ngOnInit(): void {
     
-    this.getSubscriptionCategories();
+    //this.getSubscriptionCategories();
     this.getConfigParams();
     this.getCounter();
-    this.getActiveInstituteList();
+    //this.getActiveInstituteList();
     
   }
 
@@ -183,7 +186,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
 
   getActiveInstituteList()
   {
-    this.showLoader = true;
+    //this.showLoader = true;
     this.instituteService.get_institutes().subscribe(
       data=>{
         if(!(JSON.parse(JSON.stringify(data))['err']))
@@ -227,7 +230,7 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
  
   getSubscriptionCategories()
   {
-    this.showLoader = true;
+    //this.showLoader = true;
     this.libCategoryServices.getSubscriptionCategories().subscribe(
       data => {
         this.subscriptions = data as Array<any>;
@@ -284,6 +287,12 @@ export class RegisterSubscriberComponent implements OnInit,OnChanges {
           // this.router.navigateByUrl('e-library/subscriber/subscriber-management/categories').then(
           //   ()=>{this.showLoader =false;}
           // );
+          if(this.external)
+          {
+            this.router.navigateByUrl('login').then(
+              ()=>{this.showLoader=false}
+            );
+          }
           this.showLoader=false;
         }
         else

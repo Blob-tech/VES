@@ -106,7 +106,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     SharedModule
   ],
   providers : [],
-  bootstrap: [SubscriberManagementComponent]
+  bootstrap: [SubscriberManagementComponent],
+  exports : [RegisterSubscriberComponent]
 })
 
 export class SubscriberManagementModule { }

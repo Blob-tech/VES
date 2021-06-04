@@ -47,6 +47,7 @@ import { AccessForbiddenComponent } from './components/access-forbidden/access-f
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PackageRoutingModule } from './modules/library/modules/package-management/package-routing.module';
+import { SubscriberManagementModule } from './modules/library/modules/subscriber-management/subscriber-management.module';
 
 
 @NgModule({
@@ -101,7 +102,8 @@ import { PackageRoutingModule } from './modules/library/modules/package-manageme
     MatVideoModule,
     NgbModule,
     SharedModule,
-    PackageRoutingModule
+    PackageRoutingModule,
+    SubscriberManagementModule,
 
   ],
   exports:[],

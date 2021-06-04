@@ -1,0 +1,54 @@
+<button [disabled]="disabled" matTooltip="Subscriptions" mat-mini-fab (click)="open(subscriptionManager)">
+    <mat-icon>view_in_ar</mat-icon>
+</button>
+
+
+<ng-template #subscriptionManager>
+        <h1 mat-dialog-title >{{ mode == 'institute' ? 'Institute Package' : 'User Subscription'}}</h1>
+        <img class="logo" src="{{currentInstitute ? imgUrl + currentInstitute.avatar : '/assets/images/insimg.png'}}">
+        <span style="color: gray; font-size: 20px;">{{ mode == 'institute' ? currentInstitute.organisation_name : ''}}</span>
+        <hr>
+        <mat-dialog-content>
+            <form [formGroup]="subscriptionForm">
+                    <mat-form-field  class="form-group" appearance="outline" style="width: 90%;">
+                            <mat-label>Package</mat-label>
+                            <mat-select formControlName="package" required (selectionChange)="getPremium($event)">
+                                <mat-option *ngFor="let package of packageList" value="{{package.package_id}}">{{package.package_name}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="package.hasError('required')">Value is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field  class="form-group" appearance="outline" style="width: 90%;">
+                        <mat-label>Premium</mat-label>
+                            <mat-select formControlName="premium" required >
+                                <mat-option *ngFor="let premium of premiumList" value="{{premium.premium_id}}">{{premium.premium_name}}</mat-option>
+                                </mat-select>
+                            <mat-error *ngIf="premium.hasError('required') && !package.hasError('required')">Value is required</mat-error>
+                            <mat-error *ngIf="package.hasError('required')">
+                                Please Select a Package
+                            </mat-error>
+                    </mat-form-field>
+                    <br>
+                    <span class="alert alert-info">
+                        If you don't fill the Premium valid upto , then the premium will be valid as per the normal
+                        premium tenure.
+                    </span>
+                    <br>
+                    <br>
+                    <mat-form-field class="form-group" appearance="outline" style="width: 90%;">
+                            <mat-label>Premium valid upto</mat-label>
+                            <input [min]="minDate" matInput formControlName="valid_upto"  placeholder="Choose a date" [matDatepicker]="picker">
+                            <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>                           
+                      </mat-form-field>
+
+            </form>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+                <button mat-raised-button color="primary" mat-dialog-close
+                [disabled]="!subscriptionForm.valid"
+                ><mat-icon>verified</mat-icon>Save</button>
+               <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+             </mat-dialog-actions>
+             
+
+</ng-template>

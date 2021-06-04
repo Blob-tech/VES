@@ -139,7 +139,7 @@ organisations.post('/add',(req,res,next)=>{
                     let libraryconfig = connection.db.collection("library_config");
                     countercol.updateOne({},{$inc : {organisation : 1}});
                     libraryconfig.updateOne({institute_id : req.body.organisation_id},
-                        {set :{
+                        {$set :{
                             release: 2592000000,
                             img_size:2,
                             doc_size:20,

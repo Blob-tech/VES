@@ -52,11 +52,12 @@ import { SecureStorageService } from './services/secure-storage.service';
 import { LocalService } from './services/local-storage';
 import { AuthGuradService } from './guard/auth-guard';
 import { SessionStorageService } from './services/session-storage.service';
+import { ManageSubscriptionComponent } from './widgets/manage-subscription/manage-subscription.component';
 
 
 
 @NgModule({
-  declarations: [ProfileGridComponent, ManageAccessComponent, SocialLinksComponent, RoleTranslatePipe, SearchGridComponent],
+  declarations: [ProfileGridComponent, ManageAccessComponent, SocialLinksComponent, RoleTranslatePipe, SearchGridComponent, ManageSubscriptionComponent],
   imports: [
     CommonModule,
     MatSliderModule,
@@ -105,7 +106,7 @@ import { SessionStorageService } from './services/session-storage.service';
     MatVideoModule,
     PlyrModule,
   ],
-  exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent,
+  exports : [ProfileGridComponent,ManageAccessComponent,SocialLinksComponent,ManageSubscriptionComponent,
     SearchGridComponent, RoleTranslatePipe],
   providers : [MatDatepickerModule,SecureStorageService,LocalService, AuthGuradService,
   SessionStorageService],
