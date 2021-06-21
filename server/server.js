@@ -349,12 +349,12 @@ app.get('/system/get',(req,res,next)=>{
     {
         if(err)
         {
-            res.json({"err":"Error in loading System Branding"}) 
+            res.json({"err":"Error in loading System Branding 1" + JSON.stringify(err)}) 
         }
         collection.find({}).toArray(function(err, data){
             if(err)
             {
-                res.json({"err":"Error in Loading System Branding"})
+                res.json({"err":"Error in Loading System Branding 2" + JSON.stringify(err)})
             }
             res.json(data)
         })

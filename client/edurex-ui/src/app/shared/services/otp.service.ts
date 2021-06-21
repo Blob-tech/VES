@@ -11,10 +11,10 @@ export class OtpService {
 
   constructor(private httpClient : HttpClient) { }
 
-  sendOtp(email)
+  sendOtp(otpForm)
   {
     let headers = new HttpHeaders();
     headers.append("Content-Type","application/json");
-    return this.httpClient.get(this.URL+"otp/"+email,{headers:headers})
+    return this.httpClient.post(this.URL+"otp/insert",otpForm,{headers:headers});
   }
 }
