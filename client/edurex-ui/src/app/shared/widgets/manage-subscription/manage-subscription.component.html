@@ -10,16 +10,16 @@
         <hr>
         <mat-dialog-content>
             <form [formGroup]="subscriptionForm">
-                    <mat-form-field  class="form-group" appearance="outline" style="width: 90%;">
+                    <mat-form-field  class="form-group" appearance="outline" style="width: 45%; margin-right: 5%;">
                             <mat-label>Package</mat-label>
                             <mat-select formControlName="package" required (selectionChange)="getPremium($event)">
                                 <mat-option *ngFor="let package of packageList" value="{{package.package_id}}">{{package.package_name}}</mat-option>
                               </mat-select>
                               <mat-error *ngIf="package.hasError('required')">Value is required</mat-error>
                     </mat-form-field>
-                    <mat-form-field  class="form-group" appearance="outline" style="width: 90%;">
+                    <mat-form-field  class="form-group" appearance="outline" style="width: 45%;">
                         <mat-label>Premium</mat-label>
-                            <mat-select formControlName="premium" required >
+                            <mat-select formControlName="premium" required (selectionChange)="getPeriod($event)" >
                                 <mat-option *ngFor="let premium of premiumList" value="{{premium.premium_id}}">{{premium.premium_name}}</mat-option>
                                 </mat-select>
                             <mat-error *ngIf="premium.hasError('required') && !package.hasError('required')">Value is required</mat-error>
@@ -29,17 +29,29 @@
                     </mat-form-field>
                     <br>
                     <span class="alert alert-info">
-                        If you don't fill the Premium valid upto , then the premium will be valid as per the normal
+                        If you don't fill the Subscription Period , then the premium will be valid as per the normal
                         premium tenure.
                     </span>
                     <br>
                     <br>
-                    <mat-form-field class="form-group" appearance="outline" style="width: 90%;">
-                            <mat-label>Premium valid upto</mat-label>
-                            <input [min]="minDate" matInput formControlName="valid_upto"  placeholder="Choose a date" [matDatepicker]="picker">
-                            <mat-datepicker-toggle  matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>                           
-                      </mat-form-field>
+                    <mat-form-field class="form-group" appearance="outline" style="width : 90%">
+                        <mat-label>Subscription Period</mat-label>
+                        <input matInput type="number" [min]="1" formControlName="subscription_period" 
+                        placeholder="Enter a subscription period" required>
+                        <span matSuffix>{{period}}</span>
+                        <mat-error *ngIf="subscription_period.hasError('required')">Value is Required and should be greater than 1</mat-error>
+                    </mat-form-field>
+                    <br>
+                    <div class='alert alert-success'>
+                        <span *ngIf="currentPackage && currentPackage.package_name"
+                         style="font-size: 15px;"><b>Package Name : {{currentPackage.package_name}}</b></span>
+                         <br>
+                         <span *ngIf="currentPremium && currentPremium.premium_name"
+                         style="font-size: 10px;"><b>Premium Name : {{currentPremium.premium_name}}</b></span>
+                    </div>
+
+                    <button (click)="calcPremiumAccess()" mat-raised-button  color="primary"> Calculate Premium </button>
+
 
             </form>
         </mat-dialog-content>

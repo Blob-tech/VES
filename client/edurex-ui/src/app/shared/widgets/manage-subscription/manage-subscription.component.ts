@@ -26,11 +26,17 @@ export class ManageSubscriptionComponent implements OnInit {
   
 
   currentInstitute;
+  currentPackage;
+  currentPremium;
   packageList=[];
   premiumList = [];
   imgUrl = config.host + "organisation_logo/";
   minDate : Date;
-  
+  period : String = 'Year(s)';
+  premiumStartDate ='';
+  premiumEndDate = '';
+  total_price = '';
+  discountedPrice = '';
 
   constructor(private dialog : MatDialog, private instituteService : InstituteManagementService,
     private snackBar : MatSnackBar, private packageService : PackageService,
@@ -43,13 +49,36 @@ export class ManageSubscriptionComponent implements OnInit {
     this.getInstitute();
   }
 
+  ngOnDestroy()
+  {
+    this.subscriptionForm.reset();
+  }
+
   subscriptionForm = this.formBuilder.group(
     {
       package : ['',Validators.required],
       premium : ['', Validators.required],
-      valid_upto : ['']
+      subscription_period : ['',Validators.required],
+     // is_custom_price : [false],
+     // custom_price : [''],
     }
   )
+
+  get subscription_period()
+  {
+    return this.subscriptionForm.get('subscription_period');
+  }
+
+ /* get isCustomPrice()
+  {
+    return this.subscriptionForm.get('is_custom_price');
+
+  }
+
+  get custom_price()
+  {
+    return this.subscriptionForm.get('custom_price');
+  }*/
 
   get package()
   {
@@ -61,10 +90,6 @@ export class ManageSubscriptionComponent implements OnInit {
     return this.subscriptionForm.get('premium');
   }
 
-  get valid_upto()
-  {
-    return this.subscriptionForm.get('valid_upto');
-  }
 
   open(content)
   {
@@ -99,6 +124,7 @@ export class ManageSubscriptionComponent implements OnInit {
   {
     this.premium.setValue('');
     let package_id = event.value.trim();
+    this.currentPackage = this.packageList.filter(value => {return (value.package_id === package_id)})[0];
     if(package_id == '')
       {
         
@@ -112,6 +138,65 @@ export class ManageSubscriptionComponent implements OnInit {
         this.snackBar.open("Error in loading premium")
       }
     )
+  }
+
+  getPeriod(event)
+  {
+    
+    let premium_id = event.value.trim();
+    let premium = this.premiumList.filter((value) => {return value.premium_id == premium_id});
+    this.currentPremium = premium[0];
+    this.subscription_period.setValue(premium[0]['max_time_period']);
+    if(premium[0]['is_splitwise'])
+    {
+      let premiumCategory = premium[0]['splitwise_category'];
+      switch (premiumCategory)
+      {
+        case 'weekly' :
+          this.period = "Week(s)";
+          break;
+        case 'monthly' :
+          this.period ="Month(s)";
+          break;
+        case 'daily' :
+          this.period = "Day(s)";
+          break;
+        default :
+          this.period = "Year(s)";
+
+      }
+    }
+    else
+    {
+      this.period = "Year(s)";
+    }
+  }
+
+  calcPremiumAccess()
+  {
+    let premium = this.premiumList.filter((value)=>{return value.premium_id == this.premium.value});
+    let subsPeriod = this.subscription_period.value;
+    if(premium[0]['is_splitwise']) { 
+          if(premium[0]['max_time_period'] > subsPeriod)
+          {
+            this.total_price = (Number(subsPeriod) * Number(premium[0]['splitwise_price'])).toString();
+            this.discountedPrice='';
+          }
+          else if(premium[0]['max_time_period'] == subsPeriod)
+          {
+            this.total_price = premium[0]['total_premium_price'];
+            this.discountedPrice = premium[0]['discounted_premium_price'];
+          }
+          else
+          {
+            this.total_price = (Number(subsPeriod) * Number(premium[0]['splitwise_price'])).toString();
+            this.discountedPrice = (((Math.trunc(Number(subsPeriod))/Number(premium[0]['max_time_period']))
+            *(Number(premium[0]['discounted_premium_price'])))
+            + ( (Number(subsPeriod) % Number(premium[0]['max_time_period']))*premium[0]['splitwise_price'])).toString() ;
+          }   
+  }
+  console.log(this.total_price);
+  console.log(this.discountedPrice);
   }
 
 }

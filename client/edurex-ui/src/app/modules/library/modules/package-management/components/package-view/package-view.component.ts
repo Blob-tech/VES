@@ -4,12 +4,28 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import {config} from 'src/conf';
 import { from } from 'rxjs';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ValidatorFn, FormGroup } from '@angular/forms';
 import { NavbarService } from 'src/app/components/navbar/navbar.service';
 import { MatDialog } from '@angular/material/dialog';
 
 
 
+const validDiscountPrice: ValidatorFn = (fg: FormGroup) => {
+  const total = fg.get('total_premium_price').value;
+  const discount = fg.get('discounted_premium_price').value;
+
+  if(total<=discount)
+  {
+      fg.get('discounted_premium_price').setErrors({invalidDiscountAmt : true});
+  }
+  else
+  {
+    fg.get('discounted_premium_price').setErrors(null);
+  }
+  return total !== null && discount !== null && total > discount
+    ? null
+    : { range: true };
+};
 
 @Component({
   selector: 'app-package-view',
@@ -260,6 +276,19 @@ export class PackageViewComponent implements OnInit,DoCheck,OnDestroy{
     }
   }
 
+  isDiscountValid(premium):boolean
+  {
+    let currDate = new Date();
+    if(premium && premium.discount_valid_upto) {
+      if(premium.discount_valid_upto.getTime() < currDate.getTime())
+      {
+        return true;
+      }
+    }
+
+    return false;
+    
+  }
   
   showHidePremiumForm()
   {
@@ -280,7 +309,9 @@ export class PackageViewComponent implements OnInit,DoCheck,OnDestroy{
       max_time_period : ['',[Validators.required,Validators.min(1),Validators.max(1000000)]],
       discounted_premium_price : ['',[Validators.required,Validators.min(1),Validators.max(10000000000)]],
       discount_valid_upto : ['',[Validators.required]]
-    }
+    },
+    {validators : validDiscountPrice}
+
   );
 
   get premium_id()

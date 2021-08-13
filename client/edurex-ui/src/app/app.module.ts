@@ -42,7 +42,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { SharedModule } from './shared/shared.module';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ForgotPasswordComponent, ChangePasswordDialogComponent } from './components/forgot-password/forgot-password.component';
 import { AccessForbiddenComponent } from './components/access-forbidden/access-forbidden.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -59,6 +59,7 @@ import { SubscriberManagementModule } from './modules/library/modules/subscriber
     NotFoundComponent,
     ForgotPasswordComponent,
     AccessForbiddenComponent,
+    ChangePasswordDialogComponent
     
     
   ],

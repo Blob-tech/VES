@@ -307,6 +307,16 @@ export class ProfileViewComponent implements OnInit {
     }
   }
   
+  goToForgotPassword()
+  {
+    var res = confirm("This action will log you out from the current session. Please confirm to proceed.");
+    if(res)
+    {
+      localStorage.clear();
+      sessionStorage.clear();
+      this.router.navigateByUrl('/forgot-password');
+    }
+  }
 
   updateBasicInfo()
   {
