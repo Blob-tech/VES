@@ -144,6 +144,9 @@ mat-raised-button color="primary" style="width : 300px; height: 60px;"><mat-icon
         <mat-hint>Enter a price between 1 and 100000000</mat-hint>
         <mat-error *ngIf="discounted_premium_price.hasError('required')">Value is required</mat-error>
         <mat-error *ngIf="discounted_premium_price.hasError('min')">Minimum price should be 1</mat-error>
+        <mat-error *ngIf="discounted_premium_price.hasError('invalidDiscountAmt')">
+            Discount amount should be less than total premium value
+        </mat-error>
     </mat-form-field>
     <mat-form-field *ngIf="is_discounted_price.value" class="form-group" appearance="outline" required>
             <mat-label>Discount valid upto</mat-label>
@@ -319,6 +322,9 @@ mat-raised-button color="primary" style="width : 300px; height: 60px;"><mat-icon
                             <mat-hint>Enter a price between 1 and 100000000</mat-hint>
                             <mat-error *ngIf="discounted_premium_price.hasError('required')">Value is required</mat-error>
                             <mat-error *ngIf="discounted_premium_price.hasError('min')">Minimum price should be 1</mat-error>
+                            <mat-error *ngIf="discounted_premium_price.hasError('invalidDiscountAmt')">
+                                    Discount amount should be less than total premium value
+                                </mat-error>
                         </mat-form-field>
                         <mat-form-field *ngIf="is_discounted_price.value" class="form-group" appearance="outline" required>
                                 <mat-label>Discount valid upto</mat-label>

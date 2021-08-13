@@ -20,7 +20,7 @@ otp.post('/validate',(req,res,next)=>{
             }
             else
             {
-                res.json({"msg":"OTP Expired"})
+                res.json({"err":"OTP has been Expired. Please resend OTP"})
             }
         }
         else

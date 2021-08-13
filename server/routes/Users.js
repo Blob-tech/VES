@@ -526,6 +526,42 @@ users.post('/change_password',(req,res,next)=>{
     })
 })
 
+
+users.post('/change_password/otp',(req,res,next)=>{
+    User.find({$and : [{email : req.body.email},
+        {active : true},
+        {isActivated : true}
+    ]})
+    .then(data=>{
+        if(data.length==0)
+        {
+            res.json({"err" : "Your account has been deactivated . Please contract System Admin"});
+        }
+        else
+        {
+            let bool = bcrypt.compareSync(req.body.new_password,data[0].password);
+            if(bool == true)
+            {
+                res.json({"err" : "Your new password is same as old password. Please try a different one for strong security"});
+            }
+            else
+            {
+                User.updateOne({email : req.body.email},
+                    {$set :
+                    {
+                        password : bcrypt.hashSync(req.body.new_password,10)
+                    }}).then(
+                        data=>{
+                            res.json({"msg" : "Your password has been changed successfully"});
+                        }
+                    ).catch(err=>{
+                        res.json({"err" : "Server Error ! Error in changing your password. Please try after few minutes "});
+                    })
+            }
+        }
+    })
+})
+
 users.post('/login',async(req,res,next)=>{
   
     User.find({$or : [ { email : req.body.username},

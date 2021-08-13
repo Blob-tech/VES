@@ -276,7 +276,7 @@
                                         <button type="button" mat-icon-button matSuffix (click)="old_hide = !old_hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                             <mat-icon>{{old_hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                             </button>
-                                        <mat-hint><a href="/forgot-password">Forgot Password ?</a></mat-hint>
+                                        <mat-hint (click)="goToForgotPassword()"><a style="color: blue;">Forgot Password ?</a></mat-hint>
                                         <mat-error *ngIf="old_pass.hasError('required')">Value is required</mat-error>
                        </mat-form-field><br>
                        <mat-form-field class="form-group" appearance="outline" >
@@ -621,7 +621,7 @@
                                           <button type="button" mat-icon-button matSuffix (click)="old_hide = !old_hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                               <mat-icon>{{old_hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                               </button>
-                                          <mat-hint><a href="/forgot-password">Forgot Password ?</a></mat-hint>
+                                          <mat-hint (click)="goToForgotPassword()"><a style="color: blue;">Forgot Password ?</a></mat-hint>
                                           <mat-error *ngIf="old_pass.hasError('required')">Value is required</mat-error>
                          </mat-form-field><br>
                          <mat-form-field class="form-group" appearance="outline" >

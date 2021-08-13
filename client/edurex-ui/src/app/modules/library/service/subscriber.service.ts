@@ -66,6 +66,14 @@ export class SubscriberService {
     headers.append("Content-Type","application/json");
     return this.httpClient.post(this.URL + "change_password",formData,{headers : headers});
   }
+
+  change_password_by_otp(formData)
+  {
+    let headers = new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.post(this.URL + "change_password/otp",formData,{headers : headers});
+  }
+
   get_unassigned_user_by_search(institute_id,searchkey)
   {
     let headers = new HttpHeaders();

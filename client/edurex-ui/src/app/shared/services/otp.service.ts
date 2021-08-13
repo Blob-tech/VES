@@ -17,4 +17,13 @@ export class OtpService {
     headers.append("Content-Type","application/json");
     return this.httpClient.post(this.URL+"otp/insert",otpForm,{headers:headers});
   }
+
+  validateOtp(otpForm)
+  {
+    let headers =new HttpHeaders();
+    headers.append("Content-Type","application/json");
+    return this.httpClient.post(this.URL + "otp/validate",otpForm,{headers:headers});
+  }
+
+
 }
